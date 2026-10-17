@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 5 – Operators in Action</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="12" data-lesson="Lesson 5 · Operators in Action">
+<div class="stage">
+
+<section class="slide cover" data-title="Operators in Action">
+  <div class="num">05</div>
+  <h1>Operators in Action</h1>
+  <p>Arithmetic, increment, comparison, logic, the conditional operator, assignment and shorthand &mdash; the tools every program uses on every line.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>classify operators as <b>unary, binary or ternary</b></li>
+      <li>predict the result of <code>/</code>, <code>%</code>, <code>x++</code> vs <code>++x</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>?:</code> and <code>+=</code></li>
+      <li>explain short-circuit evaluation and the <code>=</code> vs <code>==</code> trap</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-kinds" data-title="Unary, binary and ternary operators">
+  <span class="kicker">Sorting operators by how many operands they take</span>
+  <h2>Unary, binary, ternary &mdash; count the operands</h2>
+  <p class="lead">An <b>operator</b> is an action symbol. An <b>operand</b> is the value it acts on. In <code>3 + 4</code>: operator <code>+</code>, operands 3 and 4.</p>
+  <div class="cols c3">
+    <div class="card accent step"><span class="ico">1&#65039;&#8419;</span><h3>Unary</h3><p><b>One</b> operand.</p><p><code>-x</code> &nbsp; <code>!flag</code> &nbsp; <code>x++</code> &nbsp; <code>~x</code> &nbsp; <code>sizeof(x)</code></p></div>
+    <div class="card accent step"><span class="ico">2&#65039;&#8419;</span><h3>Binary</h3><p><b>Two</b> operands, one on each side.</p><p><code>a + b</code> &nbsp; <code>a &lt; b</code> &nbsp; <code>a &amp;&amp; b</code> &nbsp; <code>a = b</code></p></div>
+    <div class="card accent step"><span class="ico">3&#65039;&#8419;</span><h3>Ternary</h3><p><b>Three</b> operands. C++ has exactly <b>one</b>: <code>?:</code></p><p><code>cond ? x : y</code></p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Remember</span><p class="big">Unary = 1 &nbsp; Binary = 2 &nbsp; Ternary = 3 &nbsp;(<i>uni-cycle, bi-cycle, tri-cycle</i>)</p></div>
+</section>
+
+<section class="slide slow" id="s-arith" data-title="Arithmetic operators">
+  <span class="kicker">Arithmetic</span>
+  <h2>The five arithmetic operators</h2>
+  <table>
+    <tr><th>Operator</th><th>Meaning</th><th>Example (a = 17, b = 5)</th><th>Result</th></tr>
+    <tr class="step"><td><code>+</code></td><td>add</td><td><code>a + b</code></td><td>22</td></tr>
+    <tr class="step"><td><code>-</code></td><td>subtract</td><td><code>a - b</code></td><td>12</td></tr>
+    <tr class="step"><td><code>*</code></td><td>multiply</td><td><code>a * b</code></td><td>85</td></tr>
+    <tr class="step"><td><code>/</code></td><td>divide</td><td><code>a / b</code></td><td><b>3</b> (not 3.4!)</td></tr>
+    <tr class="step"><td><code>%</code></td><td>remainder (modulus)</td><td><code>a % b</code></td><td>2</td></tr>
+  </table>
+  <div class="callout warn step"><span class="tag">Two golden rules</span><ul><li><b>int / int = int.</b> The fraction is thrown away: 17 / 5 = 3. Make one side decimal to keep it: <code>17 / 5.0</code> = 3.4.</li><li><code>%</code> works <b>only on whole numbers</b>.</li></ul></div>
+</section>
+
+<section class="slide slow" id="s-arith-code" data-title="Arithmetic in code">
+  <span class="kicker">See it work</span>
+  <h2>Division and remainder</h2>
+  <div class="code" data-title="arithmetic.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 17, b = 5;
+    cout << a + b << endl;
+    cout << a * b << endl;
+    cout << a / b << endl;
+    cout << a % b << endl;
+    cout << 17 / 5.0 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 17, b = 5;
+    clrscr();
+    cout << a + b << endl;
+    cout << a * b << endl;
+    cout << a / b << endl;
+    cout << a % b << endl;
+    cout << 17 / 5.0 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+22
+85
+3
+2
+3.4
+</script>
+<ol class="walk">
+  <li data-l="7,8"><b>Add and multiply</b> behave as in maths: 17 + 5 = 22, 17 &times; 5 = 85.</li>
+  <li data-l="9"><b>Integer division.</b> Both operands are <code>int</code>, so the answer is an <code>int</code>: 17 &divide; 5 = 3.4, but the <b>.4 is discarded</b>, leaving 3.</li>
+  <li data-l="10"><b>Remainder.</b> 5 goes into 17 three times (15). What is left over is <b>2</b>. So 17 % 5 = 2.</li>
+  <li data-l="11"><b>One decimal operand</b> makes the whole division decimal: 17 / 5.0 = 3.4.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-mod" data-title="What is % good for?">
+  <span class="kicker">Uses of the % operator</span>
+  <h2><code>%</code> is the most useful &ldquo;small&rdquo; operator</h2>
+  <div class="cols c3">
+    <div class="card accent"><h3>Even or odd?</h3><p><code>n % 2</code> is <b>0</b> for even, <b>1</b> for odd.</p></div>
+    <div class="card accent"><h3>Last digit</h3><p><code>1234 % 10</code> = <b>4</b>.</p><p>And <code>1234 / 10</code> = 123 removes it!</p></div>
+    <div class="card accent"><h3>Clock arithmetic</h3><p><code>(10 + 5) % 12</code> = <b>3</b>: 5 hours after 10 o&rsquo;clock is 3 o&rsquo;clock.</p></div>
+  </div>
+  <div class="callout trick"><span class="tag">Remember</span><p class="big"><code>%</code> gives the <b>remainder</b>, and its sign follows the <b>left</b> operand: <code>-7 % 3</code> = <b>-1</b> and <code>7 % -3</code> = <b>1</b>.</p></div>
+</section>
+
+<section class="slide slow" id="s-incdec" data-title="Increment and decrement: prefix vs postfix">
+  <span class="kicker">The famous exam topic</span>
+  <h2><code>++</code> and <code>--</code>: add or subtract one</h2>
+  <p class="lead"><code>x++</code> and <code>++x</code> both add 1 to x. The difference is <b>what value the rest of the statement sees</b>.</p>
+  <div class="cols c2">
+    <div class="card accent step"><h3>Prefix: <code>++x</code></h3><p><b>Change first, then use.</b></p><p>Like <b>pre-paid</b> mobile: you pay first, then you talk.</p></div>
+    <div class="card accent step"><h3>Postfix: <code>x++</code></h3><p><b>Use first, then change.</b></p><p>Like <b>post-paid</b> mobile: you talk first, the bill (change) comes later.</p></div>
+  </div>
+  <div class="rule step"><b>Pre</b> = change, <i>then</i> use. &nbsp;&nbsp; <b>Post</b> = use, <i>then</i> change.</div>
+  <div class="card step"><h3>Trace with <code>a = 5</code></h3>
+    <table style="font-size:.8rem">
+      <tr><th>Statement</th><th>Value used in the statement</th><th>a afterwards</th></tr>
+      <tr><td><code>b = a++;</code></td><td>5 (old value)</td><td>6</td></tr>
+      <tr><td><code>b = ++a;</code></td><td>6 (new value)</td><td>6</td></tr>
+    </table></div>
+</section>
+
+<section class="slide slow" id="s-incdec-code" data-title="Increment: tracing a program">
+  <span class="kicker">See it work</span>
+  <h2>Trace the values, line by line</h2>
+  <div class="code" data-title="incdec.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 5, b, c;
+    b = a++;
+    cout << "a=" << a << " b=" << b << endl;
+    c = ++a;
+    cout << "a=" << a << " c=" << c << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 5, b, c;
+    clrscr();
+    b = a++;
+    cout << "a=" << a << " b=" << b << endl;
+    c = ++a;
+    cout << "a=" << a << " c=" << c << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+a=6 b=5
+a=7 c=7
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Start:</b> a = 5. b and c are empty lockers.</li>
+  <li data-l="7"><b>b = a++;</b> Postfix: <b>use first</b>. b receives the old value 5, <i>then</i> a becomes 6.</li>
+  <li data-l="8"><b>Print:</b> a=6 and b=5. They differ because b took the value <i>before</i> the increment.</li>
+  <li data-l="9"><b>c = ++a;</b> Prefix: <b>change first</b>. a becomes 7 first, <i>then</i> c receives 7.</li>
+  <li data-l="10"><b>Print:</b> a=7 and c=7. Both are the new value.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">Exam warning</span><p>Never change the same variable twice in one statement, e.g. <code>a = a++ + ++a;</code>. The C++ standard calls it <b>undefined behaviour</b>, and Turbo C++ and modern compilers can disagree. Write one change per statement.</p></div>
+</section>
+
+<section class="slide fast" id="s-relational" data-title="Relational operators">
+  <span class="kicker">Comparing values</span>
+  <h2>Relational operators answer <em>yes (1)</em> or <em>no (0)</em></h2>
+  <table>
+    <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result (a = 7, b = 10)</th></tr>
+    <tr><td><code>&lt;</code></td><td>less than</td><td><code>a &lt; b</code></td><td>1</td></tr>
+    <tr><td><code>&gt;</code></td><td>greater than</td><td><code>a &gt; b</code></td><td>0</td></tr>
+    <tr><td><code>&lt;=</code></td><td>less than or equal</td><td><code>a &lt;= 7</code></td><td>1</td></tr>
+    <tr><td><code>&gt;=</code></td><td>greater than or equal</td><td><code>a &gt;= b</code></td><td>0</td></tr>
+    <tr><td><code>==</code></td><td>is equal to</td><td><code>a == b</code></td><td>0</td></tr>
+    <tr><td><code>!=</code></td><td>is not equal to</td><td><code>a != b</code></td><td>1</td></tr>
+  </table>
+  <div class="callout warn"><span class="tag">Biggest beginner bug</span><p><code>=</code> <b>stores</b> a value. <code>==</code> <b>compares</b> two values. Writing <code>if (a = 5)</code> puts 5 into a (always true!) instead of asking whether a is 5. Say it out loud: single = is &ldquo;<i>becomes</i>&rdquo;, double == is &ldquo;<i>is equal to</i>&rdquo;.</p></div>
+</section>
+
+<section class="slide slow" id="s-relational-code" data-title="Relational operators in code">
+  <span class="kicker">See it work</span>
+  <h2>Printing comparisons needs <em>brackets</em></h2>
+  <div class="code" data-title="relational.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 7, b = 10;
+    cout << (a < b) << " " << (a > b) << endl;
+    cout << (a == b) << " " << (a != b) << endl;
+    cout << (a <= 7) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 7, b = 10;
+    clrscr();
+    cout << (a < b) << " " << (a > b) << endl;
+    cout << (a == b) << " " << (a != b) << endl;
+    cout << (a <= 7) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 0
+0 1
+1
+</script>
+<ol class="walk">
+  <li data-l="7"><b>(a &lt; b)</b> is true, printed as <b>1</b>. <b>(a &gt; b)</b> is false, printed as <b>0</b>. C++ prints true/false as 1/0.</li>
+  <li data-l="8"><b>Equal?</b> 7 == 10 is false (0). 7 != 10 is true (1).</li>
+  <li data-l="9"><b>Brackets matter!</b> <code>&lt;&lt;</code> has <b>higher precedence</b> than <code>&lt;=</code> (you will see the full ranking in Lesson 7). Without brackets, <code>cout &lt;&lt; a &lt;= 7</code> would be read as <code>(cout &lt;&lt; a) &lt;= 7</code>, which is an error.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-logical" data-title="Logical operators">
+  <span class="kicker">Combining conditions</span>
+  <h2><code>&amp;&amp;</code> AND, <code>||</code> OR, <code>!</code> NOT</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p><b>AND:</b> &ldquo;You may enter if you have a ticket <b>and</b> an ID.&rdquo; Both needed.<br><b>OR:</b> &ldquo;You may pay by cash <b>or</b> card.&rdquo; One is enough.<br><b>NOT:</b> flips the answer.</p></div>
+  <div class="cols c3">
+    <div class="card accent step"><h3><code>&amp;&amp;</code> (AND)</h3>
+      <table style="font-size:.78rem"><tr><th>A</th><th>B</th><th>A &amp;&amp; B</th></tr><tr><td>1</td><td>1</td><td><b>1</b></td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td></tr></table>
+      <p>True only if <b>both</b> true.</p></div>
+    <div class="card accent step"><h3><code>||</code> (OR)</h3>
+      <table style="font-size:.78rem"><tr><th>A</th><th>B</th><th>A || B</th></tr><tr><td>1</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>0</td><td>0</td><td><b>0</b></td></tr></table>
+      <p>False only if <b>both</b> false.</p></div>
+    <div class="card accent step"><h3><code>!</code> (NOT)</h3>
+      <table style="font-size:.78rem"><tr><th>A</th><th>!A</th></tr><tr><td>1</td><td>0</td></tr><tr><td>0</td><td>1</td></tr></table>
+      <p>Flips true &harr; false.</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Tricks</span><p class="big"><b>AND</b> = all must be true. <b>OR</b> = at least one true.</p><p>In C++, <b>0 is false and every non-zero value is true</b>: <code>!5</code> is 0, <code>!0</code> is 1.</p></div>
+</section>
+
+<section class="slide fast" id="s-logical-hier" data-title="Hierarchy of logical operators">
+  <span class="kicker">Which logical operator goes first?</span>
+  <h2><code>!</code> first, then <code>&amp;&amp;</code>, then <code>||</code></h2>
+  <div class="pipe"><div class="node hot">1st &nbsp;<code style="background:none;color:inherit">!</code><small>NOT, highest</small></div><span class="arr">&rarr;</span><div class="node">2nd &nbsp;<code>&amp;&amp;</code><small>AND</small></div><span class="arr">&rarr;</span><div class="node">3rd &nbsp;<code>||</code><small>OR, lowest</small></div></div>
+  <div class="rule">NOT is strongest &nbsp;&middot;&nbsp; <b>AND beats OR</b></div>
+  <div class="card"><h3>Example: <code>!0 || 0 &amp;&amp; 0</code></h3><p><b>1.</b> NOT first: <code>(!0) || (0 &amp;&amp; 0)</code></p><p><b>2.</b> AND next: <code>1 || 0</code></p><p><b>3.</b> OR last: <b>1</b></p></div>
+</section>
+
+<section class="slide slow" id="s-logical-code" data-title="Logical operators in code">
+  <span class="kicker">See it work</span>
+  <h2>Using logic on real conditions</h2>
+  <div class="code" data-title="logical.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int age = 16, marks = 72;
+    cout << (age >= 15 && marks >= 60) << endl;
+    cout << (age > 18 || marks > 90) << endl;
+    cout << !(age > 18) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int age = 16, marks = 72;
+    clrscr();
+    cout << (age >= 15 && marks >= 60) << endl;
+    cout << (age > 18 || marks > 90) << endl;
+    cout << !(age > 18) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1
+0
+1
+</script>
+<ol class="walk">
+  <li data-l="7"><b>AND:</b> age &ge; 15 is true, marks &ge; 60 is true. true AND true = <b>1</b>.</li>
+  <li data-l="8"><b>OR:</b> age &gt; 18 is false, marks &gt; 90 is false. false OR false = <b>0</b>.</li>
+  <li data-l="9"><b>NOT:</b> age &gt; 18 is false (0), and <code>!</code> flips it to <b>1</b>. The brackets make <code>!</code> apply to the whole comparison.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-shortcircuit" data-title="Short-circuit evaluation">
+  <span class="kicker">A lazy but clever habit</span>
+  <h2>C++ stops as soon as the answer is known</h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3><code>A &amp;&amp; B</code></h3><p>If <b>A is false</b>, the answer must be false. <b>B is never evaluated.</b></p></div>
+    <div class="card accent step"><h3><code>A || B</code></h3><p>If <b>A is true</b>, the answer must be true. <b>B is never evaluated.</b></p></div>
+  </div>
+  <div class="code step" data-title="shortcircuit.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 0, b = 5;
+    if (a != 0 && ++b > 0)
+        cout << "inside" << endl;
+    cout << "b = " << b << endl;
+    if (a == 0 || ++b > 0)
+        cout << "or" << endl;
+    cout << "b = " << b << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 0, b = 5;
+    clrscr();
+    if (a != 0 && ++b > 0)
+        cout << "inside" << endl;
+    cout << "b = " << b << endl;
+    if (a == 0 || ++b > 0)
+        cout << "or" << endl;
+    cout << "b = " << b << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+b = 5
+or
+b = 5
+</script>
+<ol class="walk">
+  <li data-l="7"><b>a != 0 is false</b>, so the AND is already false. The right side <code>++b &gt; 0</code> is <b>skipped</b>, so b is <b>not</b> incremented.</li>
+  <li data-l="9">So b is still 5. Short-circuiting has a visible effect!</li>
+  <li data-l="10"><b>a == 0 is true</b>, so the OR is already true. Again <code>++b</code> is skipped, and the message &ldquo;or&rdquo; prints.</li>
+  <li data-l="12">b is <b>still 5</b>. Never put important changes (like <code>++b</code>) on the right side of <code>&amp;&amp;</code> or <code>||</code>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ternary" data-title="The conditional (ternary) operator">
+  <span class="kicker">The only operator with three operands</span>
+  <h2><code>? :</code> &mdash; a one-line <em>if-else</em></h2>
+  <div class="rule step"><code style="font-size:.9em">condition ? value_if_true : value_if_false</code></div>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A question and two answers: <b>&ldquo;Is it raining? take an umbrella : take sunglasses.&rdquo;</b> Exactly one of the two answers is chosen, and the other is never touched.</p></div>
+  <div class="code step" data-title="ternary.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 8, b = 12;
+    int big = (a > b) ? a : b;
+    cout << "Bigger = " << big << endl;
+    cout << (a % 2 == 0 ? "a is even" : "a is odd") << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 8, b = 12;
+    int big = (a > b) ? a : b;
+    clrscr();
+    cout << "Bigger = " << big << endl;
+    cout << (a % 2 == 0 ? "a is even" : "a is odd") << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Bigger = 12
+a is even
+</script>
+<ol class="walk">
+  <li data-l="7"><b>(a &gt; b) ? a : b</b> &mdash; Is 8 &gt; 12? No (false), so the <b>second</b> value, b = 12, is chosen and stored in <code>big</code>.</li>
+  <li data-l="9"><b>Inside cout.</b> 8 % 2 is 0, so <code>a % 2 == 0</code> is true: the text <code>"a is even"</code> is chosen. Brackets keep the whole conditional together.</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">Nesting</span><p>It associates <b>right-to-left</b> (more on this in Lesson 7): <code>n &gt; 0 ? 1 : n &lt; 0 ? -1 : 0</code> means <code>n &gt; 0 ? 1 : (n &lt; 0 ? -1 : 0)</code>. This gives the sign of n: 1, &minus;1 or 0.</p></div>
+</section>
+
+<section class="slide slow" id="s-assign" data-title="The assignment operator">
+  <span class="kicker">Storing values</span>
+  <h2><code>=</code> means &ldquo;<em>calculate the right, store in the left</em>&rdquo;</h2>
+  <div class="cols c2">
+    <div class="card good step"><h3>&#9989; Valid</h3><p><code>x = 10;</code><br><code>x = x + 5;</code> &nbsp;(read: new x = old x + 5)<br><code>a = b = c = 5;</code></p></div>
+    <div class="card bad step"><h3>&#10060; Invalid</h3><p><code>10 = x;</code> &nbsp;(left side must be a variable)<br><code>x + 1 = 5;</code></p></div>
+  </div>
+  <div class="callout warn step"><span class="tag">Don&rsquo;t read it as maths</span><p>In maths, <code>x = x + 5</code> is impossible. In C++ it is perfectly fine, because <code>=</code> is an <b>action</b>, not a statement of equality. Assignment goes <b>right to left</b>, so <code>a = b = c = 5</code> sets c first, then b, then a.</p></div>
+  <div class="code step" data-title="assign.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b, c;
+    a = b = c = 5;
+    cout << a << " " << b << " " << c << endl;
+    int x = 10;
+    x = x + 5;
+    cout << x << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b, c;
+    int x = 10;
+    clrscr();
+    a = b = c = 5;
+    cout << a << " " << b << " " << c << endl;
+    x = x + 5;
+    cout << x << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+5 5 5
+15
+</script>
+  </div>
+</section>
+
+<section class="slide slow" id="s-shorthand" data-title="Shorthand assignment operators">
+  <span class="kicker">Writing less</span>
+  <h2>Shorthand: <code>a += 5</code> means <code>a = a + 5</code></h2>
+  <table>
+    <tr><th>Shorthand</th><th>Same as</th><th>Shorthand</th><th>Same as</th></tr>
+    <tr class="step"><td><code>a += b</code></td><td><code>a = a + b</code></td><td><code>a &lt;&lt;= b</code></td><td><code>a = a &lt;&lt; b</code></td></tr>
+    <tr class="step"><td><code>a -= b</code></td><td><code>a = a - b</code></td><td><code>a &gt;&gt;= b</code></td><td><code>a = a &gt;&gt; b</code></td></tr>
+    <tr class="step"><td><code>a *= b</code></td><td><code>a = a * b</code></td><td><code>a &amp;= b</code></td><td><code>a = a &amp; b</code></td></tr>
+    <tr class="step"><td><code>a /= b</code></td><td><code>a = a / b</code></td><td><code>a |= b</code></td><td><code>a = a | b</code></td></tr>
+    <tr class="step"><td><code>a %= b</code></td><td><code>a = a % b</code></td><td><code>a ^= b</code></td><td><code>a = a ^ b</code></td></tr>
+  </table>
+  <div class="callout warn step"><span class="tag">The classic trap</span><p>The <b>whole right side</b> is calculated first. So <code>a *= b + c</code> means <code>a = a * (b + c)</code>, <b>not</b> <code>a = a * b + c</code>.</p></div>
+</section>
+
+<section class="slide slow" id="s-shorthand-code" data-title="Shorthand in code">
+  <span class="kicker">See it work</span>
+  <h2>Tracing the shorthand operators</h2>
+  <div class="code" data-title="shorthand.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 10;
+    a += 5;
+    a -= 3;
+    a *= 2;
+    a /= 4;
+    a %= 4;
+    cout << a << endl;
+    int x = 3, y = 4;
+    x *= y + 1;
+    cout << x << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 10;
+    int x = 3, y = 4;
+    clrscr();
+    a += 5;
+    a -= 3;
+    a *= 2;
+    a /= 4;
+    a %= 4;
+    cout << a << endl;
+    x *= y + 1;
+    cout << x << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+2
+15
+</script>
+<ol class="walk">
+  <li data-l="6,7"><b>a = 10, then += 5</b> &rarr; 15.</li>
+  <li data-l="8"><b>-= 3</b> &rarr; 12.</li>
+  <li data-l="9"><b>*= 2</b> &rarr; 24.</li>
+  <li data-l="10"><b>/= 4</b> &rarr; 6 &nbsp;(integer division).</li>
+  <li data-l="11,12"><b>%= 4</b> &rarr; 6 % 4 = <b>2</b>, and that is what is printed.</li>
+  <li data-l="13,14"><b>x *= y + 1</b> &rarr; x = 3 * (4 + 1) = <b>15</b>, <i>not</i> 3 * 4 + 1 = 13.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-arith">
+    <p class="q">What is the value of   17 % 5 ?</p>
+    <ul><li>3</li><li>3.4</li><li>2</li><li>12</li></ul>
+    <div class="exp">5 goes into 17 three times (15), leaving a remainder of <b>2</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-incdec">
+    <p class="q">int x = 5;   int y = x++ + 2;   What are x and y?</p>
+    <ul><li>x = 6, y = 7</li><li>x = 5, y = 7</li><li>x = 6, y = 8</li><li>x = 5, y = 8</li></ul>
+    <div class="exp">Postfix: <b>use first</b>: y = 5 + 2 = 7, <i>then</i> x becomes 6.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="3" data-ref="s-incdec">
+    <p class="q">int x = 5;   int y = ++x * 2;   What is y?</p>
+    <ul><li>10</li><li>11</li><li>5</li><li>12</li></ul>
+    <div class="exp">Prefix: <b>change first</b>. x becomes 6, then y = 6 * 2 = <b>12</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-shorthand">
+    <p class="q">int a = 10;   a -= 3 * 2;   What is a?</p>
+    <ul><li>14</li><li>4</li><li>21</li><li>7</li></ul>
+    <div class="exp">The whole right side first: a = 10 &minus; (3 * 2) = 10 &minus; 6 = <b>4</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-shortcircuit">
+    <p class="q">int a = 0, b = 5;   if (a != 0 &amp;&amp; ++b &gt; 0) { }   What is b afterwards?</p>
+    <ul><li>5</li><li>6</li><li>0</li><li>Error</li></ul>
+    <div class="exp">a != 0 is false, so <code>&amp;&amp;</code> short-circuits and <code>++b</code> never runs. b stays <b>5</b>.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 5 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c3">
+    <div class="card good"><h3>&#9989; Arithmetic</h3><ul><li>Unary 1, binary 2, ternary 3 operands.</li><li><code>int / int</code> = int. <code>%</code> = remainder.</li><li><b>Pre</b> = change then use; <b>Post</b> = use then change.</li></ul></div>
+    <div class="card good"><h3>&#9989; Conditions</h3><ul><li>Relational give 1 or 0; <code>=</code> vs <code>==</code>.</li><li><code>!</code> &gt; <code>&amp;&amp;</code> &gt; <code>||</code>.</li><li><code>&amp;&amp;</code> and <code>||</code> short-circuit.</li></ul></div>
+    <div class="card good"><h3>&#9989; Storing</h3><ul><li><code>c ? x : y</code> is a one-line if-else.</li><li><code>=</code> goes right to left.</li><li><code>a *= b + c</code> means <code>a = a * (b + c)</code>.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

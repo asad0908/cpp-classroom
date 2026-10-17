@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 7 – The Operator Table</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="345" data-lesson="Lesson 7 · The Operator Table (Precedence &amp; Associativity)">
+<div class="stage">
+
+<section class="slide cover" data-title="The Operator Table">
+  <div class="num">07</div>
+  <h1>The Operator Table</h1>
+  <p>You have now met <b>every</b> operator. Which one goes first when they appear together? This looks like the hardest topic in Part 1 &mdash; but with one ladder, one sentence and three short rules, you will solve every exam question.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>explain <b>precedence</b> (who goes first) and <b>associativity</b> (who goes first on a tie)</li>
+      <li>recall the whole table from a picture and a one-line memory sentence</li>
+      <li>solve any expression with the <b>3-step method</b>, and check it with a live solver</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide fast" id="s-why" data-title="Why do we need an operator table?">
+  <span class="kicker">The problem</span>
+  <h2>What does <code>2 + 3 * 4</code> equal?</h2>
+  <div class="cols c2">
+    <div class="card"><h3>Left to right?</h3><p>(2 + 3) &times; 4 = <b>20</b></p></div>
+    <div class="card good"><h3>Multiplication first?</h3><p>2 + (3 &times; 4) = <b>14</b></p></div>
+  </div>
+  <p class="lead">You already know the answer from maths class: <b>14</b>. You use the rule BODMAS without thinking. C++ has the same idea, just with <b>many more operators</b>, so it needs a complete ranking: the <b>operator table</b>.</p>
+  <div class="callout hook"><span class="tag">Picture it</span><p>A school has ranks: Principal, Teachers, Students. When two people give you orders, you obey the higher rank first. Operators have ranks too.</p></div>
+</section>
+
+<section class="slide slow" id="s-two" data-title="Precedence and associativity">
+  <span class="kicker">Two questions, two rules</span>
+  <h2>Two ideas decide <em>everything</em></h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3>1. Precedence &mdash; who goes first?</h3><p>When <b>different</b> operators meet, the higher rank goes first.</p><p><code>2 + 3 * 4</code> &rarr; <code>*</code> outranks <code>+</code> &rarr; <code>2 + (3 * 4)</code> = 14</p></div>
+    <div class="card accent step"><h3>2. Associativity &mdash; who wins a tie?</h3><p>When operators of the <b>same</b> rank meet, direction decides: Left&rarr;Right or Right&rarr;Left.</p><p><code>10 - 4 - 3</code> &rarr; left to right &rarr; <code>(10 - 4) - 3</code> = 3 (not 9!)</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Remember</span><p class="big"><b>Precedence</b> compares <i>different</i> operators.<br><b>Associativity</b> breaks a tie between <i>equal</i> ones.</p></div>
+  <div class="callout think step"><span class="tag">Try it</span><p>What is <code>a = b = c = 5</code>? Assignment is <b>right to left</b>: <code>a = (b = (c = 5))</code>. First c gets 5, then b gets c&rsquo;s value, then a does. All three become 5.</p></div>
+</section>
+
+<section class="slide slow" id="s-ladder" data-title="The operator ladder">
+  <span class="kicker">The picture to remember</span>
+  <h2>The operator <em>ladder</em> &mdash; top rung goes first</h2>
+  <div class="ladder">
+    <div class="rung l1 step"><span class="lv">1</span><span class="nm">Brackets &amp; postfix</span><span class="op">::&nbsp; ( )&nbsp; [ ]&nbsp; .&nbsp; -&gt;&nbsp; x++&nbsp; x--</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l2 step"><span class="lv">2</span><span class="nm">Unary (one operand)</span><span class="op">++x&nbsp; --x&nbsp; +x&nbsp; -x&nbsp; !&nbsp; ~&nbsp; (type)&nbsp; sizeof</span><span class="as r">R &rarr; L</span></div>
+    <div class="rung l3 step"><span class="lv">3</span><span class="nm">Multiply</span><span class="op">*&nbsp; /&nbsp; %</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l3 step"><span class="lv">4</span><span class="nm">Add</span><span class="op">+&nbsp; -</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l4 step"><span class="lv">5</span><span class="nm">Shift</span><span class="op">&lt;&lt;&nbsp; &gt;&gt;</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l5 step"><span class="lv">6</span><span class="nm">Relational</span><span class="op">&lt;&nbsp; &lt;=&nbsp; &gt;&nbsp; &gt;=</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l5 step"><span class="lv">7</span><span class="nm">Equality</span><span class="op">==&nbsp; !=</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l6 step"><span class="lv">8</span><span class="nm">Bitwise AND</span><span class="op">&amp;</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l6 step"><span class="lv">9</span><span class="nm">Bitwise XOR</span><span class="op">^</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l6 step"><span class="lv">10</span><span class="nm">Bitwise OR</span><span class="op">|</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l7 step"><span class="lv">11</span><span class="nm">Logical AND</span><span class="op">&amp;&amp;</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l7 step"><span class="lv">12</span><span class="nm">Logical OR</span><span class="op">||</span><span class="as">L &rarr; R</span></div>
+    <div class="rung l8 step"><span class="lv">13</span><span class="nm">Conditional (ternary)</span><span class="op">?&nbsp; :</span><span class="as r">R &rarr; L</span></div>
+    <div class="rung l9 step"><span class="lv">14</span><span class="nm">Assignment</span><span class="op">=&nbsp; +=&nbsp; -=&nbsp; *=&nbsp; /=&nbsp; %=&nbsp; &lt;&lt;=&nbsp; &gt;&gt;=&nbsp; &amp;=&nbsp; ^=&nbsp; |=</span><span class="as r">R &rarr; L</span></div>
+    <div class="rung l10 step"><span class="lv">15</span><span class="nm">Comma</span><span class="op">,</span><span class="as">L &rarr; R</span></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-mnemonic" data-title="The memory sentence">
+  <span class="kicker">Memory trick 1: the sentence</span>
+  <h2>Ten families, one sentence</h2>
+  <p class="lead">Group the ladder into <b>10 families</b>. Take the first letter of each, top to bottom, and read this sentence:</p>
+  <div class="center" style="font-size:1.35rem;line-height:2.2">
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>B</b>ig<small>Brackets &amp; postfix</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>U</b>ncles<small>Unary</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>M</b>ake<small>Math (* / % then + -)</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>S</b>weet<small>Shift</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>R</b>asgullas,<small>Relational (&lt; &gt;, then == !=)</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>B</b>ecause<small>Bitwise (&amp; ^ |)</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>L</b>ittle<small>Logical (&amp;&amp; ||)</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>T</b>inku<small>Ternary ?:</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>A</b>lways<small>Assignment</small></span></span>
+    <span class="step"><span class="tok tk-id" style="font-size:1.2em"><b>C</b>ries<small>Comma</small></span></span>
+  </div>
+  <div class="rule step" style="font-size:1.25rem">&ldquo;<b>B</b>ig <b>U</b>ncles <b>M</b>ake <b>S</b>weet <b>R</b>asgullas, <b>B</b>ecause <b>L</b>ittle <b>T</b>inku <b>A</b>lways <b>C</b>ries&rdquo;</div>
+</section>
+
+<section class="slide slow" id="s-inside" data-title="Order inside a family">
+  <span class="kicker">Memory trick 2: inside the families</span>
+  <h2><em>AND</em> beats <em>OR</em>. Every time.</h2>
+  <div class="cols c3">
+    <div class="card accent step"><h3>Math</h3><p><code>* / %</code> go before <code>+ -</code></p><p>Just like BODMAS.</p></div>
+    <div class="card accent step"><h3>Relational</h3><p><code>&lt; &lt;= &gt; &gt;=</code> go before <code>== !=</code></p><p>&ldquo;Compare sizes first, then check equality.&rdquo;</p></div>
+    <div class="card accent step"><h3>Bitwise</h3><p><code>&amp;</code> then <code>^</code> then <code>|</code></p><p>AND &rarr; XOR &rarr; OR</p></div>
+    <div class="card accent step"><h3>Logical</h3><p><code>!</code> then <code>&amp;&amp;</code> then <code>||</code></p><p>NOT &rarr; AND &rarr; OR</p></div>
+  </div>
+  <div class="rule step"><b>AND</b> always comes before <b>OR</b> &mdash; in <code>&amp;</code> vs <code>|</code> and in <code>&amp;&amp;</code> vs <code>||</code></div>
+  <div class="callout warn step"><span class="tag">Famous trap</span><p>Bitwise operators rank <b>below</b> comparison. So <code>1 + 2 == 3 &amp; 4</code> means <code>((1 + 2) == 3) &amp; 4</code> = <code>1 &amp; 4</code> = <b>0</b>. When in doubt, use brackets.</p></div>
+</section>
+
+<section class="slide slow" id="s-assoc" data-title="Associativity trick: U-T-A go right to left">
+  <span class="kicker">Memory trick 3: direction</span>
+  <h2>Only <em>three</em> families go right-to-left</h2>
+  <div class="rule step"><b>U</b>nary &nbsp;&middot;&nbsp; <b>T</b>ernary &nbsp;&middot;&nbsp; <b>A</b>ssignment &nbsp; &rarr; &nbsp; <b>R &rarr; L</b><br><span style="font-size:.6em;font-weight:600">Everything else is <b>L &rarr; R</b></span></div>
+  <div class="cols c3">
+    <div class="card accent step"><h3>Unary</h3><p>Has <b>one</b> operand, which sits on its right. <code>!-x</code> means <code>!(-x)</code>: the nearest operator to x acts first.</p></div>
+    <div class="card accent step"><h3>Ternary</h3><p><code>a ? b : c ? d : e</code> means <code>a ? b : (c ? d : e)</code>.</p></div>
+    <div class="card accent step"><h3>Assignment</h3><p>The value <b>flows leftwards</b> into the variable. <code>a = b = 5</code> means <code>a = (b = 5)</code>.</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Why it makes sense</span><p>Remember &ldquo;<b>U-T-A</b>&rdquo; like the name <i>Uta</i>. Unary, Ternary, Assignment all <i>reach to the right</i> for their input, so they resolve from the right.</p></div>
+</section>
+
+<section class="slide slow" id="s-method" data-title="The 3-step solving method">
+  <span class="kicker">The method</span>
+  <h2>Solve <em>any</em> expression in 3 steps</h2>
+  <ol class="steps" style="list-style:none;padding:0">
+    <li class="card accent step"><h3>Step 1 &mdash; Add brackets using precedence</h3><p>Put brackets around the highest-ranked operator pairs first, then work down the ladder.</p></li>
+    <li class="card accent step"><h3>Step 2 &mdash; Break ties with associativity</h3><p>Same rank? Group left-to-right, except unary, ternary and assignment (right-to-left).</p></li>
+    <li class="card accent step"><h3>Step 3 &mdash; Evaluate the innermost brackets outward</h3><p>Now there is no doubt about the order. Just calculate.</p></li>
+  </ol>
+  <div class="card good step"><h3>Worked example: <code>2 + 3 * 4 - 6 / 2</code></h3>
+    <p><b>1.</b> <code>*</code> and <code>/</code> outrank <code>+ -</code> &rarr; <code>2 + (3 * 4) - (6 / 2)</code></p>
+    <p><b>2.</b> <code>+</code> and <code>-</code> tie, left to right &rarr; <code>(2 + (3 * 4)) - (6 / 2)</code></p>
+    <p><b>3.</b> <code>(2 + 12) - 3</code> &rarr; <code>14 - 3</code> = <b>11</b></p></div>
+</section>
+
+<section class="slide slow" id="s-example2" data-title="Worked example: logical and relational">
+  <span class="kicker">Another worked example</span>
+  <h2><code>5 &gt; 3 &amp;&amp; 2 &lt; 1 || 4 == 4</code></h2>
+  <div class="card step"><p><b>1. Precedence.</b> Relational (<code>&gt;</code>, <code>&lt;</code>) and equality (<code>==</code>) outrank <code>&amp;&amp;</code>, which outranks <code>||</code>:</p><p><code>((5 &gt; 3) &amp;&amp; (2 &lt; 1)) || (4 == 4)</code></p></div>
+  <div class="card step"><p><b>2. Evaluate the innermost brackets.</b> 5 &gt; 3 is true (1); 2 &lt; 1 is false (0); 4 == 4 is true (1):</p><p><code>(1 &amp;&amp; 0) || 1</code></p></div>
+  <div class="card step"><p><b>3. AND before OR.</b> 1 &amp;&amp; 0 = 0, then 0 || 1 =</p><p class="big"><b>1</b> &nbsp;(true)</p></div>
+  <div class="callout trick step"><span class="tag">Reminder</span><p>In C++ every comparison gives <b>1</b> (true) or <b>0</b> (false), so you can keep calculating with the results.</p></div>
+</section>
+
+<section class="slide slow" id="s-solver" data-title="Live expression solver">
+  <span class="kicker">Try it yourself</span>
+  <h2>The expression solver &mdash; see the order, step by step</h2>
+  <div class="play expreval"></div>
+  <p class="mute">Click a preset or type your own. Notice the brackets line (Steps 1 and 2 of the method) and then each evaluation (Step 3), with the ladder level used.</p>
+</section>
+
+<section class="slide fast" id="s-caution" data-title="Precedence is not the order of evaluation">
+  <span class="kicker">A subtle point</span>
+  <h2>Precedence tells you the <em>grouping</em>, not the <em>timing</em></h2>
+  <p class="lead">In <code>f() + g()</code>, the <code>+</code> is clear, but C++ does <b>not</b> promise whether <code>f()</code> or <code>g()</code> is called first.</p>
+  <div class="cols c2">
+    <div class="card bad"><h3>&#10060; Avoid in real programs</h3><p><code>i = i++ + ++i;</code><br><code>a[i] = i++;</code></p><p>Changing a variable twice in one statement gives <b>undefined behaviour</b>. Different compilers give different answers.</p></div>
+    <div class="card good"><h3>&#9989; What to do</h3><p>Use <b>brackets</b> to make your meaning obvious, and change a variable <b>once per statement</b>.</p><p>In an exam, follow the rules in this lesson; in real code, keep it simple.</p></div>
+  </div>
+</section>
+
+<section class="slide fast" id="s-reference" data-title="Official table (reference)">
+  <span class="kicker">Reference</span>
+  <h2>The complete table (highest priority first)</h2>
+  <table style="font-size:.75rem">
+    <tr><th class="c">Level</th><th>Operators</th><th>Associativity</th></tr>
+    <tr><td class="c">1</td><td><code>::</code> &nbsp; <code>( )</code> &nbsp; <code>[ ]</code> &nbsp; <code>.</code> &nbsp; <code>-&gt;</code> &nbsp; <code>x++</code> &nbsp; <code>x--</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">2</td><td><code>++x</code> <code>--x</code> <code>+x</code> <code>-x</code> <code>!</code> <code>~</code> <code>(type)</code> <code>*p</code> <code>&amp;x</code> <code>sizeof</code> <code>new</code> <code>delete</code></td><td><b>Right &rarr; Left</b></td></tr>
+    <tr><td class="c">2.5</td><td><code>.*</code> &nbsp; <code>-&gt;*</code> &nbsp; <span class="mute">(pointer-to-member; advanced)</span></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">3</td><td><code>*</code> &nbsp; <code>/</code> &nbsp; <code>%</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">4</td><td><code>+</code> &nbsp; <code>-</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">5</td><td><code>&lt;&lt;</code> &nbsp; <code>&gt;&gt;</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">6</td><td><code>&lt;</code> &nbsp; <code>&lt;=</code> &nbsp; <code>&gt;</code> &nbsp; <code>&gt;=</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">7</td><td><code>==</code> &nbsp; <code>!=</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">8</td><td><code>&amp;</code> &nbsp;(bitwise AND)</td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">9</td><td><code>^</code> &nbsp;(bitwise XOR)</td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">10</td><td><code>|</code> &nbsp;(bitwise OR)</td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">11</td><td><code>&amp;&amp;</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">12</td><td><code>||</code></td><td>Left &rarr; Right</td></tr>
+    <tr><td class="c">13</td><td><code>?:</code></td><td><b>Right &rarr; Left</b></td></tr>
+    <tr><td class="c">14</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code> <code>&amp;=</code> <code>^=</code> <code>|=</code></td><td><b>Right &rarr; Left</b></td></tr>
+    <tr><td class="c">15</td><td><code>,</code> &nbsp;(comma)</td><td>Left &rarr; Right</td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-practice" data-title="Practice: solve these">
+  <span class="kicker">Your turn</span>
+  <h2>Solve with the 3-step method</h2>
+  <p class="mute">Let the class work each one, then press &rarr; for the answer. Check them in the solver from the previous slides.</p>
+  <table>
+    <tr><th>Expression</th><th>With brackets</th><th>Answer</th></tr>
+    <tr class="step"><td><code>10 + 5 * 2 - 8 / 4</code></td><td><code>(10 + (5*2)) - (8/4)</code></td><td><b>18</b></td></tr>
+    <tr class="step"><td><code>20 / 5 * 2</code></td><td><code>(20/5) * 2</code> &nbsp;(tie: left first)</td><td><b>8</b> (not 2)</td></tr>
+    <tr class="step"><td><code>3 + 4 &gt; 5 &amp;&amp; 10 % 3 == 1</code></td><td><code>((3+4) &gt; 5) &amp;&amp; ((10%3) == 1)</code></td><td><b>1</b></td></tr>
+    <tr class="step"><td><code>2 + 3 &lt;&lt; 1</code></td><td><code>(2+3) &lt;&lt; 1</code> &nbsp;(+ outranks &lt;&lt;)</td><td><b>10</b></td></tr>
+    <tr class="step"><td><code>!0 + 1</code></td><td><code>(!0) + 1</code> &nbsp;(unary first)</td><td><b>2</b></td></tr>
+    <tr class="step"><td><code>1 | 2 &amp; 3</code></td><td><code>1 | (2 &amp; 3)</code> &nbsp;(AND before OR)</td><td><b>3</b></td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 4</h2>
+  <div class="mcq" data-a="1" data-ref="s-method">
+    <p class="q">What is the value of   6 + 4 / 2 * 3 ?</p>
+    <ul><li>15</li><li>12</li><li>9</li><li>7</li></ul>
+    <div class="exp">6 + ((4 / 2) * 3): / and * tie (left first): 4/2 = 2, then 2*3 = 6, then 6 + 6 = <b>12</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 4</h2>
+  <div class="mcq" data-a="2" data-ref="s-assoc">
+    <p class="q">Which families associate RIGHT to LEFT?</p>
+    <ul><li>Math, Shift, Relational</li><li>Logical, Bitwise, Comma</li><li>Unary, Ternary, Assignment</li><li>Only assignment</li></ul>
+    <div class="exp"><b>U-T-A</b>: Unary, Ternary, Assignment. Everything else goes left to right.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 4</h2>
+  <div class="mcq" data-a="1" data-ref="s-two">
+    <p class="q">What is the value of   10 &gt; 5 &gt; 2 ?</p>
+    <ul><li>1</li><li>0</li><li>Compile error</li><li>true</li></ul>
+    <div class="exp">Left to right: (10 &gt; 5) = 1, then 1 &gt; 2 = <b>0</b>. It does not mean &ldquo;10 is greater than 5 and 2&rdquo;.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 4</h2>
+  <div class="mcq" data-a="2" data-ref="s-inside">
+    <p class="q">In   a || b &amp;&amp; c   which operation happens first?</p>
+    <ul><li>a || b</li><li>The comma</li><li>b &amp;&amp; c</li><li>It is random</li></ul>
+    <div class="exp"><b>AND beats OR.</b> It is evaluated as <code>a || (b &amp;&amp; c)</code>.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 7 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; The three memory tools</h3><ul><li><b>Sentence:</b> Big Uncles Make Sweet Rasgullas, Because Little Tinku Always Cries.</li><li><b>AND beats OR</b> in both bitwise and logical.</li><li><b>U-T-A</b> go right to left; everything else left to right.</li></ul></div>
+    <div class="card good"><h3>&#9989; The method</h3><ul><li>1) bracket by precedence</li><li>2) break ties by associativity</li><li>3) evaluate innermost first</li><li>When in doubt, use brackets!</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 3 – Variables and Constants</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="28" data-lesson="Lesson 3 · Variables &amp; Constants">
+<div class="stage">
+
+<section class="slide cover" data-title="Variables & Constants">
+  <div class="num">03</div>
+  <h1>Variables &amp; Constants</h1>
+  <p>Variables are the <b>memory</b> of a program. Constants are the things that must <b>never change</b>.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>declare, initialise and change a variable</li>
+      <li>tell instantly whether a variable name is legal</li>
+      <li>write integer (decimal / octal / hex), floating-point, character and string constants</li>
+      <li>create named constants with <code>#define</code>, <code>const</code> and <code>enum</code></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-locker" data-title="What is a variable?">
+  <span class="kicker">The big idea</span>
+  <h2>A variable is a <em>labelled locker</em> in memory</h2>
+  <div class="mem step">
+    <div class="cell"><div class="nm">age &middot; int</div><div class="vl">16</div><div class="ad">address 1000</div></div>
+    <div class="cell"><div class="nm">height &middot; float</div><div class="vl">5.5</div><div class="ad">address 1004</div></div>
+    <div class="cell"><div class="nm">grade &middot; char</div><div class="vl">'A'</div><div class="ad">address 1008</div></div>
+  </div>
+  <div class="cols c4">
+    <div class="card accent step"><h3>Name</h3><p>The label on the locker: <code>age</code>.</p></div>
+    <div class="card accent step"><h3>Type</h3><p>The size and kind of locker: <code>int</code>.</p></div>
+    <div class="card accent step"><h3>Value</h3><p>What is inside right now: <code>16</code>.</p></div>
+    <div class="card accent step"><h3>Address</h3><p>The locker number in memory: <code>1000</code>.</p></div>
+  </div>
+  <div class="callout hook step"><span class="tag">Why &ldquo;variable&rdquo;?</span><p>You can open the locker and <b>replace</b> what is inside. The locker stays, only the content <i>varies</i>. (Addresses above are only for illustration.)</p></div>
+</section>
+
+<section class="slide slow" id="s-life" data-title="Declare, initialise, assign">
+  <span class="kicker">Life of a variable</span>
+  <h2>Three steps: <em>declare</em>, <em>initialise</em>, <em>assign</em></h2>
+  <div class="cols c3">
+    <div class="card accent step"><h3>1. Declare</h3><p>&ldquo;Reserve a locker.&rdquo;</p><p><code>int age;</code></p></div>
+    <div class="card accent step"><h3>2. Initialise</h3><p>&ldquo;Reserve and put the first value in.&rdquo;</p><p><code>int age = 16;</code></p></div>
+    <div class="card accent step"><h3>3. Assign</h3><p>&ldquo;Replace the value.&rdquo;</p><p><code>age = 17;</code></p></div>
+  </div>
+  <div class="callout warn step"><span class="tag">Danger</span><p>A variable that is declared but never given a value holds <b>garbage</b> left over from earlier. Always initialise your variables.</p></div>
+</section>
+
+<section class="slide slow" id="s-vars-code" data-title="Variables in a program">
+  <span class="kicker">See it work</span>
+  <h2>Declaring and changing variables</h2>
+  <div class="code" data-title="variables.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int age = 16;
+    float height = 5.5;
+    char grade = 'A';
+    cout << age << " " << height << " " << grade << endl;
+    age = 17;
+    cout << age << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int age = 16;
+    float height = 5.5;
+    char grade = 'A';
+    clrscr();
+    cout << age << " " << height << " " << grade << endl;
+    age = 17;
+    cout << age << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+16 5.5 A
+17
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Declare + initialise.</b> A locker named <code>age</code> that holds whole numbers is created and <code>16</code> is put inside.</li>
+  <li data-l="7,8"><b>More lockers.</b> <code>height</code> holds a decimal, <code>grade</code> holds one character (single quotes!).</li>
+  <li data-l="9"><b>Printing.</b> We print the <b>values</b> inside the lockers, not the names. <code>" "</code> is a space between them.</li>
+  <li data-l="10"><b>Assign.</b> <code>age = 17;</code> throws out the old 16 and stores 17. No type is written this time &mdash; the locker already exists.</li>
+  <li data-l="11"><b>Result.</b> The second print shows 17. The old value is gone for ever.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-naming" data-title="Rules for naming a variable">
+  <span class="kicker">Identifiers</span>
+  <h2>The naming rules</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Allowed</h3><ul><li>Letters <code>a&ndash;z</code>, <code>A&ndash;Z</code></li><li>Digits <code>0&ndash;9</code> (but <b>not first</b>)</li><li>Underscore <code>_</code></li></ul></div>
+    <div class="card bad"><h3>&#10060; Not allowed</h3><ul><li>Starting with a digit</li><li>Spaces or symbols: <code>@ # - % $ .</code></li><li>Keywords such as <code>int</code>, <code>class</code>, <code>float</code></li></ul></div>
+  </div>
+  <div class="rule">First: <b>L</b>etter or <b>U</b>nderscore. After that: <b>L</b>etters, <b>U</b>nderscores, <b>D</b>igits. &nbsp;<span class="mute" style="font-size:.7em">(L-U-D)</span></div>
+  <p class="center">And remember: C++ is <b>case-sensitive</b>. <code>Age</code>, <code>age</code> and <code>AGE</code> are three different lockers.</p>
+</section>
+
+<section class="slide slow" id="s-naming-table" data-title="Legal or illegal? Name checker">
+  <span class="kicker">Class game</span>
+  <h2>Legal or illegal?</h2>
+  <p class="mute">Ask the class to call it, then press &rarr; to reveal the verdict.</p>
+  <table>
+    <tr><th>Name</th><th class="c">Legal?</th><th>Reason</th></tr>
+    <tr class="step"><td><code>total_marks</code></td><td class="c">&#9989;</td><td>letters and an underscore</td></tr>
+    <tr class="step"><td><code>_count</code></td><td class="c">&#9989;</td><td>may start with an underscore</td></tr>
+    <tr class="step"><td><code>x1</code></td><td class="c">&#9989;</td><td>a digit is fine after the first character</td></tr>
+    <tr class="step"><td><code>1st_rank</code></td><td class="c">&#10060;</td><td>starts with a digit</td></tr>
+    <tr class="step"><td><code>my name</code></td><td class="c">&#10060;</td><td>contains a space</td></tr>
+    <tr class="step"><td><code>a-b</code></td><td class="c">&#10060;</td><td>the <code>-</code> would mean subtraction</td></tr>
+    <tr class="step"><td><code>float</code></td><td class="c">&#10060;</td><td>keyword: already has a meaning</td></tr>
+    <tr class="step"><td><code>Float</code></td><td class="c">&#9989;</td><td>legal (capital F differs from <code>float</code>) but confusing</td></tr>
+  </table>
+  <p class="step mute">Good habit: use meaningful names (<code>totalMarks</code>, not <code>tm</code>).</p>
+</section>
+
+<section class="slide fast" id="s-const-intro" data-title="What is a constant?">
+  <span class="kicker">Constants</span>
+  <h2>A constant never changes</h2>
+  <div class="callout hook"><span class="tag">Picture it</span><p>Your <b>date of birth</b> and the value of <b>&pi;</b> never change. A variable is a locker you can refill. A constant is a locker that is <b>welded shut</b> after the first value goes in.</p></div>
+  <div class="cols c2">
+    <div class="card accent"><h3>Literal constants</h3><p>The value itself, written right in the code.</p><p><code>25</code> &nbsp; <code>3.14</code> &nbsp; <code>'A'</code> &nbsp; <code>"Hello"</code></p></div>
+    <div class="card accent"><h3>Named constants</h3><p>A name attached to a value that cannot change.</p><p><code>#define</code> &nbsp; <code>const</code> &nbsp; <code>enum</code></p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-intconst" data-title="Integer constants: decimal, octal, hex">
+  <span class="kicker">Numerical constants</span>
+  <h2>One number, three ways to write it</h2>
+  <p class="lead">The <b>prefix</b> tells the compiler which number system you mean. All of these are the value <b>seventy-five</b>.</p>
+  <table>
+    <tr><th>Kind</th><th>How to spot it</th><th>Digits allowed</th><th>Example</th></tr>
+    <tr class="step"><td><b>Decimal</b></td><td>no prefix</td><td>0&ndash;9</td><td><code>75</code></td></tr>
+    <tr class="step"><td><b>Octal</b></td><td>starts with <b>0</b> (zero)</td><td>0&ndash;7</td><td><code>0113</code></td></tr>
+    <tr class="step"><td><b>Hexadecimal</b></td><td>starts with <b>0x</b></td><td>0&ndash;9 and A&ndash;F</td><td><code>0x4B</code></td></tr>
+    <tr class="step"><td>Binary (C++14 only, not Turbo)</td><td>starts with <b>0b</b></td><td>0 and 1</td><td><code>0b1001011</code></td></tr>
+  </table>
+  <div class="callout warn step"><span class="tag">Classic trap</span><p><code>010</code> is <b>8</b>, not ten! A leading zero means octal. And <code>089</code> is an <b>error</b>, because 8 and 9 do not exist in octal.</p></div>
+  <p class="step mute">Suffixes: <code>U</code> unsigned, <code>L</code> long, <code>UL</code>, <code>LL</code> long long: <code>100U</code>, <code>5000000000LL</code>.</p>
+</section>
+
+<section class="slide slow" id="s-convert" data-title="Trick: convert octal and hex fast">
+  <span class="kicker">Memory trick</span>
+  <h2>Octal and hex from <em>binary</em> in seconds</h2>
+  <div class="rule step"><b>Hex digit = 4 bits</b> &nbsp;&middot;&nbsp; <b>Octal digit = 3 bits</b></div>
+  <div class="card step"><h3>Worked example: 75</h3>
+    <p>75 in binary is <code>1001011</code> &nbsp;(64 + 8 + 2 + 1).</p>
+  </div>
+  <div class="cols c2">
+    <div class="card accent step"><h3>Hex: group by 4 from the right</h3><p><code>100 | 1011</code> &rarr; <b>4</b> and <b>B</b> &rarr; <code>0x4B</code></p></div>
+    <div class="card accent step"><h3>Octal: group by 3 from the right</h3><p><code>1 | 001 | 011</code> &rarr; 1, 1, 3 &rarr; <code>0113</code></p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Hex digits</span><p class="big">A = 10 &nbsp; B = 11 &nbsp; C = 12 &nbsp; D = 13 &nbsp; E = 14 &nbsp; F = 15</p><p>Check: <code>0x4B</code> = 4&times;16 + 11 = <b>75</b> &#10003;</p></div>
+</section>
+
+<section class="slide slow" id="s-intcode" data-title="Integer constants in code">
+  <span class="kicker">See it work</span>
+  <h2>Same value, different spellings</h2>
+  <div class="code" data-title="int_constants.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 75, b = 0113, c = 0x4B;
+    cout << a << " " << b << " " << c << endl;
+    cout << oct << a << " " << hex << a << " " << dec << a << endl;
+    cout << 010 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 75, b = 0113, c = 0x4B;
+    clrscr();
+    cout << a << " " << b << " " << c << endl;
+    cout << oct << a << " " << hex << a << " " << dec << a << endl;
+    cout << 010 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+75 75 75
+113 4b 75
+8
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Three spellings</b> of the same number: decimal 75, octal <code>0113</code>, hex <code>0x4B</code>. Inside the computer all three become the same bits.</li>
+  <li data-l="7"><b>All print 75.</b> By default <code>cout</code> always shows numbers in decimal, whatever way you wrote them.</li>
+  <li data-l="8"><b>Manipulators.</b> <code>oct</code>, <code>hex</code>, <code>dec</code> change how <code>cout</code> <i>prints</i>: 75 in octal is 113, in hex is 4b, and <code>dec</code> switches back to decimal.</li>
+  <li data-l="9"><b>The trap.</b> <code>010</code> starts with 0, so it is octal: 1&times;8 + 0 = <b>8</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-floatconst" data-title="Floating-point constants">
+  <span class="kicker">Floating-point constants</span>
+  <h2>Numbers with a decimal point or an exponent</h2>
+  <table>
+    <tr><th>Form</th><th>Example</th><th>Meaning</th><th>Type</th></tr>
+    <tr><td>Fixed (decimal) form</td><td><code>3.14</code> &nbsp; <code>.5</code> &nbsp; <code>7.</code></td><td>ordinary decimals</td><td><code>double</code></td></tr>
+    <tr><td>Scientific (exponent) form</td><td><code>2.5e3</code> &nbsp; <code>1.5E-2</code></td><td>2.5&times;10<sup>3</sup> = 2500 &nbsp;|&nbsp; 1.5&times;10<sup>&minus;2</sup> = 0.015</td><td><code>double</code></td></tr>
+    <tr><td>Suffix <code>f</code></td><td><code>3.14f</code></td><td>make it a smaller <code>float</code></td><td><code>float</code></td></tr>
+    <tr><td>Suffix <code>L</code></td><td><code>3.14L</code></td><td>make it a <code>long double</code></td><td><code>long double</code></td></tr>
+  </table>
+  <div class="rule"><b>e</b> means &ldquo;move the dot&rdquo;: <code>e3</code> &rarr; 3 places <b>right</b>, <code>e-2</code> &rarr; 2 places <b>left</b></div>
+  <div class="code" data-title="float_constants.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << 2.5e3 << endl;
+    cout << 1.5e-2 << endl;
+    cout << 3.0 << endl;
+    cout << 7 / 2 << " " << 7 / 2.0 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << 2.5e3 << endl;
+    cout << 1.5e-2 << endl;
+    cout << 3.0 << endl;
+    cout << 7 / 2 << " " << 7 / 2.0 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+2500
+0.015
+3
+3 3.5
+</script>
+  </div>
+  <p class="mute">Why does <code>3.0</code> print as <code>3</code>? <code>cout</code> drops trailing zeros. Why is <code>7 / 2</code> equal to 3 but <code>7 / 2.0</code> equal to 3.5? Two <b>ints</b> give an int answer (the fraction is thrown away); one decimal makes the whole answer decimal.</p>
+</section>
+
+<section class="slide fast" id="s-charconst" data-title="Character constants and escapes">
+  <span class="kicker">Character constants</span>
+  <h2>One character in <em>single quotes</em></h2>
+  <p class="lead"><code>'A'</code> &nbsp; <code>'7'</code> &nbsp; <code>'$'</code>. Special characters use a backslash &mdash; they are called <b>escape sequences</b>.</p>
+  <table>
+    <tr><th>Code</th><th>Meaning</th><th>Code</th><th>Meaning</th></tr>
+    <tr><td><code>'\n'</code></td><td>new line</td><td><code>'\\'</code></td><td>a backslash</td></tr>
+    <tr><td><code>'\t'</code></td><td>tab (a wide jump)</td><td><code>'\''</code></td><td>a single quote</td></tr>
+    <tr><td><code>'\0'</code></td><td>NULL (the end-of-string marker)</td><td><code>'\"'</code></td><td>a double quote</td></tr>
+    <tr><td><code>'\a'</code></td><td>beep (alert)</td><td><code>'\b'</code></td><td>backspace</td></tr>
+  </table>
+  <div class="callout trick"><span class="tag">Why escape?</span><p>A quote mark normally <i>ends</i> the text. To print a quote <b>inside</b> text, put a backslash before it: <code>"She said \"Hi\""</code>. The backslash means &ldquo;treat the next character specially&rdquo;.</p></div>
+</section>
+
+<section class="slide slow" id="s-strconst" data-title="String constants">
+  <span class="kicker">String constants</span>
+  <h2>Text in <em>double quotes</em> has a hidden last character</h2>
+  <p class="lead step">The compiler secretly adds a <b>NULL character <code>'\0'</code></b> at the end of every string, to mark where the text stops.</p>
+  <div class="card step">
+    <div class="bytes"><b>"Hello"</b><i>H</i><i>e</i><i>l</i><i>l</i><i>o</i><i class="r">\0</i><span>&rarr; <b>6</b> bytes, not 5</span></div>
+  </div>
+  <div class="rule step"><b>S</b>ingle quote = <b>S</b>ingle letter &nbsp;|&nbsp; <b>D</b>ouble quote = <b>D</b>ozens of letters</div>
+  <p class="step center"><code>'A'</code> is one char (1 byte). <code>"A"</code> is a string (2 bytes: <code>A</code> and <code>\0</code>).</p>
+</section>
+
+<section class="slide slow" id="s-strcode" data-title="Strings and escapes in code">
+  <span class="kicker">See it work</span>
+  <h2>Escapes and string size</h2>
+  <div class="code" data-title="strings_and_escapes.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "She said \"Hi\"\n";
+    cout << "C:\\Users\\Asad" << endl;
+    cout << sizeof("Hi") << " " << sizeof("Hello") << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "She said \"Hi\"\n";
+    cout << "C:\\Users\\Asad" << endl;
+    cout << sizeof("Hi") << " " << sizeof("Hello") << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+She said "Hi"
+C:\Users\Asad
+3 6
+</script>
+<ol class="walk">
+  <li data-l="6"><b>\" and \n.</b> <code>\"</code> prints a real double quote inside the text. <code>\n</code> at the end moves to a new line (same effect as <code>endl</code>).</li>
+  <li data-l="7"><b>\\ prints one backslash.</b> To show <code>C:\Users</code> you must write each backslash twice, because a single <code>\</code> starts an escape.</li>
+  <li data-l="8"><b>sizeof a string.</b> <code>"Hi"</code> is H + i + <code>\0</code> = 3 bytes. <code>"Hello"</code> is 5 letters + <code>\0</code> = 6 bytes.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-defined" data-title="#define and const">
+  <span class="kicker">Defined constants</span>
+  <h2>Give a value a <em>name</em> once, use it everywhere</h2>
+  <p class="lead">Instead of typing <code>3.14</code> in fifty places, name it. If the value ever changes, you edit <b>one</b> line.</p>
+  <div class="code" data-title="named_constants.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+#define PI 3.14
+
+int main()
+{
+    const int RADIUS = 5;
+    cout << "Area = " << PI * RADIUS * RADIUS << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+#define PI 3.14
+
+void main()
+{
+    const int RADIUS = 5;
+    clrscr();
+    cout << "Area = " << PI * RADIUS * RADIUS << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Area = 78.5
+</script>
+<ol class="walk">
+  <li data-l="4"><b>#define PI 3.14</b> &mdash; a <b>preprocessor</b> instruction. Before compiling, every <code>PI</code> in the file is replaced by the text <code>3.14</code>. No <code>=</code>, no <code>;</code>, no data type.</li>
+  <li data-l="8"><b>const int RADIUS = 5;</b> &mdash; a real variable with a type, but marked <b>read-only</b>. Writing <code>RADIUS = 6;</code> later would be a compile error.</li>
+  <li data-l="9"><b>Using them.</b> The compiler sees <code>3.14 * 5 * 5</code> = 78.5.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-define-vs-const" data-title="#define vs const">
+  <span class="kicker">Compare</span>
+  <h2><code>#define</code> vs <code>const</code></h2>
+  <table>
+    <tr><th></th><th><code>#define PI 3.14</code></th><th><code>const float PI = 3.14;</code></th></tr>
+    <tr class="step"><td>Who handles it?</td><td>the <b>preprocessor</b> (find &amp; replace)</td><td>the <b>compiler</b></td></tr>
+    <tr class="step"><td>Has a data type?</td><td>no, it is just text</td><td>yes, <code>float</code></td></tr>
+    <tr class="step"><td>Ends with <code>;</code> and uses <code>=</code>?</td><td><b>No, and no</b></td><td>Yes, and yes</td></tr>
+    <tr class="step"><td>Takes memory?</td><td>no</td><td>yes: one read-only locker</td></tr>
+    <tr class="step"><td>Preferred in modern C++?</td><td>old style</td><td><b>yes</b></td></tr>
+  </table>
+  <div class="callout warn step"><span class="tag">Trap</span><p><code>#define PI 3.14;</code> (with a semicolon) pastes <code>3.14;</code> everywhere, so <code>2 * PI * r</code> becomes <code>2 * 3.14; * r</code> &rarr; compile error.</p></div>
+</section>
+
+<section class="slide slow" id="s-enum" data-title="enum">
+  <span class="kicker">Enumerations</span>
+  <h2><code>enum</code>: names for a family of constants</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Days of the week. Instead of remembering &ldquo;Monday is 0, Tuesday is 1&hellip;&rdquo;, you write <code>MON, TUE, WED</code>. The computer numbers them for you.</p></div>
+  <div class="code step" data-title="enum_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+enum Day { MON, TUE, WED, THU, FRI };
+enum Level { LOW = 10, MEDIUM, HIGH = 50 };
+
+int main()
+{
+    Day today = WED;
+    cout << MON << " " << today << " " << FRI << endl;
+    cout << LOW << " " << MEDIUM << " " << HIGH << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+enum Day { MON, TUE, WED, THU, FRI };
+enum Level { LOW = 10, MEDIUM, HIGH = 50 };
+
+void main()
+{
+    Day today = WED;
+    clrscr();
+    cout << MON << " " << today << " " << FRI << endl;
+    cout << LOW << " " << MEDIUM << " " << HIGH << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+0 2 4
+10 11 50
+</script>
+<ol class="walk">
+  <li data-l="4"><b>Auto-numbering.</b> <code>MON</code> is 0, <code>TUE</code> 1, <code>WED</code> 2, <code>THU</code> 3, <code>FRI</code> 4. It starts at 0 and adds 1 each time.</li>
+  <li data-l="5"><b>Custom numbers.</b> <code>LOW = 10</code> sets 10. <code>MEDIUM</code> has no number, so it continues: 10 + 1 = <b>11</b>. <code>HIGH = 50</code> sets 50.</li>
+  <li data-l="9,10"><b>Using it.</b> <code>today</code> is a variable of type <code>Day</code>, set to <code>WED</code>. Printing shows the number behind the name: 0, 2, 4.</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">Trick</span><p class="big">First name = <b>0</b>. Each next name = <b>previous + 1</b>, unless you write <code>=</code>.</p><p>A <code>Day</code> variable can only hold <code>Day</code> names: <code>today = 3;</code> is an error in C++. (Modern C++ also has <code>enum class</code>, which Turbo C++ does not.)</p></div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="3" data-ref="s-naming">
+    <p class="q">Which is a legal variable name?</p>
+    <ul><li>2nd_year</li><li>my-score</li><li>double</li><li>_roll_no</li></ul>
+    <div class="exp"><code>_roll_no</code> starts with an underscore: legal. <code>2nd_year</code> starts with a digit, <code>my-score</code> has a hyphen, and <code>double</code> is a keyword.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-convert">
+    <p class="q">What is the value of 0x1F ?</p>
+    <ul><li>15</li><li>31</li><li>1</li><li>16</li></ul>
+    <div class="exp">1&times;16 + F(15) = <b>31</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-intconst">
+    <p class="q">int x = 012;   cout &lt;&lt; x;   prints&hellip;</p>
+    <ul><li>12</li><li>2</li><li>10</li><li>Error</li></ul>
+    <div class="exp">A leading 0 means octal. 012 = 1&times;8 + 2 = <b>10</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-enum">
+    <p class="q">enum Color { RED = 5, GREEN, BLUE };   What is the value of BLUE?</p>
+    <ul><li>7</li><li>2</li><li>6</li><li>0</li></ul>
+    <div class="exp">RED = 5, GREEN = 6, BLUE = <b>7</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="3" data-ref="s-strconst">
+    <p class="q">How many bytes does the string constant "Class" occupy?</p>
+    <ul><li>4</li><li>5</li><li>7</li><li>6</li></ul>
+    <div class="exp">5 letters + the hidden <code>'\0'</code> = <b>6</b> bytes.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 3 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Variables</h3><ul><li>Named locker: declare &rarr; initialise &rarr; assign.</li><li>Names: <b>L-U-D</b>, no keywords, case-sensitive.</li></ul></div>
+    <div class="card good"><h3>&#9989; Constants</h3><ul><li>Integer: <code>75</code>, octal <code>0113</code>, hex <code>0x4B</code>.</li><li>Float: <code>3.14</code>, <code>2.5e3</code>. Char <code>'A'</code>, string <code>"A"</code> (+ <code>\0</code>).</li><li><code>#define PI 3.14</code> (no <code>;</code>), <code>const</code>, <code>enum</code> (counts from 0).</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

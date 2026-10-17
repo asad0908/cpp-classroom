@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 6 – Bitwise and I/O Operators</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="190" data-lesson="Lesson 6 · Bitwise Operators &amp; the &lt;&lt; &gt;&gt; Operators">
+<div class="stage">
+
+<section class="slide cover" data-title="Bitwise & I/O Operators">
+  <div class="num">06</div>
+  <h1>Bitwise &amp; I/O Operators</h1>
+  <p>Working directly on the 0s and 1s inside a number &mdash; and a final look at the two arrows <code>&lt;&lt;</code> and <code>&gt;&gt;</code> that you have been using since Lesson 1.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>write a number in binary and apply <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code> bit by bit</li>
+      <li>use <code>&lt;&lt;</code> and <code>&gt;&gt;</code> as shifts: multiply and divide by powers of 2</li>
+      <li>explain why <code>&lt;&lt;</code> and <code>&gt;&gt;</code> also work as <b>insertion</b> and <b>extraction</b> operators</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-binary" data-title="Binary: numbers as switches">
+  <span class="kicker">First, the picture</span>
+  <h2>Inside the computer, a number is a row of <em>switches</em></h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Eight light switches in a row. Each is <b>ON (1)</b> or <b>OFF (0)</b>. Each switch is worth a different amount, <b>doubling</b> from right to left. The number is the <b>sum of the switches that are ON</b>.</p></div>
+  <table class="step" style="text-align:center">
+    <tr><th class="c">128</th><th class="c">64</th><th class="c">32</th><th class="c">16</th><th class="c">8</th><th class="c">4</th><th class="c">2</th><th class="c">1</th><th>Number</th></tr>
+    <tr class="bits"><td class="c off">0</td><td class="c off">0</td><td class="c off">0</td><td class="c off">0</td><td class="c on">1</td><td class="c on">1</td><td class="c off">0</td><td class="c off">0</td><td><b>8 + 4 = 12</b></td></tr>
+    <tr class="bits"><td class="c off">0</td><td class="c off">0</td><td class="c off">0</td><td class="c off">0</td><td class="c on">1</td><td class="c off">0</td><td class="c on">1</td><td class="c off">0</td><td><b>8 + 2 = 10</b></td></tr>
+  </table>
+  <div class="callout trick step"><span class="tag">Trick</span><p class="big">Place values: <b>128 64 32 16 8 4 2 1</b>. To write a number, go left to right: if it fits, put 1 and subtract; otherwise put 0.</p></div>
+</section>
+
+<section class="slide slow" id="s-bitrules" data-title="The four bitwise operators">
+  <span class="kicker">Bitwise operators work on each bit separately</span>
+  <h2><code>&amp;</code> &nbsp; <code>|</code> &nbsp; <code>^</code> &nbsp; <code>~</code></h2>
+  <div class="cols c4">
+    <div class="card accent step"><h3><code>&amp;</code> AND</h3><p><b>1 only if both bits are 1.</b></p><p class="mute">Both switches must be ON for the light to shine.</p></div>
+    <div class="card accent step"><h3><code>|</code> OR</h3><p><b>1 if at least one bit is 1.</b></p><p class="mute">Any switch ON lights it.</p></div>
+    <div class="card accent step"><h3><code>^</code> XOR</h3><p><b>1 if the bits are different.</b></p><p class="mute">Like a staircase light: flipping either switch changes it.</p></div>
+    <div class="card accent step"><h3><code>~</code> NOT</h3><p><b>Flips every bit</b> (0&rarr;1, 1&rarr;0). Unary.</p><p class="mute">Also called the <b>one&rsquo;s complement</b>.</p></div>
+  </div>
+  <table class="step" style="text-align:center">
+    <tr><th class="c">a</th><th class="c">b</th><th class="c">a &amp; b</th><th class="c">a | b</th><th class="c">a ^ b</th><th class="c">~a</th></tr>
+    <tr><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">1</td></tr>
+    <tr><td class="c">0</td><td class="c">1</td><td class="c">0</td><td class="c">1</td><td class="c">1</td><td class="c">1</td></tr>
+    <tr><td class="c">1</td><td class="c">0</td><td class="c">0</td><td class="c">1</td><td class="c">1</td><td class="c">0</td></tr>
+    <tr><td class="c">1</td><td class="c">1</td><td class="c">1</td><td class="c">1</td><td class="c">0</td><td class="c">0</td></tr>
+  </table>
+  <div class="rule step"><b>AND</b>: both 1 &nbsp;&middot;&nbsp; <b>OR</b>: any 1 &nbsp;&middot;&nbsp; <b>XOR</b>: different &nbsp;&middot;&nbsp; <b>NOT</b>: flip</div>
+</section>
+
+<section class="slide slow" id="s-bitexample" data-title="Worked example: 12 and 10">
+  <span class="kicker">Line the bits up</span>
+  <h2>Work column by column: <code>a = 12</code>, <code>b = 10</code></h2>
+  <table class="bits" style="font-size:1.1rem;text-align:center">
+    <tr><th>Expression</th><th>Bits (8-bit view)</th><th>Result</th></tr>
+    <tr><td><code>a</code> = 12</td><td><code>0000 1100</code></td><td>12</td></tr>
+    <tr><td><code>b</code> = 10</td><td><code>0000 1010</code></td><td>10</td></tr>
+    <tr class="step hl"><td><code>a &amp; b</code></td><td><code>0000 1000</code></td><td><b>8</b></td></tr>
+    <tr class="step hl"><td><code>a | b</code></td><td><code>0000 1110</code></td><td><b>14</b></td></tr>
+    <tr class="step hl"><td><code>a ^ b</code></td><td><code>0000 0110</code></td><td><b>6</b></td></tr>
+  </table>
+  <div class="card step"><h3>How to read it</h3><p><b>AND:</b> only the 8-column has 1 in <i>both</i> rows &rarr; <code>1000</code> = 8.</p><p><b>OR:</b> columns 8, 4 and 2 have at least one 1 &rarr; <code>1110</code> = 14.</p><p><b>XOR:</b> columns 4 and 2 are different (the 8-column matches) &rarr; <code>0110</code> = 6.</p></div>
+</section>
+
+<section class="slide slow" id="s-bitlab" data-title="Bit lab: try it yourself">
+  <span class="kicker">Try it yourself</span>
+  <h2>The <em>bit lab</em></h2>
+  <div class="play bitplay"></div>
+  <p class="mute">Ask the class for two numbers, predict each row on paper, then type them in. The bits turn green where there is a 1.</p>
+</section>
+
+<section class="slide slow" id="s-bitcode" data-title="Bitwise operators in code">
+  <span class="kicker">See it work</span>
+  <h2>Bitwise operators in a program</h2>
+  <div class="code" data-title="bitwise.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 12, b = 10;
+    cout << (a & b) << endl;
+    cout << (a | b) << endl;
+    cout << (a ^ b) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 12, b = 10;
+    clrscr();
+    cout << (a & b) << endl;
+    cout << (a | b) << endl;
+    cout << (a ^ b) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+8
+14
+6
+</script>
+<ol class="walk">
+  <li data-l="7"><b>a &amp; b = 8</b>, exactly what our column-by-column table gave.</li>
+  <li data-l="8"><b>a | b = 14.</b></li>
+  <li data-l="9"><b>a ^ b = 6.</b> The brackets are needed because <code>&lt;&lt;</code> has higher precedence than <code>&amp;</code>, <code>|</code> and <code>^</code> (Lesson 7 has the full table).</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ones" data-title="One's complement ~">
+  <span class="kicker">The NOT operator</span>
+  <h2><code>~</code> flips every bit &mdash; and gives <code>&minus;(n + 1)</code></h2>
+  <div class="card step"><h3>5 in 8 bits &rarr; flip everything</h3>
+    <p class="bits" style="font-size:1.2rem"><code>0000 0101</code> &nbsp; (5)<br><code>1111 1010</code> &nbsp; (~5)</p>
+    <p>In a signed number the leftmost bit means &ldquo;negative&rdquo;. The pattern <code>1111 1010</code> is the number <b>&minus;6</b>.</p></div>
+  <div class="rule step"><code>~n</code> = <b>&minus;(n + 1)</b> &nbsp;&nbsp;i.e. &nbsp;<code>~5</code> = &minus;6, &nbsp;<code>~0</code> = &minus;1, &nbsp;<code>~(&minus;1)</code> = 0</div>
+  <div class="callout trick step"><span class="tag">Exam shortcut</span><p class="big">No binary needed: <b>flip the sign and subtract 1</b>.<br><code>~9</code> &rarr; &minus;9 &minus; 1 = <b>&minus;10</b></p></div>
+  <div class="code step" data-title="complement.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << ~5 << " " << ~0 << " " << ~(-1) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << ~5 << " " << ~0 << " " << ~(-1) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+-6 -1 0
+</script>
+  </div>
+</section>
+
+<section class="slide slow" id="s-shift" data-title="Shift operators << and >>">
+  <span class="kicker">Sliding the bits</span>
+  <h2>Shifts slide all the bits left or right</h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3>Left shift <code>x &lt;&lt; n</code></h3><p>Slide bits <b>left</b> by n, filling with 0s on the right.</p><p><b>Multiplies by 2<sup>n</sup>.</b></p><p><code>3 &lt;&lt; 1</code> = 6 &nbsp; <code>3 &lt;&lt; 2</code> = 12</p></div>
+    <div class="card accent step"><h3>Right shift <code>x &gt;&gt; n</code></h3><p>Slide bits <b>right</b> by n; the bits that fall off are lost.</p><p><b>Divides by 2<sup>n</sup></b> (drops the remainder).</p><p><code>40 &gt;&gt; 1</code> = 20 &nbsp; <code>13 &gt;&gt; 2</code> = 3</p></div>
+  </div>
+  <div class="card step"><h3>Seeing the slide: <code>3 &lt;&lt; 2</code></h3>
+    <p class="bits" style="font-size:1.1rem"><code>0000 0011</code> &nbsp; (3)<br><code>0000 1100</code> &nbsp; (3 &lt;&lt; 2 = 12)</p>
+    <p>The two 1s moved two places left. Each place left doubles the value.</p></div>
+  <div class="rule step"><b>&lt;&lt;</b> multiplies by 2 each step &nbsp;&middot;&nbsp; <b>&gt;&gt;</b> divides by 2 each step</div>
+  <div class="callout warn step"><span class="tag">Turbo C++ note</span><p>Turbo&rsquo;s <code>int</code> has only 16 bits, so a left shift can push a 1 off the end sooner (e.g. <code>1 &lt;&lt; 15</code> becomes negative). Modern <code>int</code> has 32 bits.</p></div>
+</section>
+
+<section class="slide slow" id="s-shiftcode" data-title="Shifts in code">
+  <span class="kicker">See it work</span>
+  <h2>Left shift multiplies, right shift divides</h2>
+  <div class="code" data-title="shift.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 3, y = 40;
+    cout << (x << 1) << " " << (x << 2) << " " << (x << 3) << endl;
+    cout << (y >> 1) << " " << (y >> 2) << " " << (y >> 3) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 3, y = 40;
+    clrscr();
+    cout << (x << 1) << " " << (x << 2) << " " << (x << 3) << endl;
+    cout << (y >> 1) << " " << (y >> 2) << " " << (y >> 3) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+6 12 24
+20 10 5
+</script>
+<ol class="walk">
+  <li data-l="6"><b>x = 3, y = 40.</b></li>
+  <li data-l="7"><b>Left shifts:</b> 3 &times; 2 = 6, 3 &times; 4 = 12, 3 &times; 8 = 24. Each extra shift doubles again.</li>
+  <li data-l="8"><b>Right shifts:</b> 40 &divide; 2 = 20, 40 &divide; 4 = 10, 40 &divide; 8 = 5. Each extra shift halves again.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-tricks" data-title="Handy bit tricks">
+  <span class="kicker">Why programmers love bits</span>
+  <h2>Three classic tricks</h2>
+  <div class="cols c3">
+    <div class="card accent step"><h3>Odd or even</h3><p><code>n &amp; 1</code> looks at the last bit: <b>1 = odd</b>, 0 = even.</p></div>
+    <div class="card accent step"><h3>Swap without a spare</h3><p><code>a = a ^ b;<br>b = a ^ b;<br>a = a ^ b;</code></p></div>
+    <div class="card accent step"><h3>Quick &times; and &divide;</h3><p><code>n &lt;&lt; 1</code> doubles, <code>n &gt;&gt; 1</code> halves. Faster than * and / on some machines.</p></div>
+  </div>
+  <div class="code step" data-title="tricks.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n = 13;
+    cout << (n & 1) << endl;
+    int a = 5, b = 9;
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+    cout << a << " " << b << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n = 13;
+    int a = 5, b = 9;
+    clrscr();
+    cout << (n & 1) << endl;
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+    cout << a << " " << b << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1
+9 5
+</script>
+<ol class="walk">
+  <li data-l="7"><b>13 = 1101.</b> The last bit is 1, so <code>13 &amp; 1</code> = 1: the number is odd.</li>
+  <li data-l="9,10,11"><b>XOR swap.</b> a = 5 ^ 9 = 12. Then b = 12 ^ 9 = 5 (the old a). Then a = 12 ^ 5 = 9 (the old b). The numbers swapped with no third variable!</li>
+  <li data-l="12"><b>Result:</b> a = 9, b = 5.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-bitlogic" data-title="Bitwise vs logical">
+  <span class="kicker">Don&rsquo;t mix them up</span>
+  <h2><code>&amp;</code> vs <code>&amp;&amp;</code> &nbsp; and &nbsp; <code>|</code> vs <code>||</code></h2>
+  <table>
+    <tr><th>Expression</th><th>Works on</th><th>Result of <code>6 op 1</code></th><th>Short-circuits?</th></tr>
+    <tr><td><code>&amp;</code> &nbsp; <code>|</code> &nbsp; <code>^</code></td><td>every <b>bit</b> separately</td><td><code>6 &amp; 1</code> = <b>0</b> &nbsp; (110 &amp; 001)</td><td>No</td></tr>
+    <tr><td><code>&amp;&amp;</code> &nbsp; <code>||</code></td><td>the <b>whole value</b> as true / false</td><td><code>6 &amp;&amp; 1</code> = <b>1</b> &nbsp; (true and true)</td><td>Yes</td></tr>
+  </table>
+  <div class="callout trick"><span class="tag">Remember</span><p class="big">Single symbol = <b>bits</b>. Double symbol = <b>logic</b>.</p></div>
+</section>
+
+<section class="slide slow" id="s-io" data-title="Insertion << and extraction >>">
+  <span class="kicker">The two arrows you already know</span>
+  <h2><code>&lt;&lt;</code> and <code>&gt;&gt;</code> have <em>two jobs</em> each</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>The English word <b>&ldquo;bat&rdquo;</b> can mean a cricket bat or a flying animal. You decide the meaning from the <b>context</b>. C++ does the same with <code>&lt;&lt;</code> and <code>&gt;&gt;</code>: the <b>left-hand side</b> decides what the symbol means.</p></div>
+  <table>
+    <tr><th>Symbol</th><th>Left side is a number</th><th>Left side is <code>cout</code> / <code>cin</code></th></tr>
+    <tr class="step"><td><code>&lt;&lt;</code></td><td><b>Left shift</b><br><code>x &lt;&lt; 2</code></td><td><b>Insertion operator</b><br><code>cout &lt;&lt; x</code> &mdash; <i>inserts</i> data into the output stream</td></tr>
+    <tr class="step"><td><code>&gt;&gt;</code></td><td><b>Right shift</b><br><code>x &gt;&gt; 2</code></td><td><b>Extraction operator</b><br><code>cin &gt;&gt; x</code> &mdash; <i>extracts</i> data from the input stream</td></tr>
+  </table>
+  <div class="cols c2 step">
+    <div class="card accent"><h3>Why &ldquo;insertion&rdquo;?</h3><p>Output is a <b>stream</b> flowing to the screen. <code>&lt;&lt;</code> pushes (inserts) values into it, and it <b>chains</b>: <code>cout &lt;&lt; "a" &lt;&lt; 5 &lt;&lt; endl;</code></p></div>
+    <div class="card accent"><h3>Why &ldquo;extraction&rdquo;?</h3><p>Input is a stream coming from the keyboard. <code>&gt;&gt;</code> pulls (extracts) values out of it into variables, and also chains: <code>cin &gt;&gt; a &gt;&gt; b;</code></p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Remember</span><p class="big">The arrows point the way the data <b>flows</b>: into <code>cout</code>, out of <code>cin</code> into the variable.</p></div>
+</section>
+
+<section class="slide slow" id="s-iocode" data-title="One program, both jobs">
+  <span class="kicker">See it work</span>
+  <h2>The same <code>&lt;&lt;</code> in two roles</h2>
+  <div class="code" data-title="io_and_shift.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a;
+    cout << "Enter a number: ";
+    cin >> a;
+    cout << a << " shifted left by 2 = " << (a << 2) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a;
+    clrscr();
+    cout << "Enter a number: ";
+    cin >> a;
+    cout << a << " shifted left by 2 = " << (a << 2) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter a number: 5
+5 shifted left by 2 = 20
+</script>
+<ol class="walk">
+  <li data-l="7"><b>Insertion:</b> <code>cout &lt;&lt; "..."</code> &mdash; <code>cout</code> is on the left, so <code>&lt;&lt;</code> inserts text into the output.</li>
+  <li data-l="8"><b>Extraction:</b> <code>cin &gt;&gt; a</code> &mdash; pulls the typed number out of the input into <code>a</code>. (Sample run: the user types 5.)</li>
+  <li data-l="9"><b>Both roles in one line.</b> The first and third <code>&lt;&lt;</code> are insertion (after <code>cout</code>). But <code>(a &lt;&lt; 2)</code> has a <b>number</b> on the left, so it is a left <b>shift</b>: 5 &times; 4 = 20. The brackets stop the compiler getting confused.</li>
+</ol>
+  </div>
+  <p class="legend">Sample run shown with the user typing 5.</p>
+</section>
+
+<section class="slide slow" id="s-bitpractice" data-title="Practice: bitwise drill">
+  <span class="kicker">Your turn</span>
+  <h2>Work these out in binary</h2>
+  <p class="mute">Use the 8-bit view. Press &rarr; for each answer. Check them in the bit lab.</p>
+  <table>
+    <tr><th>Expression</th><th>Working</th><th>Answer</th></tr>
+    <tr class="step"><td><code>5 &amp; 3</code></td><td><code>0101 &amp; 0011 = 0001</code></td><td><b>1</b></td></tr>
+    <tr class="step"><td><code>5 | 3</code></td><td><code>0101 | 0011 = 0111</code></td><td><b>7</b></td></tr>
+    <tr class="step"><td><code>5 ^ 3</code></td><td><code>0101 ^ 0011 = 0110</code></td><td><b>6</b></td></tr>
+    <tr class="step"><td><code>~5</code></td><td>&minus;(5 + 1)</td><td><b>&minus;6</b></td></tr>
+    <tr class="step"><td><code>5 &lt;&lt; 2</code></td><td>5 &times; 4</td><td><b>20</b></td></tr>
+    <tr class="step"><td><code>20 &gt;&gt; 2</code></td><td>20 &divide; 4</td><td><b>5</b></td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 4</h2>
+  <div class="mcq" data-a="0" data-ref="s-bitexample">
+    <p class="q">What is   6 &amp; 3 ?    (6 = 110, 3 = 011)</p>
+    <ul><li>2</li><li>3</li><li>7</li><li>0</li></ul>
+    <div class="exp">110 &amp; 011: only the middle column has 1 in both &rarr; 010 = <b>2</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 4</h2>
+  <div class="mcq" data-a="2" data-ref="s-ones">
+    <p class="q">What is   ~9 ?</p>
+    <ul><li>9</li><li>&minus;9</li><li>&minus;10</li><li>10</li></ul>
+    <div class="exp">~n = &minus;(n + 1) = &minus;(9 + 1) = <b>&minus;10</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 4</h2>
+  <div class="mcq" data-a="3" data-ref="s-shift">
+    <p class="q">What is   1 &lt;&lt; 4 ?</p>
+    <ul><li>4</li><li>8</li><li>14</li><li>16</li></ul>
+    <div class="exp">1 &times; 2<sup>4</sup> = <b>16</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 4</h2>
+  <div class="mcq" data-a="1" data-ref="s-io">
+    <p class="q">In   cin &gt;&gt; x;   the operator &gt;&gt; is called the&hellip;</p>
+    <ul><li>Insertion operator</li><li>Extraction operator</li><li>Right shift operator</li><li>Relational operator</li></ul>
+    <div class="exp">With <code>cin</code> on the left, <code>&gt;&gt;</code> <b>extracts</b> data from the input stream. (It is a right <i>shift</i> only when a number is on the left.)</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 6 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Bitwise</h3><ul><li><b>AND</b>: both 1 &nbsp;&middot;&nbsp; <b>OR</b>: any 1 &nbsp;&middot;&nbsp; <b>XOR</b>: different &nbsp;&middot;&nbsp; <b>NOT</b>: flip.</li><li><code>~n</code> = &minus;(n + 1).</li><li><code>&lt;&lt;</code> multiplies by 2 per step, <code>&gt;&gt;</code> divides by 2 per step.</li><li>Single symbol = bits, double = logic.</li></ul></div>
+    <div class="card good"><h3>&#9989; Insertion &amp; extraction</h3><ul><li><code>cout &lt;&lt; x</code> inserts into the output stream.</li><li><code>cin &gt;&gt; x</code> extracts from the input stream.</li><li>Both arrows can be <b>chained</b>.</li><li>With a number on the left they are shifts; put shifts in brackets inside <code>cout</code>.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

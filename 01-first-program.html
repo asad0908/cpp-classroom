@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 1 – Your First Program</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="222" data-lesson="Lesson 1 · Your First C++ Program">
+<div class="stage">
+
+<!-- 1 ───────── COVER -->
+<section class="slide cover" data-title="Your First C++ Program">
+  <div class="num">01</div>
+  <h1>Your First C++ Program</h1>
+  <p>A computer is a very fast but very <b>literal</b> helper. Today you will write the exact instructions it needs &mdash; and see it obey.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>explain what a program and a compiler are</li>
+      <li>read and write a complete C++ program, in <b>Turbo C++</b> and <b>Modern C++</b> style</li>
+      <li>print with <code>cout</code>, read with <code>cin</code>, and explain your code with comments</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 2 ───────── WHAT IS A PROGRAM -->
+<section class="slide fast" id="s-program" data-title="What is a program?">
+  <span class="kicker">The big idea</span>
+  <h2>A program is a <em>recipe</em> for the computer</h2>
+  <p class="lead">A recipe is a list of steps, in order, that a cook follows <b>exactly</b>. A cook can guess what &ldquo;a pinch of salt&rdquo; means. A computer cannot guess anything.</p>
+  <div class="cols c3">
+    <div class="card accent"><span class="ico">&#127859;</span><h3>Recipe</h3><p>Steps written for a cook. If a step is missing, the dish fails.</p></div>
+    <div class="card accent"><span class="ico">&#128220;</span><h3>Program</h3><p>Steps written for a computer. If a step is wrong or missing, the program fails.</p></div>
+    <div class="card accent"><span class="ico">&#9997;&#65039;</span><h3>Programming</h3><p>Writing those steps clearly, one by one, in a language the computer can be taught &mdash; like <b>C++</b>.</p></div>
+  </div>
+</section>
+
+<!-- 3 ───────── COMPILER -->
+<section class="slide slow" id="s-compiler" data-title="Write → Compile → Run">
+  <span class="kicker">How a program becomes real</span>
+  <h2>Humans write C++. Computers only understand <em>0s and 1s</em>.</h2>
+  <div class="pipe step">
+    <div class="node">1. Write<small>you type C++ code<br>(<code>.cpp</code> file)</small></div><span class="arr">&rarr;</span>
+    <div class="node hot">2. Compile<small>the <b>compiler</b> translates<br>to machine language</small></div><span class="arr">&rarr;</span>
+    <div class="node">3. Run<small>the computer follows<br>the translated steps</small></div><span class="arr">&rarr;</span>
+    <div class="node">4. Output<small>the result you<br>see on screen</small></div>
+  </div>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>The compiler is like a <b>translator</b> between you and a person who only speaks 0s and 1s. If your sentence has a spelling mistake, the translator stops and tells you: that message is a <b>compile error</b>.</p></div>
+  <div class="callout trick step"><span class="tag">Remember</span><p class="big">Error = the compiler could not <i>understand</i> you.<br>Wrong output = the computer understood, but you gave the <i>wrong instructions</i>.</p></div>
+</section>
+
+<!-- 4 ───────── HELLO WALK -->
+<section class="slide slow" id="s-hello" data-title="Hello, World! line by line">
+  <span class="kicker">Our first program</span>
+  <h2>Hello, World! &mdash; <em>line by line</em></h2>
+  <p class="mute">Press &rarr; to walk through the code. Each line lights up with its meaning.</p>
+  <div class="code" data-title="hello.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "Hello, C++!";
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "Hello, C++!";
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Hello, C++!
+</script>
+<ol class="walk">
+  <li data-l="1"><b>#include &lt;iostream&gt;</b> &mdash; &ldquo;Bring in the <b>input/output toolbox</b>.&rdquo; Without it, the computer has never heard of <code>cout</code>. The <code>#</code> line is read by the <i>preprocessor</i> before compiling.</li>
+  <li data-l="2"><b>using namespace std;</b> &mdash; The tools in that toolbox live in a drawer named <code>std</code>. This line says &ldquo;open that drawer for me&rdquo;, so we can write <code>cout</code> instead of <code>std::cout</code>.</li>
+  <li data-l="4"><b>int main()</b> &mdash; Every program <b>starts here</b>. <code>main</code> is the main gate of the program. The <code>int</code> means: when finished, it hands back a whole number to the operating system.</li>
+  <li data-l="5,8"><b>{ &hellip; }</b> &mdash; Curly braces mark the <b>body</b> of <code>main</code>. Everything between <code>{</code> and <code>}</code> belongs to it, like the walls of a room.</li>
+  <li data-l="6"><b>cout &lt;&lt; "Hello, C++!";</b> &mdash; &ldquo;Send this text to the screen.&rdquo; Text inside <b>double quotes</b> is printed exactly as written. The <code>;</code> at the end is the <b>full stop</b> of a statement.</li>
+  <li data-l="7"><b>return 0;</b> &mdash; Tells the operating system &ldquo;I finished successfully.&rdquo; By convention <code>0</code> means <b>success</b>.</li>
+</ol>
+  </div>
+</section>
+
+<!-- 5 ───────── SANDWICH -->
+<section class="slide fast" id="s-skeleton" data-title="The program skeleton">
+  <span class="kicker">Remember this shape</span>
+  <h2>Every C++ program is a <em>sandwich</em></h2>
+  <div class="cols c3">
+    <div class="card accent"><span class="ico">&#127838;</span><h3>Top bread</h3><p><b>Headers.</b> <code>#include</code> lines that bring in tools.</p></div>
+    <div class="card accent"><span class="ico">&#129747;</span><h3>Filling</h3><p><b><code>main()</code> with <code>{ }</code>.</b> The statements that actually do the work, each ending with <code>;</code></p></div>
+    <div class="card accent"><span class="ico">&#127838;</span><h3>Bottom bread</h3><p><b><code>return 0;</code></b> then the closing <code>}</code>. A clean finish.</p></div>
+  </div>
+  <div class="rule">Headers &rarr; <b>main</b> &rarr; <b>{ statements; }</b></div>
+</section>
+
+<!-- 6 ───────── COMPARE -->
+<section class="slide slow" id="s-compare" data-title="Turbo C++ vs Modern C++">
+  <span class="kicker">Two compilers, one language</span>
+  <h2>The <em>same</em> program, written two ways</h2>
+  <div class="code step" data-title="hello.cpp" data-mode="cmp">
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "Hello, C++!";
+    getch();
+}
+</script>
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "Hello, C++!";
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+Hello, C++!
+</script>
+  </div>
+  <p class="legend step"><span class="d">red</span> = only in Turbo C++ &nbsp;&middot;&nbsp; <span class="a">green</span> = only in Modern C++. Both print exactly the same thing.</p>
+  <div class="callout warn step"><span class="tag">Important</span><p>Online compilers and modern IDEs <b>reject</b> the Turbo version. Turbo C++ rejects some modern code too. So always know which compiler you are using.</p></div>
+</section>
+
+<!-- 7 ───────── 5 DIFFERENCES -->
+<section class="slide slow" id="s-diffs" data-title="The 5 differences">
+  <span class="kicker">Spot the differences</span>
+  <h2>Turbo &rarr; Modern: <em>5 changes</em></h2>
+  <table>
+    <tr><th class="c">#</th><th>Turbo C++</th><th>Modern C++</th><th>Why it changed</th></tr>
+    <tr class="step"><td class="c">1</td><td><code>#include &lt;iostream.h&gt;</code></td><td><code>#include &lt;iostream&gt;</code></td><td>The standard removed <code>.h</code> from C++ headers.</td></tr>
+    <tr class="step"><td class="c">2</td><td><i>(nothing)</i></td><td><code>using namespace std;</code></td><td>Standard tools now live inside the <code>std</code> drawer; you must open it.</td></tr>
+    <tr class="step"><td class="c">3</td><td><code>void main()</code></td><td><code>int main()</code></td><td>The standard says <code>main</code> must return an <code>int</code> (a whole number).</td></tr>
+    <tr class="step"><td class="c">4</td><td><i>(nothing)</i></td><td><code>return 0;</code></td><td>Reports &ldquo;success&rdquo;. (If missing in <code>main</code>, modern C++ assumes it.)</td></tr>
+    <tr class="step"><td class="c">5</td><td><code>clrscr(); getch();</code> &amp; <code>&lt;conio.h&gt;</code></td><td><i>(not used)</i></td><td>DOS-only helpers: clear the screen / wait for a key. Not standard C++.</td></tr>
+  </table>
+  <div class="callout trick step"><span class="tag">Memory trick</span><p class="big">Turbo &rarr; Modern: <b>drop the <code>.h</code>, add <code>std</code>, make <code>main</code> an <code>int</code>.</b></p></div>
+</section>
+
+<!-- 8 ───────── COUT -->
+<section class="slide fast" id="s-arrows" data-title="Which way do the arrows point?">
+  <span class="kicker">Input and output</span>
+  <h2><code>cout</code> speaks. <code>cin</code> listens.</h2>
+  <div class="cols c2">
+    <div class="card accent"><h3><code>cout &lt;&lt; data;</code></h3><p><b>c</b>onsole <b>out</b> &mdash; the computer <i>speaks</i> to you.</p><p>Data flows <b>into</b> the screen. The arrows point <b>at <code>cout</code></b>.</p></div>
+    <div class="card accent"><h3><code>cin &gt;&gt; variable;</code></h3><p><b>c</b>onsole <b>in</b> &mdash; you <i>speak</i> to the computer.</p><p>Data flows <b>out of the keyboard</b> into the variable. The arrows point <b>at the variable</b>.</p></div>
+  </div>
+  <div class="rule">The arrows always point in the <b>direction the data travels</b>.</div>
+  <p class="center mute"><code>&lt;&lt;</code> is called the <b>insertion</b> operator and <code>&gt;&gt;</code> the <b>extraction</b> operator &mdash; you will study them properly in Lesson 6.</p>
+</section>
+
+<section class="slide slow" id="s-cout" data-title="Printing with cout">
+  <span class="kicker">Output</span>
+  <h2>Printing text, numbers, and answers</h2>
+  <div class="code" data-title="print.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "Hello" << endl;
+    cout << "Age: " << 16 << endl;
+    cout << "5 + 2 = " << 5 + 2 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "Hello" << endl;
+    cout << "Age: " << 16 << endl;
+    cout << "5 + 2 = " << 5 + 2 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Hello
+Age: 16
+5 + 2 = 7
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Text + endl.</b> The text in quotes is printed as-is. <code>endl</code> means &ldquo;end of line&rdquo;: move the cursor to a <b>new line</b>, like pressing Enter.</li>
+  <li data-l="7"><b>Chaining with <code>&lt;&lt;</code>.</b> You can print several things in one statement: first the text <code>"Age: "</code>, then the number <code>16</code>, then <code>endl</code>. Numbers do <b>not</b> need quotes.</li>
+  <li data-l="8"><b>Text vs calculation.</b> <code>"5 + 2 = "</code> is inside quotes, so it is <b>just text</b>. But <code>5 + 2</code> is outside the quotes, so the computer <b>calculates</b> it and prints 7.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-predict1" data-title="Predict the output">
+  <span class="kicker">Think first</span>
+  <h2>What will this print?</h2>
+  <div class="code" data-title="predict.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "3 + 4";
+    cout << " = ";
+    cout << 3 + 4;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+3 + 4 = 7
+</script>
+  </div>
+  <div class="callout think"><span class="tag">Your turn</span><p>Ask the class to write down the output <b>before</b> pressing <b>Run</b>. Notice there is no <code>endl</code>, so everything stays on <b>one line</b>.</p></div>
+</section>
+
+<!-- 9 ───────── CIN -->
+<section class="slide slow" id="s-cin" data-title="Reading with cin">
+  <span class="kicker">Input</span>
+  <h2>Asking the user: <em>add two numbers</em></h2>
+  <div class="code" data-title="add.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b, sum;
+    cout << "Enter two numbers: ";
+    cin >> a >> b;
+    sum = a + b;
+    cout << "Sum = " << sum << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b, sum;
+    clrscr();
+    cout << "Enter two numbers: ";
+    cin >> a >> b;
+    sum = a + b;
+    cout << "Sum = " << sum << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter two numbers: 5 7
+Sum = 12
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Reserve three lockers.</b> <code>int a, b, sum;</code> asks the computer for three boxes that can each hold a whole number. They are empty (garbage) for now.</li>
+  <li data-l="7"><b>Prompt.</b> A friendly message so the user knows what to type.</li>
+  <li data-l="8"><b>cin &gt;&gt; a &gt;&gt; b;</b> The program <b>waits</b> for the keyboard. If the user types <code>5 7</code>, the 5 goes into <code>a</code> and the 7 goes into <code>b</code>. Separate values with a space or Enter.</li>
+  <li data-l="9"><b>Assignment.</b> <code>=</code> does <b>not</b> mean &ldquo;equals&rdquo; here. It means: <b>calculate the right side, then store it in the left side</b>. So <code>sum</code> becomes 5 + 7 = 12.</li>
+  <li data-l="10"><b>Show the result.</b> <code>"Sum = "</code> is text; <code>sum</code> (no quotes!) is the variable, so its <b>value</b> 12 is printed.</li>
+</ol>
+  </div>
+  <p class="legend">The sample run shows the user typing <code>5 7</code> after the prompt.</p>
+</section>
+
+<!-- 10 ───────── COMMENTS -->
+<section class="slide fast" id="s-comments" data-title="Comments">
+  <span class="kicker">Notes for humans</span>
+  <h2>Comments: the compiler <em>ignores</em> them</h2>
+  <p class="lead">Comments explain <b>why</b> the code does something. They are for you, your teacher and anyone who reads the program later.</p>
+  <div class="code" data-title="comments.cpp" data-mode="modern" data-autorun="1">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    // Single-line comment: ends when the line ends
+    /* Multi-line comment:
+       it can run over many lines */
+    cout << "Comments are invisible"; // can also sit after code
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+Comments are invisible
+</script>
+  </div>
+  <div class="cols c2">
+    <div class="card accent"><h3><code>// text</code></h3><p>Single-line. Everything to the right, until the end of the line, is ignored.</p></div>
+    <div class="card accent"><h3><code>/* text */</code></h3><p>Multi-line. Starts at <code>/*</code> and ends at the <b>first</b> <code>*/</code>. They <b>cannot be nested</b>.</p></div>
+  </div>
+  <p class="mute">Pro tip: put <code>//</code> before a line of code to temporarily &ldquo;switch it off&rdquo; while testing.</p>
+</section>
+
+<!-- 11 ───────── ERROR HUNT -->
+<section class="slide slow" id="s-errors" data-title="Spot the 3 bugs">
+  <span class="kicker">Debugging game</span>
+  <h2>Find the <em>3 bugs</em> in this program</h2>
+  <div class="code" data-title="buggy.cpp (will NOT compile)" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int Main()
+{
+    Cout << "Hello"
+    return 0;
+}
+</script>
+<ol class="walk">
+  <li data-l="4"><b>Bug 1:</b> <code>Main</code> must be <code>main</code>. C++ is <b>case-sensitive</b>: <code>Main</code> and <code>main</code> are different words.</li>
+  <li data-l="6"><b>Bug 2:</b> <code>Cout</code> must be <code>cout</code>. Same reason: capital C is a different name.</li>
+  <li data-l="6"><b>Bug 3:</b> the statement <code>cout &lt;&lt; "Hello"</code> has no <code>;</code> at the end. The compiler complains on the <i>next</i> line, which is confusing &mdash; always check the line <b>before</b> the reported error.</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">The usual suspects</span><p>1) wrong capital letter &nbsp;2) missing <code>;</code> &nbsp;3) missing closing <code>"</code> or <code>}</code> &nbsp;4) forgot <code>#include</code> / <code>using namespace std;</code></p></div>
+</section>
+
+<!-- 12 ───────── QUIZ -->
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 3</h2>
+  <div class="mcq" data-a="1" data-ref="s-hello">
+    <p class="q">Where does every C++ program start executing?</p>
+    <ul><li>#include</li><li>main()</li><li>cout</li><li>return 0;</li></ul>
+    <div class="exp">Execution always begins at <code>main()</code> &mdash; the main gate of the program.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 3</h2>
+  <div class="mcq" data-a="2" data-ref="s-diffs">
+    <p class="q">Which line works ONLY in Turbo C++, not in modern compilers?</p>
+    <ul><li>using namespace std;</li><li>int main()</li><li>#include &lt;iostream.h&gt;</li><li>return 0;</li></ul>
+    <div class="exp"><code>iostream.h</code> is the old header name. Modern compilers use <code>&lt;iostream&gt;</code> (no <code>.h</code>).</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 3</h2>
+  <div class="mcq" data-a="0" data-ref="s-arrows">
+    <p class="q">Which statement reads a value from the keyboard into variable x?</p>
+    <ul><li>cin &gt;&gt; x;</li><li>cin &lt;&lt; x;</li><li>cout &gt;&gt; x;</li><li>cout &lt;&lt; x;</li></ul>
+    <div class="exp">Data flows <b>from the keyboard into x</b>, so the arrows point at x: <code>cin &gt;&gt; x;</code></div>
+  </div>
+</section>
+
+<!-- 13 ───────── RECAP -->
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 1 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Program basics</h3><ul><li>Program = exact steps; compiler = translator.</li><li>Skeleton: <code>#include</code> &rarr; <code>main()</code> &rarr; <code>{ statements; }</code></li><li>Every statement ends with <code>;</code></li></ul></div>
+    <div class="card good"><h3>&#9989; Talking to the user</h3><ul><li><code>cout &lt;&lt;</code> prints; <code>cin &gt;&gt;</code> reads.</li><li><code>//</code> and <code>/* */</code> are comments.</li><li>Turbo &rarr; Modern: drop <code>.h</code>, add <code>using namespace std;</code>, <code>int main</code> + <code>return 0;</code></li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

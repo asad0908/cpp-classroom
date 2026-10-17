@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C++ Classroom – Part 1</title>
+<link rel="stylesheet" href="assets/deck.css">
+<style>
+  body{overflow:auto;height:auto}
+  html,body{height:auto}
+  .hero{background:linear-gradient(135deg,hsl(225 78% 50%),hsl(300 80% 55%));color:#fff;padding:2.6rem 1.5rem 3rem}
+  .hero .wrap{max-width:70rem;margin:0 auto;padding:0}
+  .hero h1{font-size:3rem;font-weight:900;letter-spacing:-.02em;line-height:1.05;margin:.4rem 0}
+  .hero p{font-size:1.2rem;max-width:44rem;opacity:.95}
+  .hero .pill{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:99px;padding:.1em .8em;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-right:.4rem}
+  .hero a.go{display:inline-block;margin-top:.8rem;background:#fff;color:#2b3fbf;font-weight:800;text-decoration:none;border-radius:.9rem;padding:.6rem 1.5rem;font-size:1.05rem;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .hero a.go:hover{transform:translateY(-2px)}
+  .sect{max-width:70rem;margin:0 auto;padding:0 1.5rem}
+  .sect h2{font-size:1.5rem;margin:2.2rem 0 .3rem}
+  .lesson .meta span{border-radius:99px;padding:.05em .7em;font-weight:700}
+  .m-f{background:#dff7e8;color:#0d7a43}.m-s{background:#fff0d4;color:#a15c00}
+  :root[data-theme="dark"] .m-f{background:#12301f;color:#6fe3a2}:root[data-theme="dark"] .m-s{background:#3a2f10;color:#ffc95e}
+  .ls1{--hue:222}.ls2{--hue:165}.ls3{--hue:28}.ls4{--hue:275}.ls5{--hue:12}.ls6{--hue:190}.ls7{--hue:345}.ls8{--hue:95}.ls9{--hue:320}
+  @media (max-width:760px){
+    .hero{padding:1.6rem 1rem 2rem}
+    .hero h1{font-size:2.2rem}
+    .hero p{font-size:1rem}
+    .sect{padding:0 1rem}
+    .sect h2{font-size:1.25rem}
+    .lessons{grid-template-columns:1fr}
+    .keys{grid-template-columns:1fr 1fr}
+    .dk-top .ttl{display:none}
+    .footer{padding:0 1rem}
+  }
+  .footer{max-width:70rem;margin:2rem auto 3rem;padding:0 1.5rem;color:var(--mute);font-size:.8rem}
+</style>
+</head>
+<body class="home-page">
+
+<div class="dk-top"><span class="logo">C++ <span>Classroom</span></span><span class="ttl">Class 11 &middot; Introduction to C++ &middot; Part 1</span>
+  <button id="zm">A&minus;</button><button id="zp">A+</button><button id="thm">&#9681;</button></div>
+
+<header class="hero"><div class="wrap">
+  <span class="pill">Class 11</span><span class="pill">Part 1</span><span class="pill">Beginner friendly</span>
+  <h1>C++ Classroom</h1>
+  <p>From &ldquo;what is a variable?&rdquo; to bitwise operators. Nine short lessons, taught slide by slide, with every program shown in <b>Turbo C++</b> and <b>Modern C++</b>.</p>
+  <a class="go" href="01-first-program.html">&#9654;&nbsp; Start Lesson 1</a>
+</div></header>
+
+<div class="sect">
+  <h2>How the lessons adapt to the topic</h2>
+  <div class="cols c3">
+    <div class="card good"><span class="ico">&#9889;</span><h3>Easy idea &rarr; quick slide</h3><p>Marked <b>&#9889; Quick one</b>. Everything appears at once, so you can move fast.</p></div>
+    <div class="card accent"><span class="ico">&#129504;</span><h3>Hard idea &rarr; slow down</h3><p>Marked <b>&#129504; Take your time</b>. Content appears <b>step by step</b>, and code is explained <b>one line at a time</b>.</p></div>
+    <div class="card bad"><span class="ico">&#8617;&#65039;</span><h3>Wrong answer &rarr; revisit</h3><p>Every quiz answer links to the slide that explains it, and a recap list collects the weak spots.</p></div>
+  </div>
+</div>
+
+<div class="sect">
+  <h2>The lessons</h2>
+  <div class="lessons">
+    <a class="lesson ls1" href="01-first-program.html"><div class="no">LESSON 1</div><h3>Your First Program</h3><p>What a program is, <code>main</code>, <code>cout</code> / <code>cin</code>, comments, and the Turbo vs Modern differences.</p><div class="meta"><span class="m-f">&#9889; 9 quick</span><span class="m-s">&#129504; 7 deep</span></div></a>
+    <a class="lesson ls2" href="02-data-types.html"><div class="no">LESSON 2</div><h3>Data Types</h3><p>int, char, float, double, void, bool, long, short, long double &mdash; and the size of each. The 1-2-4-8 trick.</p><div class="meta"><span class="m-f">&#9889; 11 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
+    <a class="lesson ls3" href="03-variables-constants.html"><div class="no">LESSON 3</div><h3>Variables &amp; Constants</h3><p>Naming rules, int / float / char / string / hex / octal constants, <code>#define</code>, <code>const</code>, <code>enum</code>.</p><div class="meta"><span class="m-f">&#9889; 10 quick</span><span class="m-s">&#129504; 12 deep</span></div></a>
+    <a class="lesson ls4" href="04-tokens.html"><div class="no">LESSON 4</div><h3>Tokens &amp; Preprocessor</h3><p>Keywords, identifiers, literals, operators, white space, <code>#include</code>, <code>#define</code>, <code>#ifdef</code>. Live token splitter.</p><div class="meta"><span class="m-f">&#9889; 9 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
+    <a class="lesson ls5" href="05-operators.html"><div class="no">LESSON 5</div><h3>Operators in Action</h3><p>Arithmetic, unary / binary / ternary, <code>++</code> / <code>--</code>, relational, logical, <code>?:</code>, assignment, shorthand.</p><div class="meta"><span class="m-f">&#9889; 9 quick</span><span class="m-s">&#129504; 13 deep</span></div></a>
+    <a class="lesson ls6" href="06-bitwise.html"><div class="no">LESSON 6</div><h3>Bitwise &amp; I/O Operators</h3><p><code>&amp;</code> <code>|</code> <code>^</code> <code>~</code> <code>&lt;&lt;</code> <code>&gt;&gt;</code> with a live bit lab, plus insertion and extraction operators.</p><div class="meta"><span class="m-f">&#9889; 6 quick</span><span class="m-s">&#129504; 12 deep</span></div></a>
+    <a class="lesson ls7" href="07-operator-precedence.html"><div class="no">LESSON 7</div><h3>The Operator Table</h3><p>Precedence &amp; associativity, the operator ladder, a memory sentence, and a live step-by-step expression solver.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
+    <a class="lesson ls8" href="08-scope-casting.html"><div class="no">LESSON 8</div><h3>Scope &amp; Type Casting</h3><p>Local vs global, visibility, the <code>::</code> operator, implicit and explicit casts.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 11 deep</span></div></a>
+    <a class="lesson ls9" href="09-practice.html"><div class="no">LESSON 9</div><h3>Exam Practice</h3><p>11 quick-fire questions, 7 find-the-output programs, an operator challenge, and the 12 classic exam traps.</p><div class="meta"><span class="m-f">&#9889; 15 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
+  </div>
+</div>
+
+<div class="sect">
+  <h2>Two compilers, one language</h2>
+  <p class="mute">Every code box has three tabs: <b>Compare</b> (red = Turbo only, green = Modern only), <b>Modern</b> and <b>Turbo C++</b>. Press <b>&#9654; Run</b> to reveal the output, and <b>Copy</b> to paste into an online compiler.</p>
+  <table>
+    <tr><th>Thing</th><th>Turbo C++ (old)</th><th>Modern C++</th></tr>
+    <tr><td>Header for cout / cin</td><td><code>#include &lt;iostream.h&gt;</code></td><td><code>#include &lt;iostream&gt;</code></td></tr>
+    <tr><td>Where is <code>cout</code>?</td><td>available directly</td><td>inside <code>std</code>: <code>using namespace std;</code></td></tr>
+    <tr><td>main function</td><td><code>void main()</code></td><td><code>int main()</code> and <code>return 0;</code></td></tr>
+    <tr><td>Clear screen / wait for key</td><td><code>clrscr(); getch();</code> from <code>&lt;conio.h&gt;</code></td><td>not used</td></tr>
+    <tr><td><code>int</code> size</td><td>2 bytes (16-bit)</td><td>4 bytes</td></tr>
+    <tr><td><code>bool</code>, <code>long long</code>, <code>static_cast</code></td><td>not in Turbo C++ 3.0</td><td>available</td></tr>
+  </table>
+  <div class="callout warn"><span class="tag">For the online compiler</span><p>Paste the <b>Modern</b> version. The Turbo version (<code>iostream.h</code>, <code>void main</code>, <code>conio.h</code>) will be rejected by modern and online compilers.</p></div>
+</div>
+
+<div class="sect">
+  <h2>Controls (while presenting)</h2>
+  <div class="keys">
+    <div class="card"><kbd>&rarr;</kbd> <kbd>Space</kbd> next step / slide</div>
+    <div class="card"><kbd>&larr;</kbd> go back</div>
+    <div class="card"><kbd>O</kbd> overview of all slides</div>
+    <div class="card"><kbd>F</kbd> show every step at once</div>
+    <div class="card"><kbd>+</kbd> <kbd>&minus;</kbd> text size (or A&minus; / A+)</div>
+    <div class="card"><kbd>T</kbd> light / dark theme</div>
+  </div>
+</div>
+
+<div class="footer">Tip: the page address remembers the slide (e.g. <code>#7</code>), so you can bookmark where you stopped. All files work offline: just open the HTML in a browser.</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>

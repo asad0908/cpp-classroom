@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 2 – Data Types</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="165" data-lesson="Lesson 2 · Data Types">
+<div class="stage">
+
+<section class="slide cover" data-title="Data Types">
+  <div class="num">02</div>
+  <h1>Data Types</h1>
+  <p>Before the computer stores anything, it must know <b>what kind</b> of data it is and <b>how much room</b> to keep for it.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>name every built-in type and pick the right one for a job</li>
+      <li>quote the <b>size</b> of each type in Turbo C++ and Modern C++ using one trick</li>
+      <li>use modifiers (<code>signed</code>, <code>unsigned</code>, <code>short</code>, <code>long</code>), <code>bool</code>, <code>void</code> and <code>sizeof</code></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide fast" id="s-why" data-title="Why do we need data types?">
+  <span class="kicker">The big idea</span>
+  <h2>Every kind of thing needs the <em>right container</em></h2>
+  <p class="lead">In a kitchen, you do not store water in a paper bag, or a single grain of salt in a huge drum. Memory works the same way.</p>
+  <div class="cols c3">
+    <div class="card accent"><span class="ico">&#128207;</span><h3>1. How much room?</h3><p>A tiny number needs a small box, a giant number needs a big one.</p></div>
+    <div class="card accent"><span class="ico">&#128273;</span><h3>2. Which values?</h3><p>A box for whole numbers cannot hold 3.5. A box for letters cannot hold 42.</p></div>
+    <div class="card accent"><span class="ico">&#129518;</span><h3>3. Which operations?</h3><p>You can add two numbers. Adding two letters makes no sense.</p></div>
+  </div>
+  <div class="rule">A <b>data type</b> = size + allowed values + allowed operations</div>
+</section>
+
+<section class="slide fast" id="s-family" data-title="The family of data types">
+  <span class="kicker">The map</span>
+  <h2>Three families of types</h2>
+  <div class="cols c3">
+    <div class="card good"><h3>&#127968; Built-in (fundamental)</h3><p>Already inside the compiler. <b>This is today&rsquo;s lesson.</b></p><p><code>int</code> <code>char</code> <code>float</code> <code>double</code> <code>bool</code> <code>void</code></p></div>
+    <div class="card"><h3>&#129521; Derived</h3><p>Made <i>from</i> built-in types. (Later chapters.)</p><p>array, pointer, function, reference</p></div>
+    <div class="card"><h3>&#128736;&#65039; User-defined</h3><p>Types you invent yourself. (Later chapters.)</p><p><code>struct</code> <code>class</code> <code>enum</code> <code>union</code> <code>typedef</code></p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-builtin" data-title="The six built-in types">
+  <span class="kicker">Meet the types</span>
+  <h2>The six built-in types</h2>
+  <table>
+    <tr><th>Type</th><th>Stores</th><th>Example value</th><th>Real-life use</th></tr>
+    <tr class="step"><td><code>int</code></td><td>whole numbers (no decimal point)</td><td><code>25</code>, <code>-7</code>, <code>0</code></td><td>age, marks, number of students</td></tr>
+    <tr class="step"><td><code>char</code></td><td><b>one</b> character</td><td><code>'A'</code>, <code>'7'</code>, <code>'#'</code></td><td>grade, initial, symbol</td></tr>
+    <tr class="step"><td><code>float</code></td><td>decimal numbers, about 6&ndash;7 correct digits</td><td><code>3.14f</code></td><td>height, price, percentage</td></tr>
+    <tr class="step"><td><code>double</code></td><td>decimal numbers, about 15 correct digits</td><td><code>3.141592653</code></td><td>science, money, exact calculations</td></tr>
+    <tr class="step"><td><code>bool</code></td><td>only <code>true</code> or <code>false</code></td><td><code>true</code></td><td>passed? present? raining?</td></tr>
+    <tr class="step"><td><code>void</code></td><td><b>nothing at all</b></td><td>&mdash;</td><td>&ldquo;this function gives nothing back&rdquo;</td></tr>
+  </table>
+  <div class="callout warn step"><span class="tag">Careful</span><p><code>'A'</code> (single quotes) is a <b>char</b>. <code>"A"</code> (double quotes) is a <b>string</b>. Also: Turbo C++ 3.0 has <b>no <code>bool</code></b> &mdash; there you use <code>int</code> with 1 / 0.</p></div>
+</section>
+
+<section class="slide slow" id="s-bytes" data-title="Memory is a row of bytes">
+  <span class="kicker">How much room?</span>
+  <h2>Memory is a long row of tiny boxes called <em>bytes</em></h2>
+  <p class="lead">A bigger type books more boxes &mdash; like booking <b>seats in a cinema</b>: <code>char</code> books 1 seat, <code>double</code> books 8.</p>
+  <div class="card">
+    <div class="bytes step"><b>char</b><i>1</i><span>1 byte</span></div>
+    <div class="bytes step"><b>short</b><i>1</i><i>2</i><span>2 bytes</span></div>
+    <div class="bytes step"><b>int</b><i class="g">1</i><i class="g">2</i><i class="g">3</i><i class="g">4</i><span>4 bytes in Modern &nbsp;|&nbsp; <b>only 2 in Turbo C++</b></span></div>
+    <div class="bytes step"><b>float</b><i class="o">1</i><i class="o">2</i><i class="o">3</i><i class="o">4</i><span>4 bytes</span></div>
+    <div class="bytes step"><b>double</b><i class="v">1</i><i class="v">2</i><i class="v">3</i><i class="v">4</i><i class="v">5</i><i class="v">6</i><i class="v">7</i><i class="v">8</i><span>8 bytes</span></div>
+    <div class="bytes step"><b>long double</b><i class="r">1</i><i class="r">2</i><i class="r">3</i><i class="r">4</i><i class="r">5</i><i class="r">6</i><i class="r">7</i><i class="r">8</i><i class="r">9</i><i class="r">10</i><span>10 in Turbo &nbsp;|&nbsp; 16 on most modern PCs</span></div>
+  </div>
+</section>
+
+<section class="slide fast" id="s-trick" data-title="The 1-2-4-8 trick">
+  <span class="kicker">Memory trick</span>
+  <h2>Never forget a size again</h2>
+  <div class="rule"><b>char 1</b> &rarr; <b>short 2</b> &rarr; <b>int &amp; float 4</b> &rarr; <b>double 8</b></div>
+  <div class="cols c3">
+    <div class="card accent"><h3>Each step doubles</h3><p>1, 2, 4, 8 &hellip; and <code>long double</code> doubles once more to 16.</p></div>
+    <div class="card accent"><h3>float is half of double</h3><p>That is why it is less accurate: half the room, half the digits.</p></div>
+    <div class="card bad"><h3>Turbo&rsquo;s odd one out</h3><p><code>int</code> is <b>2</b>, the same as <code>short</code>, because Turbo C++ was built for old <b>16-bit</b> DOS computers.</p></div>
+  </div>
+</section>
+
+<section class="slide fast" id="s-sizes" data-title="Full size table">
+  <span class="kicker">Reference table</span>
+  <h2>All sizes, side by side</h2>
+  <table>
+    <tr><th>Type</th><th class="c">Turbo C++</th><th class="c">Modern C++</th><th>Range in Modern (signed)</th></tr>
+    <tr><td><code>char</code></td><td class="c">1</td><td class="c">1</td><td>&minus;128 to 127</td></tr>
+    <tr><td><code>short</code></td><td class="c">2</td><td class="c">2</td><td>&minus;32,768 to 32,767</td></tr>
+    <tr class="hl"><td><code>int</code></td><td class="c"><b>2</b></td><td class="c"><b>4</b></td><td>&minus;2,147,483,648 to 2,147,483,647</td></tr>
+    <tr><td><code>long</code></td><td class="c">4</td><td class="c">4 (Windows) / 8 (Linux)</td><td>&plusmn;2.1 billion if 4 bytes</td></tr>
+    <tr><td><code>long long</code></td><td class="c">not available</td><td class="c">8</td><td>about &plusmn;9.2 &times; 10<sup>18</sup></td></tr>
+    <tr><td><code>float</code></td><td class="c">4</td><td class="c">4</td><td>about &plusmn;3.4 &times; 10<sup>38</sup> (6&ndash;7 digits)</td></tr>
+    <tr><td><code>double</code></td><td class="c">8</td><td class="c">8</td><td>about &plusmn;1.7 &times; 10<sup>308</sup> (15&ndash;16 digits)</td></tr>
+    <tr class="hl"><td><code>long double</code></td><td class="c"><b>10</b></td><td class="c"><b>16</b> (12 on 32-bit)</td><td>even larger and more precise</td></tr>
+    <tr><td><code>bool</code></td><td class="c">not in Turbo C++ 3.0</td><td class="c">1</td><td><code>true</code> / <code>false</code></td></tr>
+    <tr><td><code>void</code></td><td class="c" colspan="3">no size, no values &mdash; it means &ldquo;nothing&rdquo;</td></tr>
+  </table>
+  <p class="legend">The standard guarantees only <code>char</code> = 1 and <code>short</code> &le; <code>int</code> &le; <code>long</code>. Real sizes depend on the compiler and machine &mdash; so we ask the compiler with <code>sizeof</code>.</p>
+</section>
+
+<section class="slide slow" id="s-sizeof" data-title="sizeof: ask the compiler">
+  <span class="kicker">Try it</span>
+  <h2><code>sizeof</code> tells the <em>truth</em> about your compiler</h2>
+  <div class="code" data-title="sizes.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "char        : " << sizeof(char) << endl;
+    cout << "short       : " << sizeof(short) << endl;
+    cout << "int         : " << sizeof(int) << endl;
+    cout << "long        : " << sizeof(long) << endl;
+    cout << "long long   : " << sizeof(long long) << endl;
+    cout << "float       : " << sizeof(float) << endl;
+    cout << "double      : " << sizeof(double) << endl;
+    cout << "long double : " << sizeof(long double) << endl;
+    cout << "bool        : " << sizeof(bool) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "char        : " << sizeof(char) << endl;
+    cout << "short       : " << sizeof(short) << endl;
+    cout << "int         : " << sizeof(int) << endl;
+    cout << "long        : " << sizeof(long) << endl;
+    cout << "float       : " << sizeof(float) << endl;
+    cout << "double      : " << sizeof(double) << endl;
+    cout << "long double : " << sizeof(long double) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+char        : 1
+short       : 2
+int         : 4
+long        : 8
+long long   : 8
+float       : 4
+double      : 8
+long double : 16
+bool        : 1
+</script>
+<script type="text/plain" data-v="outt">
+char        : 1
+short       : 2
+int         : 2
+long        : 4
+float       : 4
+double      : 8
+long double : 10
+</script>
+<ol class="walk">
+  <li data-l="6"><b>sizeof(type)</b> is an <b>operator</b> that returns how many bytes a type occupies. It works on a type name, like <code>sizeof(char)</code>, or on a variable.</li>
+  <li data-l="8"><b>int</b> prints <b>4</b> on a modern compiler but <b>2</b> in Turbo C++. Click the <b>Turbo C++</b> tab and press Run to see the old output.</li>
+  <li data-l="9,10"><b>long</b> is 8 on 64-bit Linux and most online compilers, but 4 on Windows. <b>long long</b> always gives 8 and does not exist in Turbo C++.</li>
+  <li data-l="13"><b>long double</b> is 16 here, 10 in Turbo C++, and can also be 12 or 8 on other systems.</li>
+  <li data-l="14"><b>bool</b> takes 1 byte (even though it only needs 1 bit). Turbo C++ 3.0 has no <code>bool</code>, so that line is missing from the old program.</li>
+</ol>
+  </div>
+  <p class="legend">Output shown is from a typical 64-bit Linux online compiler; the Turbo tab shows the 16-bit result.</p>
+</section>
+
+<section class="slide fast" id="s-predict-sizeof" data-title="Predict: sizeof of literals">
+  <span class="kicker">Think first</span>
+  <h2>What do these print?</h2>
+  <div class="code" data-title="predict.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << sizeof(3.5) << " " << sizeof(3.5f) << " " << sizeof('A') << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+8 4 1
+</script>
+  </div>
+  <div class="cols c3">
+    <div class="card"><h3><code>3.5</code> &rarr; 8</h3><p>A decimal number written plainly is a <b>double</b> by default.</p></div>
+    <div class="card"><h3><code>3.5f</code> &rarr; 4</h3><p>The <b>f</b> suffix turns it into a <b>float</b>.</p></div>
+    <div class="card"><h3><code>'A'</code> &rarr; 1</h3><p>A single character is a <b>char</b>: 1 byte.</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-modifiers" data-title="Modifiers: signed, unsigned, short, long">
+  <span class="kicker">Tuning a type</span>
+  <h2>Modifiers change the <em>size</em> or the <em>range</em></h2>
+  <p class="lead">Think of modifiers as adjectives: a <b>long</b> int, an <b>unsigned</b> int.</p>
+  <div class="cols c2">
+    <div class="card accent step"><span class="ico">&#177;</span><h3><code>signed</code> / <code>unsigned</code></h3><p><b>Can the value be negative?</b></p><p><code>signed</code> (the default): negative, zero and positive.</p><p><code>unsigned</code>: zero and positive only &mdash; but it reaches <b>twice as high</b>.</p></div>
+    <div class="card accent step"><span class="ico">&#8597;</span><h3><code>short</code> / <code>long</code></h3><p><b>Make the box smaller or bigger.</b></p><p><code>short int</code>, <code>long int</code>, <code>long long</code>, <code>long double</code>.</p><p><code>int</code> can be dropped: <code>long</code> means <code>long int</code>.</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Range formula &mdash; never memorise ranges again</span>
+    <p class="big">n bits &rarr; &nbsp; signed: <b>&minus;2<sup>n&minus;1</sup> &hellip; 2<sup>n&minus;1</sup>&minus;1</b> &nbsp;&nbsp; unsigned: <b>0 &hellip; 2<sup>n</sup>&minus;1</b></p>
+    <p>Example: <code>char</code> = 1 byte = 8 bits = 2<sup>8</sup> = <b>256</b> patterns. Unsigned: 0&hellip;255. Signed: half go negative &rarr; &minus;128&hellip;127. Turbo&rsquo;s <code>int</code> = 16 bits &rarr; &minus;32768&hellip;32767 (unsigned 0&hellip;65535).</p></div>
+</section>
+
+<section class="slide slow" id="s-odometer" data-title="Overflow: the odometer">
+  <span class="kicker">What if we go past the maximum?</span>
+  <h2>Types <em>wrap around</em> like a car odometer</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A 5-digit odometer shows <b>99999</b>. Drive one more kilometre and it shows <b>00000</b>. A data type does the same when you add past its maximum.</p></div>
+  <div class="code step" data-title="wrap.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    short s = 32767;
+    s = s + 1;
+    cout << s << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+-32768
+</script>
+  </div>
+  <div class="callout warn step"><span class="tag">Why -32768?</span><p>32767 is the largest <code>short</code>. Adding 1 overflows, and the value wraps round to the <b>smallest</b> one. Bigger data type = bigger range = later wrap. Choose a type large enough for your data.</p></div>
+</section>
+
+<section class="slide slow" id="s-limits" data-title="Limits of each type">
+  <span class="kicker">Let the compiler tell us</span>
+  <h2>Printing the minimum and maximum values</h2>
+  <div class="code" data-title="limits.cpp" data-mode="cmp">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <climits>
+using namespace std;
+
+int main()
+{
+    cout << "int min : " << INT_MIN << endl;
+    cout << "int max : " << INT_MAX << endl;
+    cout << "unsigned int max : " << UINT_MAX << endl;
+    cout << "signed char max : " << SCHAR_MAX << endl;
+    cout << "unsigned char max : " << UCHAR_MAX << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <limits.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << "int min : " << INT_MIN << endl;
+    cout << "int max : " << INT_MAX << endl;
+    cout << "unsigned int max : " << UINT_MAX << endl;
+    cout << "signed char max : " << SCHAR_MAX << endl;
+    cout << "unsigned char max : " << UCHAR_MAX << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+int min : -2147483648
+int max : 2147483647
+unsigned int max : 4294967295
+signed char max : 127
+unsigned char max : 255
+</script>
+<script type="text/plain" data-v="outt">
+int min : -32768
+int max : 32767
+unsigned int max : 65535
+signed char max : 127
+unsigned char max : 255
+</script>
+  </div>
+  <p class="step legend">Header names differ too: Turbo <code>&lt;limits.h&gt;</code> &rarr; Modern <code>&lt;climits&gt;</code>. Rule: C headers lose the <code>.h</code> and gain a <code>c</code> in front. Press <b>Run</b> to compare the two outputs.</p>
+</section>
+
+<section class="slide slow" id="s-char" data-title="char: a letter is secretly a number">
+  <span class="kicker">The char type</span>
+  <h2>A <code>char</code> is secretly a <em>number</em></h2>
+  <p class="lead">Computers only store numbers. Every character has a secret number, its <b>ASCII code</b>.</p>
+  <div class="mem step">
+    <div class="cell sm"><div class="nm">'A'</div><div class="vl">65</div></div>
+    <div class="cell sm"><div class="nm">'B'</div><div class="vl">66</div></div>
+    <div class="cell sm"><div class="nm">'Z'</div><div class="vl">90</div></div>
+    <div class="cell sm"><div class="nm">'a'</div><div class="vl">97</div></div>
+    <div class="cell sm"><div class="nm">'z'</div><div class="vl">122</div></div>
+    <div class="cell sm"><div class="nm">'0'</div><div class="vl">48</div></div>
+    <div class="cell sm"><div class="nm">' ' (space)</div><div class="vl">32</div></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Trick</span><p class="big">Capital <b>A = 65</b>, small <b>a = 97</b>, digit <b>'0' = 48</b>. Small = Capital + <b>32</b>.</p></div>
+  <div class="code step" data-title="char_demo.cpp" data-mode="cmp">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    char c = 'A';
+    cout << c << endl;
+    cout << (int) c << endl;
+    cout << (char) (c + 1) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    char c = 'A';
+    clrscr();
+    cout << c << endl;
+    cout << (int) c << endl;
+    cout << (char) (c + 1) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+A
+65
+B
+</script>
+  </div>
+</section>
+
+<section class="slide slow" id="s-precision" data-title="float vs double accuracy">
+  <span class="kicker">Decimal types</span>
+  <h2><code>float</code> vs <code>double</code>: how many digits are <em>correct</em>?</h2>
+  <div class="code" data-title="precision.cpp" data-mode="cmp">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    float f = 1.0f / 3;
+    double d = 1.0 / 3;
+    cout << setprecision(15);
+    cout << "float  : " << f << endl;
+    cout << "double : " << d << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <iomanip.h>
+#include <conio.h>
+
+void main()
+{
+    float f = 1.0f / 3;
+    double d = 1.0 / 3;
+    clrscr();
+    cout << setprecision(15);
+    cout << "float  : " << f << endl;
+    cout << "double : " << d << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+float  : 0.333333343267441
+double : 0.333333333333333
+</script>
+  </div>
+  <div class="callout think step"><span class="tag">Look closely</span><p>Both should be 0.3333&hellip; forever. The <b>float</b> goes wrong after about <b>7 digits</b> (0.3333333<b style="color:var(--bad)">43</b>&hellip;). The <b>double</b> stays right for about <b>15 digits</b>.</p></div>
+  <p class="step legend"><code>setprecision(15)</code> asks <code>cout</code> to show 15 digits. By default <code>cout</code> shows only 6 significant digits. Turbo&rsquo;s header is <code>&lt;iomanip.h&gt;</code>, Modern&rsquo;s is <code>&lt;iomanip&gt;</code>.</p>
+</section>
+
+<section class="slide fast" id="s-boolvoid" data-title="bool and void">
+  <span class="kicker">Two special types</span>
+  <h2><code>bool</code> is a light switch. <code>void</code> is an empty hand.</h2>
+  <div class="cols c2">
+    <div class="card accent"><span class="ico">&#128161;</span><h3><code>bool</code></h3><p>Only two states: <code>true</code> (stored as <b>1</b>) or <code>false</code> (stored as <b>0</b>).</p><p><code>cout</code> prints 1 or 0, unless you add <code>boolalpha</code>. Any <b>non-zero</b> value turns into <code>true</code>.</p></div>
+    <div class="card accent"><span class="ico">&#9995;</span><h3><code>void</code></h3><p>&ldquo;No value.&rdquo; A function that only <i>does</i> something (like printing) and hands nothing back is <code>void</code>. That is why Turbo C++ allows <code>void main()</code>.</p><p>You <b>cannot</b> create a variable of type <code>void</code>.</p></div>
+  </div>
+  <div class="code" data-title="bool_demo.cpp  (Modern only: Turbo C++ 3.0 has no bool)" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    bool passed = true;
+    bool failed = false;
+    cout << passed << " " << failed << endl;
+    bool x = 25;
+    cout << x << endl;
+    cout << boolalpha << passed << " " << failed << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+1 0
+1
+true false
+</script>
+  </div>
+</section>
+
+<section class="slide slow" id="s-choose" data-title="Which type should I use?">
+  <span class="kicker">Class game</span>
+  <h2>Choose the right type</h2>
+  <p class="mute">Ask the class first. Press &rarr; to reveal each answer.</p>
+  <table>
+    <tr><th>Data to store</th><th>Best type</th><th>Reason</th></tr>
+    <tr class="step"><td>Age of a student</td><td><code>int</code></td><td>whole number, small</td></tr>
+    <tr class="step"><td>Percentage 87.5</td><td><code>float</code></td><td>has a decimal part</td></tr>
+    <tr class="step"><td>Grade &lsquo;B&rsquo;</td><td><code>char</code></td><td>exactly one character</td></tr>
+    <tr class="step"><td>Is the student present?</td><td><code>bool</code></td><td>only yes / no</td></tr>
+    <tr class="step"><td>Population of India</td><td><code>long long</code></td><td>over a billion: too big for Turbo&rsquo;s <code>int</code></td></tr>
+    <tr class="step"><td>Phone number 98XXXXXXXX</td><td>string (text)</td><td>we never calculate with it; too big for <code>int</code>; a leading 0 would vanish</td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 4</h2>
+  <div class="mcq" data-a="2" data-ref="s-trick">
+    <p class="q">In Turbo C++, sizeof(int) is&hellip;</p>
+    <ul><li>1</li><li>8</li><li>2</li><li>4</li></ul>
+    <div class="exp">Turbo C++ is a 16-bit compiler, so <code>int</code> = 2 bytes. Modern compilers give 4.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 4</h2>
+  <div class="mcq" data-a="3" data-ref="s-modifiers">
+    <p class="q">Largest value an unsigned char can hold?</p>
+    <ul><li>127</li><li>128</li><li>256</li><li>255</li></ul>
+    <div class="exp">1 byte = 8 bits = 256 patterns. Unsigned starts at 0, so the maximum is 2<sup>8</sup>&minus;1 = <b>255</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 4</h2>
+  <div class="mcq" data-a="1" data-ref="s-precision">
+    <p class="q">Which type is the most precise?</p>
+    <ul><li>float</li><li>long double</li><li>double</li><li>int</li></ul>
+    <div class="exp">Staircase: float (4) &lt; double (8) &lt; long double (10 / 16). More bytes = more digits.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 4</h2>
+  <div class="mcq" data-a="0" data-ref="s-char">
+    <p class="q">What does  cout &lt;&lt; (int) 'A';  print?</p>
+    <ul><li>65</li><li>A</li><li>97</li><li>1</li></ul>
+    <div class="exp">Casting the character to <code>int</code> shows its ASCII code: <b>65</b>.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 2 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Types &amp; sizes</h3><ul><li>Type = size + allowed values + operations.</li><li><b>1 &middot; 2 &middot; 4 &middot; 8</b>: char, short, int/float, double.</li><li>Turbo: <code>int</code> = 2, <code>long double</code> = 10. Modern: 4 and 16.</li></ul></div>
+    <div class="card good"><h3>&#9989; Ranges &amp; tools</h3><ul><li>Range: signed &minus;2<sup>n&minus;1</sup>&hellip;2<sup>n&minus;1</sup>&minus;1, unsigned 0&hellip;2<sup>n</sup>&minus;1.</li><li><code>bool</code> = 1/0, <code>void</code> = nothing.</li><li><code>sizeof</code> asks the compiler for the real size.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

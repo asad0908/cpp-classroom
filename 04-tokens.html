@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 4 – Tokens and Preprocessor</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="275" data-lesson="Lesson 4 · Tokens &amp; the Preprocessor">
+<div class="stage">
+
+<section class="slide cover" data-title="Tokens & the Preprocessor">
+  <div class="num">04</div>
+  <h1>Tokens &amp; the Preprocessor</h1>
+  <p>How the compiler <b>reads</b> your program &mdash; and the helper that works on it <b>before</b> the compiler even starts.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>cut any line of code into <b>tokens</b> and name each kind</li>
+      <li>tell keywords, identifiers, literals, operators and punctuators apart</li>
+      <li>explain white space, and use <code>#include</code>, <code>#define</code> and <code>#ifdef</code></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide fast" id="s-tokidea" data-title="What is a token?">
+  <span class="kicker">The big idea</span>
+  <h2>Tokens are the <em>words</em> of C++</h2>
+  <p class="lead">Before you can understand an English sentence, your brain cuts it into words and punctuation. The compiler does exactly the same with your code. The smallest meaningful pieces it finds are called <b>tokens</b>.</p>
+  <div class="arrowrow">
+    <div class="card"><h3>English</h3><p><code>The cat sat.</code></p><p>3 words + 1 full stop</p></div>
+    <span class="arr">&rarr;</span>
+    <div class="card accent"><h3>C++</h3><p><code>int total = marks + 5;</code></p><p>7 tokens</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-kilop" data-title="The five kinds of token">
+  <span class="kicker">Cutting a line into tokens</span>
+  <h2><code>int total = marks + 5 ;</code></h2>
+  <div class="center" style="margin:.8rem 0;font-size:1.1rem">
+    <span class="tok tk-kw step">int<small>keyword</small></span>
+    <span class="tok tk-id step">total<small>identifier</small></span>
+    <span class="tok tk-op step">=<small>operator</small></span>
+    <span class="tok tk-id step">marks<small>identifier</small></span>
+    <span class="tok tk-op step">+<small>operator</small></span>
+    <span class="tok tk-lit step">5<small>literal</small></span>
+    <span class="tok tk-pu step">;<small>punctuator</small></span>
+  </div>
+  <p class="center step big">= <b>7 tokens</b></p>
+  <div class="rule step">Only five kinds exist: <b>K</b>eywords &middot; <b>I</b>dentifiers &middot; <b>L</b>iterals &middot; <b>O</b>perators &middot; <b>P</b>unctuators &nbsp;<span class="mute" style="font-size:.6em">&ldquo;K-I-L-O-P&rdquo;, like <i>kilo</i> + P</span></div>
+</section>
+
+<section class="slide slow" id="s-tokplay" data-title="Token splitter (try it)">
+  <span class="kicker">Class game</span>
+  <h2>Count the tokens</h2>
+  <div class="play tokdemo"></div>
+  <div class="callout think step"><span class="tag">Guess first, then type it in</span><p><code>int a = 5;</code> &nbsp;&middot;&nbsp; <code>cout &lt;&lt; "Hi" &lt;&lt; x;</code> &nbsp;&middot;&nbsp; <code>if (a &gt;= 10) b++;</code></p></div>
+  <div class="callout trick step"><span class="tag">Answers</span><p><b>5</b> tokens &middot; <b>6</b> tokens (<code>cout</code> <code>&lt;&lt;</code> <code>"Hi"</code> <code>&lt;&lt;</code> <code>x</code> <code>;</code>) &middot; <b>9</b> tokens (<code>if</code> <code>(</code> <code>a</code> <code>&gt;=</code> <code>10</code> <code>)</code> <code>b</code> <code>++</code> <code>;</code>). Remember: <code>&gt;=</code> and <code>++</code> are <b>one</b> token each.</p></div>
+</section>
+
+<section class="slide slow" id="s-longest" data-title="The longest-match rule">
+  <span class="kicker">A compiler habit</span>
+  <h2>The compiler always grabs the <em>longest</em> token it can</h2>
+  <p class="lead">So <code>&gt;&gt;=</code> is <b>one</b> token (not three) and <code>a+++b</code> is read as <code>a ++ + b</code>.</p>
+  <div class="code" data-title="longest_match.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 5, b = 3, r;
+    r = a+++b;
+    cout << r << " " << a << " " << b << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 5, b = 3, r;
+    clrscr();
+    r = a+++b;
+    cout << r << " " << a << " " << b << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+8 6 3
+</script>
+<ol class="walk">
+  <li data-l="7"><b>a+++b</b> is cut as <code>a</code> <code>++</code> <code>+</code> <code>b</code>. The compiler takes <code>++</code> first (longest match), then the remaining <code>+</code>.</li>
+  <li data-l="8"><b>Result.</b> <code>a++</code> uses 5, then makes <code>a</code> = 6. So r = 5 + 3 = <b>8</b>, a = <b>6</b>, b = 3.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-keywords" data-title="Keywords">
+  <span class="kicker">Token kind 1</span>
+  <h2>Keywords are <em>reserved words</em></h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Words like <b>&ldquo;Principal&rdquo;</b> or <b>&ldquo;Exit&rdquo;</b> on school doors are reserved for a purpose. You cannot rename your cupboard &ldquo;Principal&rdquo;. In the same way, a keyword already has a fixed meaning in C++ and cannot be used as your own name. Keywords are always written in <b>lowercase</b>.</p></div>
+  <table>
+    <tr><th>Group</th><th>Keywords (C++98 has 63 in total; newer versions add more)</th></tr>
+    <tr class="step"><td>Data types</td><td><code>int char float double void bool long short signed unsigned wchar_t</code></td></tr>
+    <tr class="step"><td>Constants / values</td><td><code>const true false enum</code></td></tr>
+    <tr class="step"><td>Decisions &amp; loops</td><td><code>if else switch case default for while do break continue goto return</code></td></tr>
+    <tr class="step"><td>Storage &amp; modifiers</td><td><code>auto register static extern mutable volatile inline typedef sizeof</code></td></tr>
+    <tr class="step"><td>Classes &amp; objects</td><td><code>class struct union public private protected this friend virtual new delete operator template explicit</code></td></tr>
+    <tr class="step"><td>Exceptions &amp; casts</td><td><code>try catch throw static_cast const_cast dynamic_cast reinterpret_cast</code></td></tr>
+    <tr class="step"><td>Other</td><td><code>namespace using typeid typename asm export</code></td></tr>
+  </table>
+  <div class="callout trick step"><span class="tag">Tricks</span><p><b>Colour changed in the editor? It is a keyword &mdash; hands off!</b> Not keywords (common doubt): <code>main</code>, <code>cout</code>, <code>cin</code>, <code>endl</code>, <code>include</code>, <code>string</code>. They are identifiers that happen to be predefined.</p></div>
+</section>
+
+<section class="slide fast" id="s-ident" data-title="Identifiers">
+  <span class="kicker">Token kind 2</span>
+  <h2>Identifiers are <em>names you choose</em></h2>
+  <p class="lead">Names for variables, functions, constants and classes. Same rules as Lesson 3: <b>L-U-D</b>, case-sensitive, never a keyword.</p>
+  <table>
+    <tr><th>Keyword</th><th>Identifier</th></tr>
+    <tr><td>Made by the language</td><td>Made by the programmer</td></tr>
+    <tr><td>Fixed spelling and meaning (63+ of them)</td><td>Unlimited &mdash; your choice</td></tr>
+    <tr><td><code>int</code> &nbsp; <code>while</code> &nbsp; <code>return</code></td><td><code>age</code> &nbsp; <code>total_marks</code> &nbsp; <code>main</code></td></tr>
+  </table>
+</section>
+
+<section class="slide fast" id="s-literals" data-title="Literals">
+  <span class="kicker">Token kind 3</span>
+  <h2>A literal is a value <em>written directly</em> in the code</h2>
+  <table>
+    <tr><th>Literal kind</th><th>Examples</th></tr>
+    <tr><td>Integer</td><td><code>25</code> &nbsp; <code>-7</code> &nbsp; <code>0113</code> &nbsp; <code>0x4B</code> &nbsp; <code>100L</code></td></tr>
+    <tr><td>Floating-point</td><td><code>3.14</code> &nbsp; <code>2.5e3</code> &nbsp; <code>1.5f</code></td></tr>
+    <tr><td>Character</td><td><code>'A'</code> &nbsp; <code>'\n'</code> &nbsp; <code>'5'</code></td></tr>
+    <tr><td>String</td><td><code>"Hello"</code> &nbsp; <code>""</code> (empty)</td></tr>
+    <tr><td>Boolean</td><td><code>true</code> &nbsp; <code>false</code></td></tr>
+  </table>
+  <div class="callout trick"><span class="tag">Tell them apart</span><p class="big">Literal = the value <b>itself</b>. Identifier = a <b>name</b> that points to a value.</p><p>In <code>int age = 16;</code> &rarr; <code>age</code> is the identifier, <code>16</code> is the literal. In <code>cout &lt;&lt; "age";</code> &rarr; <code>"age"</code> is a string literal (plain text), <b>not</b> the variable.</p></div>
+</section>
+
+<section class="slide fast" id="s-opspunct" data-title="Operators and punctuators">
+  <span class="kicker">Token kinds 4 and 5</span>
+  <h2>Operators <em>do work</em>. Punctuators <em>organise</em>.</h2>
+  <div class="cols c2">
+    <div class="card accent"><h3>Operators</h3><p>Symbols that act on values (called <b>operands</b>).</p><p><code>+ - * / % = == &amp;&amp; ++ &lt;&lt;</code> &hellip;</p><p>In <code>3 + 4</code>: <code>+</code> is the operator; 3 and 4 are the operands. Lessons 5&ndash;7 cover them in depth.</p></div>
+    <div class="card accent"><h3>Punctuators (separators)</h3><p>Symbols that structure the code but calculate nothing.</p><p><code>; , ( ) { } [ ] #</code></p><p>Example: <code>;</code> ends a statement, <code>{ }</code> group statements.</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-whitespace" data-title="White space">
+  <span class="kicker">The invisible token separator</span>
+  <h2>White space: used to <em>separate</em>, then ignored</h2>
+  <p class="lead">White space means <b>space, tab and new line</b> (comments are skipped too).</p>
+  <div class="cols c3">
+    <div class="card accent step"><h3>Needed when&hellip;</h3><p>two tokens would otherwise glue together: <code>int x</code> (not <code>intx</code>), <code>return 0</code> (not <code>return0</code>).</p></div>
+    <div class="card accent step"><h3>Optional when&hellip;</h3><p>a symbol already separates them: <code>a+b</code> = <code>a + b</code> = <code>a &nbsp;&nbsp;+&nbsp;&nbsp; b</code>.</p></div>
+    <div class="card accent step"><h3>Kept inside&hellip;</h3><p><b>string literals</b>: <code>"Hello World"</code> keeps its space. Also, <code>#</code> lines need their own line.</p></div>
+  </div>
+  <div class="code step" data-title="whitespace.cpp  (ugly, but legal!)" data-mode="cmp">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+int main(){int a=5,b=3;cout<<a+b;return 0;}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+void main(){int a=5,b=3;clrscr();cout<<a+b;getch();}
+</script>
+<script type="text/plain" data-v="out">
+8
+</script>
+  </div>
+  <div class="callout warn step"><span class="tag">Style matters</span><p>Legal does not mean readable! Use one statement per line and <b>indent</b> inside braces. White space is free &mdash; spend it kindly on the next reader (often you, next week).</p></div>
+</section>
+
+<section class="slide slow" id="s-pre" data-title="The preprocessor">
+  <span class="kicker">Before the compiler</span>
+  <h2>The preprocessor edits your text <em>first</em></h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Before a chef cooks, an assistant gathers the ingredients and swaps &ldquo;the usual spice&rdquo; for the real spice. The <b>preprocessor</b> is that assistant: it rewrites your source <i>before</i> the compiler sees it.</p></div>
+  <div class="pipe step"><div class="node">Source<small>.cpp</small></div><span class="arr">&rarr;</span><div class="node hot">Preprocessor<small>handles every # line</small></div><span class="arr">&rarr;</span><div class="node">Compiler<small>makes machine code</small></div><span class="arr">&rarr;</span><div class="node">Linker<small>joins the pieces</small></div><span class="arr">&rarr;</span><div class="node">.exe<small>runs</small></div></div>
+  <div class="rule step">Starts with <b>#</b> &nbsp;&middot;&nbsp; <b>no semicolon</b> at the end</div>
+</section>
+
+<section class="slide slow" id="s-directives" data-title="Preprocessor directives">
+  <span class="kicker">The directives you need</span>
+  <h2>Common directives</h2>
+  <table>
+    <tr><th>Directive</th><th>What it does</th><th>Example</th></tr>
+    <tr class="step"><td><code>#include</code></td><td>Copy-pastes another file here</td><td><code>#include &lt;iostream&gt;</code></td></tr>
+    <tr class="step"><td><code>#define</code></td><td>Defines a name (constant or macro)</td><td><code>#define MAX 100</code></td></tr>
+    <tr class="step"><td><code>#undef</code></td><td>Removes a definition</td><td><code>#undef MAX</code></td></tr>
+    <tr class="step"><td><code>#ifdef</code> / <code>#ifndef</code></td><td>Keeps the code below only if a name is defined / not defined</td><td><code>#ifdef DEBUG</code></td></tr>
+    <tr class="step"><td><code>#if</code> &hellip; <code>#else</code> &hellip; <code>#endif</code></td><td>Conditional compilation (always closed by <code>#endif</code>)</td><td><code>#if MAX &gt; 50</code></td></tr>
+    <tr class="step"><td><code>#pragma</code></td><td>A compiler-specific instruction</td><td><code>#pragma once</code></td></tr>
+  </table>
+  <div class="cols c2 step">
+    <div class="card"><h3><code>#include &lt;iostream&gt;</code></h3><p>Angle brackets: search the compiler&rsquo;s <b>standard library</b> folders.</p></div>
+    <div class="card"><h3><code>#include "myfile.h"</code></h3><p>Quotes: search <b>your own project folder</b> first, then the standard folders.</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-macro" data-title="#define macros and their trap">
+  <span class="kicker">Macros</span>
+  <h2>A macro is a <em>blind find-and-replace</em></h2>
+  <p class="lead">It never calculates &mdash; it only pastes text. That can surprise you.</p>
+  <div class="code" data-title="macro_trap.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+#define SQUARE(x) x * x
+#define SAFE_SQUARE(x) ((x) * (x))
+
+int main()
+{
+    cout << SQUARE(2 + 3) << endl;
+    cout << SAFE_SQUARE(2 + 3) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+#define SQUARE(x) x * x
+#define SAFE_SQUARE(x) ((x) * (x))
+
+void main()
+{
+    clrscr();
+    cout << SQUARE(2 + 3) << endl;
+    cout << SAFE_SQUARE(2 + 3) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+11
+25
+</script>
+<ol class="walk">
+  <li data-l="4,9"><b>Predict: 25? No, it prints 11.</b> The preprocessor pastes <code>2 + 3</code> for <code>x</code> exactly as text, giving <code>2 + 3 * 2 + 3</code>. Multiplication happens first: 2 + 6 + 3 = <b>11</b>.</li>
+  <li data-l="5,10"><b>The fix: brackets everywhere.</b> <code>((2 + 3) * (2 + 3))</code> = 5 &times; 5 = <b>25</b>. Rule: wrap every parameter, and the whole macro, in brackets.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ifdef" data-title="Conditional compilation">
+  <span class="kicker">Switching code on and off</span>
+  <h2><code>#ifdef</code>: compile this part only <em>if</em> a name exists</h2>
+  <div class="code" data-title="ifdef_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+#define DEBUG
+
+int main()
+{
+#ifdef DEBUG
+    cout << "Debug mode" << endl;
+#else
+    cout << "Release mode" << endl;
+#endif
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+#define DEBUG
+
+void main()
+{
+    clrscr();
+#ifdef DEBUG
+    cout << "Debug mode" << endl;
+#else
+    cout << "Release mode" << endl;
+#endif
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Debug mode
+</script>
+<ol class="walk">
+  <li data-l="4"><b>#define DEBUG</b> creates the name <code>DEBUG</code>. It does not need a value.</li>
+  <li data-l="8,9"><b>#ifdef DEBUG</b> &mdash; &ldquo;if DEBUG is defined, keep the next lines.&rdquo; It is, so the debug message stays.</li>
+  <li data-l="10,11"><b>#else</b> &mdash; this part is <b>thrown away</b> before compiling. It does not even run, it does not even exist.</li>
+  <li data-l="12"><b>#endif</b> closes the block. Delete line 4 and run again: the output flips to &ldquo;Release mode&rdquo;.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 4</h2>
+  <div class="mcq" data-a="2" data-ref="s-kilop">
+    <p class="q">How many tokens are in:   cout &lt;&lt; "Hi" &lt;&lt; x;</p>
+    <ul><li>4</li><li>5</li><li>6</li><li>7</li></ul>
+    <div class="exp">cout, &lt;&lt;, "Hi", &lt;&lt;, x, ; &mdash; that is <b>6</b> tokens.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 4</h2>
+  <div class="mcq" data-a="1" data-ref="s-literals">
+    <p class="q">In   int marks = 90;   what kind of token is 90 ?</p>
+    <ul><li>Identifier</li><li>Literal</li><li>Keyword</li><li>Operator</li></ul>
+    <div class="exp">A value written directly in the code is a <b>literal</b> (an integer literal).</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 4</h2>
+  <div class="mcq" data-a="3" data-ref="s-directives">
+    <p class="q">Which line is correct?</p>
+    <ul><li>#define PI = 3.14;</li><li>#define PI 3.14;</li><li>define PI 3.14</li><li>#define PI 3.14</li></ul>
+    <div class="exp">Starts with <code>#</code>, no <code>=</code>, no <code>;</code>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 4</h2>
+  <div class="mcq" data-a="0" data-ref="s-keywords">
+    <p class="q">Which of these is NOT a keyword?</p>
+    <ul><li>main</li><li>while</li><li>double</li><li>return</li></ul>
+    <div class="exp"><code>main</code> is an identifier (a function name), not a reserved word.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 4 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Tokens</h3><ul><li>Five kinds: <b>K-I-L-O-P</b>.</li><li>The compiler takes the <b>longest</b> token it can.</li><li>White space only separates tokens (kept inside strings).</li></ul></div>
+    <div class="card good"><h3>&#9989; Preprocessor</h3><ul><li>Lines start with <code>#</code>, no <code>;</code>, run <b>before</b> compiling.</li><li>Macros paste text &mdash; bracket every parameter.</li><li><code>#ifdef &hellip; #else &hellip; #endif</code> switches code on or off.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

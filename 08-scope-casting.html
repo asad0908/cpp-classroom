@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 8 – Scope and Type Casting</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="95" data-lesson="Lesson 8 · Scope, Visibility &amp; Type Casting">
+<div class="stage">
+
+<section class="slide cover" data-title="Scope & Type Casting">
+  <div class="num">08</div>
+  <h1>Scope &amp; Type Casting</h1>
+  <p>Where can a variable be used? And how do we convert a value from one type to another? Two ideas that explain many &ldquo;why did my program print <i>that</i>?&rdquo; moments.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>tell local variables from global variables, and say where each can be used</li>
+      <li>explain scope vs visibility, and reach a hidden global with the <b>scope resolution operator <code>::</code></b></li>
+      <li>predict implicit conversions and write explicit casts such as <code>(float)a / b</code></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-scope-idea" data-title="What is scope?">
+  <span class="kicker">The big idea</span>
+  <h2><em>Scope</em> = the region of the program where a name can be used</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Think of a school. A <b>notebook in your bag</b> is yours: only you can use it. A <b>notice on the school board</b> can be read by everyone. A variable is the same: some are private to a small area, some are visible everywhere.</p></div>
+  <div class="cols c2">
+    <div class="card accent step"><span class="ico">&#127890;</span><h3>Local variable</h3><p>Declared <b>inside</b> a block <code>{ }</code>. Usable only inside that block, after its declaration.</p></div>
+    <div class="card accent step"><span class="ico">&#128221;</span><h3>Global variable</h3><p>Declared <b>outside every block</b> (usually at the top). Usable everywhere below it.</p></div>
+  </div>
+  <div class="rule step">A <b>block</b> is any piece of code between <code>{</code> and <code>}</code>.</div>
+</section>
+
+<section class="slide slow" id="s-local" data-title="Local variables">
+  <span class="kicker">Local scope</span>
+  <h2>A local variable lives and dies inside its <em>braces</em></h2>
+  <div class="code" data-title="local_scope.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 10;
+    {
+        int y = 20;
+        cout << x + y << endl;
+    }
+    cout << x << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 10;
+    clrscr();
+    {
+        int y = 20;
+        cout << x + y << endl;
+    }
+    cout << x << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+30
+10
+</script>
+<ol class="walk">
+  <li data-l="6"><b>x belongs to the block of <code>main</code></b> &mdash; the outer braces. It is created here and lives until main ends.</li>
+  <li data-l="7,8,9,10"><b>An inner block.</b> <code>y</code> is created inside the inner braces, and the inner block can <b>see</b> the outer <code>x</code>, so <code>x + y</code> = 30.</li>
+  <li data-l="11"><b>After the inner <code>}</code>, y is gone.</b> Writing <code>cout &lt;&lt; y;</code> here would be a compile error: &ldquo;y was not declared in this scope&rdquo;. But <code>x</code> is still alive and prints 10.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-nest" data-title="Inner blocks see outwards, never inwards">
+  <span class="kicker">The visibility rule</span>
+  <h2>Look <em>outwards</em>, never inwards</h2>
+  <div style="border:4px solid #7048d6;border-radius:1rem;padding:.6rem .9rem;background:rgba(112,72,214,.07);margin:.7rem 0">
+    <b style="color:#7048d6">Global area</b> &mdash; <code>int g;</code> visible everywhere
+    <div style="border:4px solid #14a05a;border-radius:1rem;padding:.6rem .9rem;margin:.5rem 0;background:rgba(20,160,90,.08)">
+      <b style="color:#14a05a">main&rsquo;s block</b> &mdash; <code>int x;</code> sees g and x
+      <div style="border:4px solid #e0841a;border-radius:1rem;padding:.6rem .9rem;margin:.5rem 0;background:rgba(224,132,26,.1)">
+        <b style="color:#e0841a">Inner block</b> &mdash; <code>int y;</code> sees g, x and y
+      </div>
+    </div>
+  </div>
+  <div class="rule">An inner block can use names from the <b>outer</b> areas, but an outer area can <b>never</b> see inside an inner block.</div>
+</section>
+
+<section class="slide slow" id="s-global" data-title="Global variables">
+  <span class="kicker">Global scope</span>
+  <h2>Global variables live <em>outside</em> every block</h2>
+  <div class="code" data-title="global_scope.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int total;
+int counter = 100;
+
+int main()
+{
+    cout << total << endl;
+    {
+        counter = counter + 1;
+    }
+    cout << counter << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+int total;
+int counter = 100;
+
+void main()
+{
+    clrscr();
+    cout << total << endl;
+    {
+        counter = counter + 1;
+    }
+    cout << counter << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+0
+101
+</script>
+<ol class="walk">
+  <li data-l="4,5"><b>Declared outside <code>main</code></b>, so <code>total</code> and <code>counter</code> are global. They can be used by <b>every block</b> below this point (and, later, by every function).</li>
+  <li data-l="9"><b>Globals start at 0.</b> We never gave <code>total</code> a value, yet it prints <b>0</b>. Global variables are automatically set to zero. (Local variables are <i>not</i>: they start with garbage.)</li>
+  <li data-l="10,11,12"><b>An inner block can change a global.</b> The change is visible everywhere because there is only one <code>counter</code>.</li>
+  <li data-l="13"><b>Result:</b> 101.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-compare-scope" data-title="Local vs global at a glance">
+  <span class="kicker">Side by side</span>
+  <h2>Local vs global</h2>
+  <table>
+    <tr><th></th><th>Local variable</th><th>Global variable</th></tr>
+    <tr><td>Declared</td><td>inside a block <code>{ }</code></td><td>outside all blocks, at the top</td></tr>
+    <tr><td>Can be used</td><td>only inside its block (and inner blocks)</td><td>anywhere below its declaration</td></tr>
+    <tr><td>Created / destroyed</td><td>when the block starts / ends</td><td>when the program starts / ends</td></tr>
+    <tr><td>Default value</td><td><b>garbage</b> (unknown)</td><td><b>0</b></td></tr>
+    <tr><td>Advice</td><td>&#9989; prefer these</td><td>&#9888; use sparingly: anyone can change them</td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-visibility" data-title="Scope vs visibility: hiding">
+  <span class="kicker">What if two variables share a name?</span>
+  <h2>The inner name <em>hides</em> the outer name</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A class has two students called <b>Rahul</b>. When the teacher says &ldquo;Rahul!&rdquo;, the one <b>nearest</b> in that context answers. The other Rahul still exists &mdash; he is just <b>hidden</b> behind the name.</p></div>
+  <div class="cols c3">
+    <div class="card accent step"><h3>Scope</h3><p>The region where a name is <b>available</b>.</p></div>
+    <div class="card accent step"><h3>Visibility</h3><p>Whether the name can <b>actually be seen</b> right now. An inner variable with the same name can hide the outer one.</p></div>
+    <div class="card accent step"><h3>Lifetime</h3><p>How long the variable <b>exists in memory</b>. A hidden variable is still alive.</p></div>
+  </div>
+  <div class="rule step">Hidden &ne; dead. The outer variable is <b>alive but hidden</b>.</div>
+</section>
+
+<section class="slide slow" id="s-shadow-code" data-title="Hiding and the :: operator">
+  <span class="kicker">See it work</span>
+  <h2>Three variables, all called <code>x</code></h2>
+  <div class="code" data-title="hiding.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int x = 10;
+
+int main()
+{
+    int x = 20;
+    {
+        int x = 30;
+        cout << x << endl;
+    }
+    cout << x << endl;
+    cout << ::x << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+int x = 10;
+
+void main()
+{
+    int x = 20;
+    clrscr();
+    {
+        int x = 30;
+        cout << x << endl;
+    }
+    cout << x << endl;
+    cout << ::x << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+30
+20
+10
+</script>
+<ol class="walk">
+  <li data-l="4"><b>Global x = 10.</b> Visible everywhere unless hidden.</li>
+  <li data-l="8"><b>Local x = 20</b> inside <code>main</code>. It <b>hides</b> the global x for the rest of main.</li>
+  <li data-l="10,11"><b>Innermost x = 30.</b> It hides both of the others, so this prints <b>30</b>.</li>
+  <li data-l="12,13"><b>The inner block has ended</b>, so the x = 30 is destroyed. The nearest x is now main&rsquo;s x = 20: prints <b>20</b>.</li>
+  <li data-l="14"><b><code>::x</code> reaches the hidden global.</b> The scope resolution operator <code>::</code> with nothing on its left means &ldquo;the <b>global</b> one&rdquo;: prints <b>10</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-resolution" data-title="The scope resolution operator ::">
+  <span class="kicker">The :: operator</span>
+  <h2><code>::</code> says &ldquo;the one that lives <em>there</em>&rdquo;</h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3><code>::x</code> &mdash; unary form</h3><p>Nothing on the left: reach the <b>global</b> variable even when a local of the same name hides it.</p></div>
+    <div class="card accent step"><h3><code>std::cout</code> &mdash; binary form</h3><p>&ldquo;<code>cout</code> that lives in <code>std</code>.&rdquo; Same idea as the full name &ldquo;Asad of 11-A&rdquo;. This is what <code>using namespace std;</code> lets you skip.</p></div>
+  </div>
+  <div class="code step" data-title="std_scope.cpp  (Modern C++)" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+
+int main()
+{
+    std::cout << "Hello" << std::endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+Hello
+</script>
+  </div>
+  <div class="callout trick step"><span class="tag">Later in the course</span><p><code>::</code> also connects a class to its member functions, such as <code>Student::display()</code>. It is the operator with the <b>highest precedence</b> (level 1 on the ladder).</p></div>
+</section>
+
+<section class="slide slow" id="s-cast-idea" data-title="What is type casting?">
+  <span class="kicker">Type casting</span>
+  <h2>Casting = converting a value from one type to another</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Pouring water from a <b>big jug into a small glass</b> loses some water. Pouring from a small glass into a big jug loses nothing. Type conversion works the same way.</p></div>
+  <div class="cols c2">
+    <div class="card accent step"><h3>Implicit (automatic)</h3><p>The compiler converts for you, silently, when types are mixed.</p></div>
+    <div class="card accent step"><h3>Explicit (manual)</h3><p><b>You</b> ask for the conversion, using a cast.</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-implicit" data-title="Implicit conversion">
+  <span class="kicker">Automatic conversion</span>
+  <h2>Smaller types are promoted to bigger types</h2>
+  <div class="pipe step"><div class="node">char</div><span class="arr">&rarr;</span><div class="node">short</div><span class="arr">&rarr;</span><div class="node">int</div><span class="arr">&rarr;</span><div class="node">long</div><span class="arr">&rarr;</span><div class="node">float</div><span class="arr">&rarr;</span><div class="node">double</div><span class="arr">&rarr;</span><div class="node">long double</div></div>
+  <div class="rule step">In a mixed expression, the lower type is converted <b>up</b> to the higher type. &nbsp;(<code>int + double</code> &rarr; double)</div>
+  <div class="callout warn step"><span class="tag">Going down loses data</span><p>Storing a <code>double</code> into an <code>int</code> throws away the decimal part: it <b>truncates</b> (it does not round). So <code>int x = 3.99;</code> stores <b>3</b>.</p></div>
+  <div class="code step" data-title="implicit.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 3.99;
+    char c = 'a';
+    cout << x << endl;
+    cout << c + 1 << endl;
+    cout << 7 / 2 << " " << 7 / 2.0 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 3.99;
+    char c = 'a';
+    clrscr();
+    cout << x << endl;
+    cout << c + 1 << endl;
+    cout << 7 / 2 << " " << 7 / 2.0 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+3
+98
+3 3.5
+</script>
+<ol class="walk">
+  <li data-l="6"><b>double &rarr; int.</b> 3.99 is a <code>double</code>. Storing it in an <code>int</code> drops the .99 &rarr; <code>x</code> = 3.</li>
+  <li data-l="9"><b>char &rarr; int.</b> <code>c + 1</code>: the char <code>'a'</code> (ASCII 97) is promoted to an int, so 97 + 1 = <b>98</b>, a number, not a letter.</li>
+  <li data-l="10"><b>int / int vs int / double.</b> <code>7 / 2</code> stays int (3). In <code>7 / 2.0</code> the 7 is promoted to double, so the answer is 3.5.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-explicit" data-title="Explicit casting">
+  <span class="kicker">Manual conversion</span>
+  <h2>You decide: the <em>cast</em> operator</h2>
+  <table>
+    <tr><th>Style</th><th>Example</th><th>Where it works</th></tr>
+    <tr class="step"><td>C-style cast</td><td><code>(float) a</code></td><td>Turbo C++ <b>and</b> modern</td></tr>
+    <tr class="step"><td>Function-style cast</td><td><code>float(a)</code></td><td>Turbo C++ and modern</td></tr>
+    <tr class="step"><td><code>static_cast</code></td><td><code>static_cast&lt;float&gt;(a)</code></td><td>Modern C++ only (preferred there)</td></tr>
+  </table>
+  <div class="rule step">A cast converts the <b>value being used</b>. The variable itself keeps its own type.</div>
+</section>
+
+<section class="slide slow" id="s-cast-code" data-title="Casting to fix integer division">
+  <span class="kicker">See it work</span>
+  <h2>Where you put the cast changes the answer</h2>
+  <div class="code" data-title="casting.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 7, b = 2;
+    cout << a / b << endl;
+    cout << (float)a / b << endl;
+    cout << (float)(a / b) << endl;
+    cout << static_cast<double>(a) / b << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 7, b = 2;
+    clrscr();
+    cout << a / b << endl;
+    cout << (float)a / b << endl;
+    cout << (float)(a / b) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+3
+3.5
+3
+3.5
+</script>
+<script type="text/plain" data-v="outt">
+3
+3.5
+3
+</script>
+<ol class="walk">
+  <li data-l="7"><b>int / int = int.</b> 7 / 2 = 3. The .5 is lost.</li>
+  <li data-l="8"><b>(float)a / b.</b> A cast is a <b>unary</b> operator, so it binds tighter than <code>/</code>. It converts <b>a</b> to 7.0 first. Now it is float / int, and b is promoted: 7.0 / 2 = <b>3.5</b>.</li>
+  <li data-l="9"><b>(float)(a / b).</b> The brackets make the <b>division happen first</b>: 7 / 2 = 3 (int). Only then is 3 cast to 3.0, which prints as <b>3</b>. Too late &mdash; the fraction was already lost!</li>
+  <li data-l="10"><b>static_cast&lt;double&gt;(a)</b> is the modern spelling of the same idea. It is missing in Turbo C++ (see the red/green difference in Compare).</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-cast-drill" data-title="Casting drill">
+  <span class="kicker">Your turn</span>
+  <h2>Predict each value</h2>
+  <p class="mute">Ask the class, then press &rarr;.</p>
+  <table>
+    <tr><th>Expression</th><th>Why</th><th>Value</th></tr>
+    <tr class="step"><td><code>(float)7 / 2</code></td><td>cast first &rarr; 7.0 / 2</td><td><b>3.5</b></td></tr>
+    <tr class="step"><td><code>(float)(7 / 2)</code></td><td>divide first (int) &rarr; 3, then convert</td><td><b>3</b></td></tr>
+    <tr class="step"><td><code>(int)3.99</code></td><td>truncates, never rounds</td><td><b>3</b></td></tr>
+    <tr class="step"><td><code>(int)(-3.99)</code></td><td>truncates toward zero</td><td><b>-3</b></td></tr>
+    <tr class="step"><td><code>5 / 2 * 2.0</code></td><td>left to right: (5/2) = 2, then 2 * 2.0</td><td><b>4</b></td></tr>
+    <tr class="step"><td><code>5 / 2.0 * 2</code></td><td>(5/2.0) = 2.5, then 2.5 * 2</td><td><b>5</b></td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-local">
+    <p class="q">int x = 5;  { int x = 8; }  cout &lt;&lt; x;    What is printed?</p>
+    <ul><li>5</li><li>8</li><li>13</li><li>Error</li></ul>
+    <div class="exp">The inner <code>x = 8</code> dies at the closing brace. Outside it, only the outer x (5) exists.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-shadow-code">
+    <p class="q">Global x = 10. Inside main, a local x = 20 is declared. What does   cout &lt;&lt; ::x;   print?</p>
+    <ul><li>20</li><li>30</li><li>10</li><li>Error</li></ul>
+    <div class="exp"><code>::x</code> always means the <b>global</b> x: 10.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-global">
+    <p class="q">A global   int total;   is never assigned. What does cout &lt;&lt; total; print?</p>
+    <ul><li>Garbage</li><li>0</li><li>1</li><li>Error</li></ul>
+    <div class="exp">Global variables are automatically initialised to <b>0</b>. (Local ones are not.)</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="3" data-ref="s-cast-code">
+    <p class="q">cout &lt;&lt; (float)5 / 2;   prints&hellip;</p>
+    <ul><li>2</li><li>3</li><li>2.0</li><li>2.5</li></ul>
+    <div class="exp">The cast happens first: 5.0 / 2 = <b>2.5</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-implicit">
+    <p class="q">int a = 9.8;   cout &lt;&lt; a;   prints&hellip;</p>
+    <ul><li>9</li><li>10</li><li>9.8</li><li>Error</li></ul>
+    <div class="exp">Storing a double in an int <b>truncates</b>: the .8 is dropped, giving 9.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 8 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Scope &amp; visibility</h3><ul><li>Local: inside <code>{ }</code>, dies at <code>}</code>. Global: outside everything, starts at 0.</li><li>Inner names <b>hide</b> outer names; look outwards, never inwards.</li><li><code>::x</code> reaches the global x. <code>std::cout</code> names a member of <code>std</code>.</li></ul></div>
+    <div class="card good"><h3>&#9989; Type casting</h3><ul><li>Implicit: small &rarr; big is automatic (char &rarr; int &rarr; float &rarr; double).</li><li>Big &rarr; small <b>truncates</b>: <code>int x = 3.99;</code> is 3.</li><li>Explicit: <code>(float)a / b</code> &mdash; cast first, then divide. <code>(float)(a / b)</code> is too late.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

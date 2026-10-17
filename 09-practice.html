@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 9 – Exam Practice</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="320" data-lesson="Lesson 9 · Exam Practice">
+<div class="stage">
+
+<section class="slide cover" data-title="Exam Practice">
+  <div class="num">09</div>
+  <h1>Exam Practice</h1>
+  <p>Put Part 1 to the test. Three rounds: quick-fire questions, <b>find the output</b>, and an operator-table challenge &mdash; with the real compiler as the referee.</p>
+  <div class="goals"><b>The three rounds</b>
+    <ul>
+      <li><b>Round 1</b> &mdash; 11 quick-fire questions from every lesson (a wrong answer links back to the slide that explains it)</li>
+      <li><b>Round 2</b> &mdash; 7 &ldquo;find the output&rdquo; programs: write your answer first, then press <b>Run</b></li>
+      <li><b>Round 3</b> &mdash; solve expressions, then check them against a real compiler</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide fast" data-title="How to play">
+  <span class="kicker">Rules</span>
+  <h2>How to play</h2>
+  <div class="cols c3">
+    <div class="card accent"><span class="ico">&#128221;</span><h3>1. Write it down</h3><p>Everyone writes the answer on paper <b>before</b> anything is revealed.</p></div>
+    <div class="card accent"><span class="ico">&#128483;&#65039;</span><h3>2. Explain why</h3><p>Ask one student to explain the steps. The reasoning matters more than the number.</p></div>
+    <div class="card accent"><span class="ico">&#9989;</span><h3>3. Check</h3><p>Click the answer or press <b>Run</b>. Wrong? Use the <b>revisit</b> button.</p></div>
+  </div>
+</section>
+
+<!-- ============ ROUND 1 ============ -->
+<section class="slide fast" data-title="Round 1 · Q1">
+  <span class="kicker">Round 1 &middot; 1 of 11 &middot; Lesson 3</span>
+  <h2>Naming rules</h2>
+  <div class="mcq" data-a="0" data-ref="03-variables-constants.html#s-naming" data-reftitle="Lesson 3: Rules for naming">
+    <p class="q">Which declaration is INVALID?</p>
+    <ul><li>int 2x;</li><li>float _rate;</li><li>char grade1;</li><li>double Total;</li></ul>
+    <div class="exp">A name cannot start with a digit. <code>_rate</code>, <code>grade1</code> and <code>Total</code> all follow the L-U-D rule.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q2">
+  <span class="kicker">Round 1 &middot; 2 of 11 &middot; Lesson 3</span>
+  <h2>Octal and hex</h2>
+  <div class="mcq" data-a="1" data-ref="03-variables-constants.html#s-convert" data-reftitle="Lesson 3: Octal and hex">
+    <p class="q">cout &lt;&lt; 0x1A + 010;   prints&hellip;</p>
+    <ul><li>26</li><li>34</li><li>18</li><li>36</li></ul>
+    <div class="exp"><code>0x1A</code> = 26 (hex). <code>010</code> = 8 (octal). 26 + 8 = <b>34</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q3">
+  <span class="kicker">Round 1 &middot; 3 of 11 &middot; Lesson 4</span>
+  <h2>Tokens</h2>
+  <div class="mcq" data-a="1" data-ref="04-tokens.html#s-kilop" data-reftitle="Lesson 4: The five kinds of token">
+    <p class="q">How many tokens are in:   x = y++ + 10;</p>
+    <ul><li>6</li><li>7</li><li>8</li><li>9</li></ul>
+    <div class="exp">x &nbsp;=&nbsp; y &nbsp;++&nbsp; + &nbsp;10 &nbsp;; &mdash; that is <b>7</b> tokens (<code>++</code> counts as one).</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q4">
+  <span class="kicker">Round 1 &middot; 4 of 11 &middot; Lesson 7</span>
+  <h2>Precedence</h2>
+  <div class="mcq" data-a="0" data-ref="07-operator-precedence.html#s-method" data-reftitle="Lesson 7: The 3-step method">
+    <p class="q">What is   2 + 3 * 4 % 5 ?</p>
+    <ul><li>4</li><li>0</li><li>7</li><li>9</li></ul>
+    <div class="exp"><code>*</code> and <code>%</code> tie (left to right): (3 * 4) % 5 = 12 % 5 = 2. Then 2 + 2 = <b>4</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q5">
+  <span class="kicker">Round 1 &middot; 5 of 11 &middot; Lesson 5</span>
+  <h2>Post-decrement</h2>
+  <div class="mcq" data-a="1" data-ref="05-operators.html#s-incdec" data-reftitle="Lesson 5: ++ and --">
+    <p class="q">int i = 4;   int j = i-- - 1;   What is j?</p>
+    <ul><li>2</li><li>3</li><li>4</li><li>5</li></ul>
+    <div class="exp">Postfix: <b>use first</b>. j = 4 &minus; 1 = <b>3</b>, and only then i becomes 3.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q6">
+  <span class="kicker">Round 1 &middot; 6 of 11 &middot; Lesson 5</span>
+  <h2>Logical hierarchy</h2>
+  <div class="mcq" data-a="1" data-ref="05-operators.html#s-logical-hier" data-reftitle="Lesson 5: Hierarchy of logical operators">
+    <p class="q">cout &lt;&lt; (!5 || 0 &amp;&amp; 1);   prints&hellip;</p>
+    <ul><li>1</li><li>0</li><li>5</li><li>Error</li></ul>
+    <div class="exp"><code>!5</code> = 0. Then <code>0 &amp;&amp; 1</code> = 0 (AND before OR). Finally <code>0 || 0</code> = <b>0</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q7">
+  <span class="kicker">Round 1 &middot; 7 of 11 &middot; Lesson 5</span>
+  <h2>Shorthand trap</h2>
+  <div class="mcq" data-a="1" data-ref="05-operators.html#s-shorthand" data-reftitle="Lesson 5: Shorthand operators">
+    <p class="q">int x = 10;   x /= 3 + 2;   What is x?</p>
+    <ul><li>3</li><li>2</li><li>5</li><li>8</li></ul>
+    <div class="exp">The whole right side first: x = 10 / (3 + 2) = 10 / 5 = <b>2</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q8">
+  <span class="kicker">Round 1 &middot; 8 of 11 &middot; Lesson 6</span>
+  <h2>XOR</h2>
+  <div class="mcq" data-a="0" data-ref="06-bitwise.html#s-bitexample" data-reftitle="Lesson 6: Worked example, bit by bit">
+    <p class="q">What is   12 ^ 5 ?   (12 = 1100, 5 = 0101)</p>
+    <ul><li>9</li><li>13</li><li>4</li><li>17</li></ul>
+    <div class="exp">XOR gives 1 where bits differ: 1100 ^ 0101 = 1001 = <b>9</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q9">
+  <span class="kicker">Round 1 &middot; 9 of 11 &middot; Lesson 6</span>
+  <h2>Shift</h2>
+  <div class="mcq" data-a="1" data-ref="06-bitwise.html#s-shift" data-reftitle="Lesson 6: Shift operators">
+    <p class="q">What is   3 &lt;&lt; 3 ?</p>
+    <ul><li>9</li><li>24</li><li>12</li><li>6</li></ul>
+    <div class="exp">Each left shift doubles: 3 &times; 2<sup>3</sup> = 3 &times; 8 = <b>24</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q10">
+  <span class="kicker">Round 1 &middot; 10 of 11 &middot; Lesson 8</span>
+  <h2>Scope</h2>
+  <div class="mcq" data-a="0" data-ref="08-scope-casting.html#s-local" data-reftitle="Lesson 8: Local variables">
+    <p class="q">int x = 10;   { int x = 20;  x++; }   cout &lt;&lt; x;   prints&hellip;</p>
+    <ul><li>10</li><li>11</li><li>20</li><li>21</li></ul>
+    <div class="exp">The <code>x++</code> changed the <b>inner</b> x, which dies at the closing brace. The outer x is still <b>10</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Round 1 · Q11">
+  <span class="kicker">Round 1 &middot; 11 of 11 &middot; Lesson 8</span>
+  <h2>Casting</h2>
+  <div class="mcq" data-a="1" data-ref="08-scope-casting.html#s-cast-code" data-reftitle="Lesson 8: Casting to fix integer division">
+    <p class="q">cout &lt;&lt; (int)'A' + 1.5;   prints&hellip;</p>
+    <ul><li>66</li><li>66.5</li><li>65.5</li><li>B</li></ul>
+    <div class="exp">The cast binds first: (int)'A' = 65. Then 65 + 1.5 = <b>66.5</b>.</div>
+  </div>
+</section>
+
+<!-- ============ ROUND 2 ============ -->
+<section class="slide fast" data-title="Round 2 · find the output">
+  <span class="kicker">Round 2</span>
+  <h2>Find the output</h2>
+  <p class="lead">Seven programs. For each: trace it on paper, then press <b>&#9654; Run</b> to see what a real compiler prints.</p>
+  <div class="callout trick"><span class="tag">Tracing tip</span><p>Make a small table with one column per variable. Update it after every line. That is exactly what the compiler&rsquo;s memory does.</p></div>
+</section>
+
+<section class="slide slow" id="p1" data-title="Program 1 · increments">
+  <span class="kicker">Round 2 &middot; Program 1 of 7</span>
+  <h2>Increment and decrement</h2>
+  <div class="code" data-title="p1.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 4, b = 3;
+    int c = a++ * 2 + --b;
+    cout << a << " " << b << " " << c << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 4, b = 3;
+    clrscr();
+    int c = a++ * 2 + --b;
+    cout << a << " " << b << " " << c << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+5 2 10
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Start:</b> a = 4, b = 3.</li>
+  <li data-l="7"><b>Postfix a++</b> uses 4 (then a becomes 5). <b>Prefix --b</b> makes b = 2 first, then uses 2. So c = 4 &times; 2 + 2 = <b>10</b>.</li>
+  <li data-l="8"><b>Print:</b> a = 5, b = 2, c = 10.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p2" data-title="Program 2 · shorthand and ternary">
+  <span class="kicker">Round 2 &middot; Program 2 of 7</span>
+  <h2>Shorthand and the conditional operator</h2>
+  <div class="code" data-title="p2.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 6, y = 4;
+    x %= y;
+    y <<= 2;
+    int z = (x > 1) ? y : x;
+    cout << x << " " << y << " " << z << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 6, y = 4;
+    clrscr();
+    x %= y;
+    y <<= 2;
+    int z = (x > 1) ? y : x;
+    cout << x << " " << y << " " << z << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+2 16 16
+</script>
+<ol class="walk">
+  <li data-l="7"><b>x %= y</b> &rarr; x = 6 % 4 = <b>2</b>.</li>
+  <li data-l="8"><b>y &lt;&lt;= 2</b> &rarr; y = 4 &lt;&lt; 2 = 4 &times; 4 = <b>16</b>.</li>
+  <li data-l="9"><b>Ternary:</b> is x &gt; 1? 2 &gt; 1 is true, so z takes the first value, y = <b>16</b>.</li>
+  <li data-l="10"><b>Print:</b> 2 16 16.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p3" data-title="Program 3 · logical and relational">
+  <span class="kicker">Round 2 &middot; Program 3 of 7</span>
+  <h2>Logical and relational operators</h2>
+  <div class="code" data-title="p3.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 5, b = 0, c = 3;
+    cout << (a && b) << (a || b) << !c << (a > c && c > b) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 5, b = 0, c = 3;
+    clrscr();
+    cout << (a && b) << (a || b) << !c << (a > c && c > b) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+0101
+</script>
+<ol class="walk">
+  <li data-l="7"><b>Four values printed side by side (no spaces):</b> &nbsp;<code>(a &amp;&amp; b)</code> = 5 and 0 &rarr; <b>0</b> &nbsp;|&nbsp; <code>(a || b)</code> = 5 or 0 &rarr; <b>1</b> &nbsp;|&nbsp; <code>!c</code> = !3 &rarr; <b>0</b> &nbsp;|&nbsp; <code>(a &gt; c &amp;&amp; c &gt; b)</code> = 5 &gt; 3 and 3 &gt; 0 &rarr; <b>1</b>. Together: <b>0101</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p4" data-title="Program 4 · bitwise">
+  <span class="kicker">Round 2 &middot; Program 4 of 7</span>
+  <h2>Bitwise operators</h2>
+  <div class="code" data-title="p4.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 10, b = 6;
+    cout << (a & b) << " " << (a | b) << " " << (a ^ b) << endl;
+    cout << (~a) << " " << (a << 1) << " " << (b >> 1) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 10, b = 6;
+    clrscr();
+    cout << (a & b) << " " << (a | b) << " " << (a ^ b) << endl;
+    cout << (~a) << " " << (a << 1) << " " << (b >> 1) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+2 14 12
+-11 20 3
+</script>
+<ol class="walk">
+  <li data-l="7"><b>10 = 1010, 6 = 0110.</b> AND: 0010 = <b>2</b>. OR: 1110 = <b>14</b>. XOR: 1100 = <b>12</b>.</li>
+  <li data-l="8"><b>~10</b> = &minus;(10 + 1) = <b>&minus;11</b>. <b>10 &lt;&lt; 1</b> = 20. <b>6 &gt;&gt; 1</b> = 3.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p5" data-title="Program 5 · scope and casting">
+  <span class="kicker">Round 2 &middot; Program 5 of 7</span>
+  <h2>Scope and casting together</h2>
+  <div class="code" data-title="p5.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n = 7;
+    {
+        int n = 2;
+        cout << (float)n / 4 << endl;
+    }
+    cout << n / 2 << " " << (float)n / 2 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n = 7;
+    clrscr();
+    {
+        int n = 2;
+        cout << (float)n / 4 << endl;
+    }
+    cout << n / 2 << " " << (float)n / 2 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+0.5
+3 3.5
+</script>
+<ol class="walk">
+  <li data-l="8,9,10"><b>Inside the block, n is 2</b> (it hides the outer n = 7). <code>(float)n / 4</code> = 2.0 / 4 = <b>0.5</b>.</li>
+  <li data-l="11"><b>Outside, n is 7 again.</b> <code>n / 2</code> is int division = <b>3</b>. <code>(float)n / 2</code> = 7.0 / 2 = <b>3.5</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p6" data-title="Program 6 · precedence">
+  <span class="kicker">Round 2 &middot; Program 6 of 7</span>
+  <h2>Precedence and associativity</h2>
+  <div class="code" data-title="p6.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int r = 2 + 3 * 4 % 5 - 1;
+    int s = 10 - 4 - 3;
+    int t = 2 * 3 > 5 == 1;
+    cout << r << " " << s << " " << t << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int r = 2 + 3 * 4 % 5 - 1;
+    int s = 10 - 4 - 3;
+    int t = 2 * 3 > 5 == 1;
+    clrscr();
+    cout << r << " " << s << " " << t << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+3 3 1
+</script>
+<ol class="walk">
+  <li data-l="6"><b>r:</b> <code>3 * 4 % 5</code> ties, left first: (3*4) % 5 = 12 % 5 = 2. Then 2 + 2 &minus; 1 = <b>3</b>.</li>
+  <li data-l="7"><b>s:</b> left to right: (10 &minus; 4) &minus; 3 = 6 &minus; 3 = <b>3</b>.</li>
+  <li data-l="8"><b>t:</b> level order: * first &rarr; 6; then <code>&gt;</code> &rarr; 6 &gt; 5 = 1; then <code>==</code> &rarr; 1 == 1 = <b>1</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="p7" data-title="Program 7 · constants">
+  <span class="kicker">Round 2 &middot; Program 7 of 7</span>
+  <h2>Enums and number systems</h2>
+  <div class="code" data-title="p7.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+enum { A = 3, B, C = 10, D };
+
+int main()
+{
+    cout << A << " " << B << " " << C << " " << D << endl;
+    cout << 011 + 0x10 + 5 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+enum { A = 3, B, C = 10, D };
+
+void main()
+{
+    clrscr();
+    cout << A << " " << B << " " << C << " " << D << endl;
+    cout << 011 + 0x10 + 5 << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+3 4 10 11
+30
+</script>
+<ol class="walk">
+  <li data-l="4"><b>enum:</b> A = 3, B continues &rarr; 4, C = 10, D continues &rarr; 11.</li>
+  <li data-l="8"><b>Print:</b> 3 4 10 11.</li>
+  <li data-l="9"><b>011</b> is octal = 9. <b>0x10</b> is hex = 16. So 9 + 16 + 5 = <b>30</b>.</li>
+</ol>
+  </div>
+</section>
+
+<!-- ============ ROUND 3 ============ -->
+<section class="slide fast" data-title="Round 3 · operator table challenge">
+  <span class="kicker">Round 3</span>
+  <h2>Operator-table challenge</h2>
+  <p class="lead">Solve these 8 expressions on paper using the <b>3-step method</b>. The next slide shows what a real compiler gives.</p>
+  <table>
+    <tr><th class="c">#</th><th>Expression</th></tr>
+    <tr><td class="c">1</td><td><code>10 + 5 * 2 - 8 / 4</code></td></tr>
+    <tr><td class="c">2</td><td><code>20 / 5 * 2</code></td></tr>
+    <tr><td class="c">3</td><td><code>3 + 4 &gt; 5 &amp;&amp; 10 % 3 == 1</code></td></tr>
+    <tr><td class="c">4</td><td><code>2 + 3 &lt;&lt; 1</code></td></tr>
+    <tr><td class="c">5</td><td><code>!0 + 1</code></td></tr>
+    <tr><td class="c">6</td><td><code>1 | 2 &amp; 3</code></td></tr>
+    <tr><td class="c">7</td><td><code>1 + 2 == 3 &amp; 4</code></td></tr>
+    <tr><td class="c">8</td><td><code>7 - 2 * 3 + 8 % 5</code></td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-check-expr" data-title="Round 3 · compiler check">
+  <span class="kicker">Round 3 &middot; the referee</span>
+  <h2>Compare with the real compiler</h2>
+  <div class="code" data-title="expressions.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << 10 + 5 * 2 - 8 / 4 << endl;
+    cout << 20 / 5 * 2 << endl;
+    cout << (3 + 4 > 5 && 10 % 3 == 1) << endl;
+    cout << (2 + 3 << 1) << endl;
+    cout << (!0 + 1) << endl;
+    cout << (1 | 2 & 3) << endl;
+    cout << (1 + 2 == 3 & 4) << endl;
+    cout << 7 - 2 * 3 + 8 % 5 << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+18
+8
+1
+10
+2
+3
+0
+4
+</script>
+<ol class="walk">
+  <li data-l="6,7"><b>1 and 2:</b> 18 and 8. Same-level operators go left to right: 20 / 5 * 2 = (20/5) * 2 = 8.</li>
+  <li data-l="8"><b>3:</b> 1. <code>((3+4) &gt; 5) &amp;&amp; ((10%3) == 1)</code> = 1 &amp;&amp; 1.</li>
+  <li data-l="9,10"><b>4 and 5:</b> 10 and 2. <code>+</code> outranks <code>&lt;&lt;</code>; unary <code>!</code> outranks <code>+</code>.</li>
+  <li data-l="11"><b>6:</b> 3. AND before OR: 1 | (2 &amp; 3) = 1 | 2.</li>
+  <li data-l="12"><b>7:</b> <b>0</b> &mdash; the famous trap! <code>==</code> outranks <code>&amp;</code>: ((1+2) == 3) &amp; 4 = 1 &amp; 4 = 0.</li>
+  <li data-l="13"><b>8:</b> 4. (7 &minus; (2*3)) + (8%5) = 1 + 3.</li>
+</ol>
+  </div>
+  <p class="legend">For any other expression, use the <b>Expression solver</b> in Lesson 7 &mdash; it shows each step.</p>
+</section>
+
+<section class="slide slow" id="s-traps" data-title="Top 12 exam traps">
+  <span class="kicker">Before the exam</span>
+  <h2>The 12 traps examiners love</h2>
+  <table style="font-size:.78rem">
+    <tr><th class="c">#</th><th>Trap</th><th>Remember</th></tr>
+    <tr class="step"><td class="c">1</td><td><code>7 / 2</code> is 3, not 3.5</td><td><b>int / int = int</b></td></tr>
+    <tr class="step"><td class="c">2</td><td><code>010</code> is 8, <code>0x10</code> is 16</td><td>leading 0 = octal, 0x = hex</td></tr>
+    <tr class="step"><td class="c">3</td><td><code>'A'</code> vs <code>"A"</code></td><td>single = 1 char; double = string + <code>\0</code></td></tr>
+    <tr class="step"><td class="c">4</td><td><code>#define PI 3.14;</code></td><td>no <code>=</code>, no <code>;</code></td></tr>
+    <tr class="step"><td class="c">5</td><td><code>if (a = 5)</code></td><td><code>=</code> stores, <code>==</code> compares</td></tr>
+    <tr class="step"><td class="c">6</td><td><code>a++</code> vs <code>++a</code></td><td>Post: use then change. Pre: change then use</td></tr>
+    <tr class="step"><td class="c">7</td><td><code>a *= b + c</code></td><td>= <code>a = a * (b + c)</code></td></tr>
+    <tr class="step"><td class="c">8</td><td><code>&amp;&amp;</code> / <code>||</code> skip the right side</td><td>short-circuit: no side effects there</td></tr>
+    <tr class="step"><td class="c">9</td><td><code>~n</code></td><td><b>&minus;(n + 1)</b></td></tr>
+    <tr class="step"><td class="c">10</td><td><code>1 + 2 == 3 &amp; 4</code></td><td>bitwise ranks <b>below</b> comparison</td></tr>
+    <tr class="step"><td class="c">11</td><td>local hides global</td><td><code>::x</code> reaches the global</td></tr>
+    <tr class="step"><td class="c">12</td><td><code>(float)(a/b)</code> vs <code>(float)a/b</code></td><td>cast <b>before</b> the division</td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Final recap">
+  <span class="kicker">Part 1 complete</span>
+  <h2>You made it through Part 1 &#127881;</h2>
+  <div class="cols c3">
+    <div class="card good"><h3>&#9989; Foundations</h3><ul><li>Program structure, <code>cout</code>/<code>cin</code>, comments</li><li>Data types &amp; sizes: <b>1-2-4-8</b></li><li>Variables, constants, tokens</li></ul></div>
+    <div class="card good"><h3>&#9989; Operators</h3><ul><li>Ladder + <i>Big Uncles&hellip;</i> sentence</li><li>AND beats OR; U-T-A right-to-left</li><li>++/--, logical, ?:, shorthand, bitwise</li></ul></div>
+    <div class="card good"><h3>&#9989; Scope &amp; casting</h3><ul><li>Local, global, hiding, <code>::</code></li><li>Implicit vs explicit casts</li><li>Cast <b>before</b> you divide</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

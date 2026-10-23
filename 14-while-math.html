@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 14 – The while Loop and the Math Library</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="175" data-lesson="Lesson 14 · The while Loop &amp; the Math Library">
+<div class="stage">
+
+<section class="slide cover" data-title="The while Loop & the Math Library">
+  <div class="num">14</div>
+  <h1>The while Loop &amp; the Math Library</h1>
+  <p>The <code>for</code> loop is perfect when we know the count. But what if we only know <b>when to stop</b>? That is the job of <code>while</code>. Then we borrow ready-made maths functions such as <code>sqrt</code>.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>write a <code>while</code> loop and move the four loop parts to the right places</li>
+      <li>redo the <b>sum of 10</b> with <code>while</code>, and loop until the user types a <b>stopping value</b></li>
+      <li>use <code>&lt;cmath&gt;</code> functions such as <code>sqrt()</code> and <code>pow()</code> inside a loop</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-while-idea" data-title="The while statement">
+  <span class="kicker">Loop &middot; test first</span>
+  <h2><em>while</em>: keep repeating as long as the condition is true</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>&ldquo;<b>While</b> there is water in the bucket, keep pouring.&rdquo; You look in the bucket <b>first</b>. If it is already empty, you do not pour even once.</p></div>
+      <div class="code step" data-title="syntax of while" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+while (condition)
+{
+    body;
+}
+</script>
+      </div>
+      <div class="callout warn step"><span class="tag">Your job</span><p>A <code>while</code> header holds <b>only the condition</b>. You must write the initialisation <b>before</b> the loop and the update <b>inside</b> the body yourself.</p></div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 400 325" role="img" aria-label="Flowchart of a while loop: initialise, test the condition, run the body and update, then test again until the condition is false">
+        <defs><marker id="ah-wh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="tm" x="150" y="4" width="100" height="26" rx="13"/><text class="w" x="200" y="17">Start</text>
+        <path class="fl" d="M200 30V46" marker-end="url(#ah-wh)"/>
+        <rect class="bx" x="120" y="46" width="160" height="30" rx="8"/><text x="200" y="61">initialise (before)</text>
+        <path class="fl" d="M200 76V96" marker-end="url(#ah-wh)"/>
+        <polygon class="dc" points="200,96 290,136 200,176 110,136"/><text x="200" y="136">condition?</text>
+        <path class="fl" d="M200 176V208" marker-end="url(#ah-wh)"/><text class="fyes" x="222" y="193">true</text>
+        <rect class="bx" x="120" y="208" width="160" height="32" rx="8"/><text x="200" y="224">body + update</text>
+        <path class="fl" d="M120 224H40V136H110" marker-end="url(#ah-wh)"/>
+        <path class="fl" d="M290 136H350V300H250" marker-end="url(#ah-wh)"/><text class="fno" x="318" y="128">false</text>
+        <rect class="bx" x="150" y="286" width="100" height="28" rx="8"/><text x="200" y="300">after the loop</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-while-sum" data-title="while in action: sum of 10 numbers">
+  <span class="kicker">Same job, different loop</span>
+  <h2>Sum of the first 10 numbers, now with <em>while</em></h2>
+  <div class="code" data-title="while_sum.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 1, sum = 0;
+    while (i <= 10)
+    {
+        sum = sum + i;
+        i++;
+    }
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 1, sum = 0;
+    clrscr();
+    while (i <= 10)
+    {
+        sum = sum + i;
+        i++;
+    }
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Sum of first 10 numbers = 55
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Initialisation happens here, before the loop:</b> <code>i = 1</code> and <code>sum = 0</code>.</li>
+  <li data-l="7"><b>The header is only the test.</b> Before every round: is <code>i &lt;= 10</code>?</li>
+  <li data-l="9"><b>The work:</b> add i into the accumulator.</li>
+  <li data-l="10"><b>The update is the last line of the body.</b> If you forget it, <code>i</code> never changes and the loop never ends.</li>
+  <li data-l="12"><b>After the loop:</b> print 55, exactly the same answer as the <code>for</code> version.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-while-map" data-title="for and while side by side">
+  <span class="kicker">Where did the four parts go?</span>
+  <h2><em>for</em> and <em>while</em> are two spellings of the same loop</h2>
+  <div class="cols c2">
+    <div class="code step" data-title="for version" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+for (i = 1; i <= 10; i++)
+{
+    sum = sum + i;
+}
+</script>
+    </div>
+    <div class="code step" data-title="while version" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+i = 1;
+while (i <= 10)
+{
+    sum = sum + i;
+    i++;
+}
+</script>
+    </div>
+  </div>
+  <table class="step">
+    <tr><th>Part</th><th><code>for</code></th><th><code>while</code></th></tr>
+    <tr><td>1 &middot; Initialise</td><td>first part of the header</td><td>a line <b>before</b> the loop</td></tr>
+    <tr><td>2 &middot; Condition</td><td>middle part of the header</td><td>inside the <code>( )</code></td></tr>
+    <tr><td>3 &middot; Body</td><td>the braces</td><td>the braces</td></tr>
+    <tr><td>4 &middot; Update</td><td>last part of the header</td><td>the <b>last line of the body</b></td></tr>
+  </table>
+  <div class="rule step"><b>for</b> when you know the count &nbsp;&middot;&nbsp; <b>while</b> when you only know when to stop</div>
+</section>
+
+<section class="slide slow" id="s-while-unknown" data-title="while with an unknown count">
+  <span class="kicker">Where while shines</span>
+  <h2>Add numbers <em>until the user types 0</em></h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A cashier scans items until the customer says <b>&ldquo;that&rsquo;s all&rdquo;</b>. Nobody knows in advance how many items there will be. A special value that means &ldquo;stop&rdquo; (here <b>0</b>) is called a <b>sentinel</b>.</p></div>
+  <div class="code" data-title="total.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n, total = 0;
+    cout << "Enter numbers (0 to stop): ";
+    cin >> n;
+    while (n != 0)
+    {
+        total = total + n;
+        cin >> n;
+    }
+    cout << "Total = " << total << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n, total = 0;
+    clrscr();
+    cout << "Enter numbers (0 to stop): ";
+    cin >> n;
+    while (n != 0)
+    {
+        total = total + n;
+        cin >> n;
+    }
+    cout << "Total = " << total << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter numbers (0 to stop): 5 8 2 0
+Total = 15
+</script>
+<ol class="walk">
+  <li data-l="8"><b>Read the first number before the loop</b> (5). Without this the test below would look at an empty locker.</li>
+  <li data-l="9"><b>The test:</b> is n different from 0? 5 is, so go in.</li>
+  <li data-l="11,12"><b>Add it, then read the next number.</b> The <code>cin</code> is the update: it changes n, so the test eventually sees the 0.</li>
+  <li data-l="9,10,11,12,13"><b>The rounds:</b> 5, 8, 2 are added. When <code>cin</code> reads <b>0</b>, the test <code>0 != 0</code> is false and the loop ends.</li>
+  <li data-l="14"><b>Print 15.</b> If the very first number were 0, the body would run <b>zero times</b> and the output would be <code>Total = 0</code>. A while loop tests <b>before</b> the first round.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-math-intro" data-title="The math library">
+  <span class="kicker">Ready-made functions</span>
+  <h2>The <em>math library</em>: <code>#include &lt;cmath&gt;</code></h2>
+  <p class="lead">A <b>function</b> is a named mini-program. You give it a value in <code>( )</code>, and it hands back an answer.</p>
+  <table>
+    <tr><th>Function</th><th>What it gives</th><th>Example</th><th>Result</th></tr>
+    <tr><td><code>sqrt(x)</code></td><td>square root of x</td><td><code>sqrt(49.0)</code></td><td class="c"><b>7</b></td></tr>
+    <tr><td><code>pow(x, y)</code></td><td>x raised to the power y</td><td><code>pow(2.0, 10)</code></td><td class="c"><b>1024</b></td></tr>
+    <tr><td><code>fabs(x)</code></td><td>absolute value (removes the minus)</td><td><code>fabs(-7.5)</code></td><td class="c"><b>7.5</b></td></tr>
+    <tr><td><code>ceil(x)</code></td><td>round <b>up</b> to a whole number</td><td><code>ceil(4.2)</code></td><td class="c"><b>5</b></td></tr>
+    <tr><td><code>floor(x)</code></td><td>round <b>down</b> to a whole number</td><td><code>floor(4.8)</code></td><td class="c"><b>4</b></td></tr>
+  </table>
+  <div class="cols c2">
+    <div class="callout trick"><span class="tag">Header names</span><p>Modern C++: <code>#include &lt;cmath&gt;</code><br>Turbo C++: <code>#include &lt;math.h&gt;</code></p></div>
+    <div class="callout warn"><span class="tag">Good habit</span><p>These functions work with decimals (<code>double</code>). Write <code>2.0</code> rather than <code>2</code> to stay safe on every compiler. There are more too: <code>sin</code>, <code>cos</code>, <code>log</code>, <code>exp</code>&hellip;</p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-math-demo" data-title="Trying the math functions">
+  <span class="kicker">See it work</span>
+  <h2>Five functions, five answers</h2>
+  <div class="code" data-title="math_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    cout << sqrt(49.0) << endl;
+    cout << pow(2.0, 10) << endl;
+    cout << fabs(-7.5) << endl;
+    cout << ceil(4.2) << endl;
+    cout << floor(4.8) << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <math.h>
+#include <conio.h>
+
+void main()
+{
+    clrscr();
+    cout << sqrt(49.0) << endl;
+    cout << pow(2.0, 10) << endl;
+    cout << fabs(-7.5) << endl;
+    cout << ceil(4.2) << endl;
+    cout << floor(4.8) << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+7
+1024
+7.5
+5
+4
+</script>
+<ol class="walk">
+  <li data-l="2"><b>The new line:</b> <code>&lt;cmath&gt;</code> brings in the maths functions. Without it, <code>sqrt</code> is &ldquo;not declared&rdquo;.</li>
+  <li data-l="7,8"><b>Calling a function</b> means writing its name with the value in brackets. The call <b>is replaced by its answer</b>, so <code>cout &lt;&lt; sqrt(49.0)</code> prints 7.</li>
+  <li data-l="9"><b>fabs</b> drops the minus sign: 7.5.</li>
+  <li data-l="10,11"><b>ceil and floor</b> give whole numbers: 5 and 4. Notice the results print without <code>.0</code>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-sqrt" data-title="Practice: square root of a number">
+  <span class="kicker">Practice program</span>
+  <h2>Square root of a number the user types</h2>
+  <div class="code" data-title="sqrt.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    double n;
+    cout << "Enter a number: ";
+    cin >> n;
+    if (n >= 0)
+        cout << "Square root of " << n << " = " << sqrt(n) << endl;
+    else
+        cout << "Cannot take the square root of a negative number" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <math.h>
+#include <conio.h>
+
+void main()
+{
+    double n;
+    clrscr();
+    cout << "Enter a number: ";
+    cin >> n;
+    if (n >= 0)
+        cout << "Square root of " << n << " = " << sqrt(n) << endl;
+    else
+        cout << "Cannot take the square root of a negative number" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter a number: 49
+Square root of 49 = 7
+</script>
+<ol class="walk">
+  <li data-l="7"><b>A <code>double</code> variable</b>, so the user may type decimals such as 2.25.</li>
+  <li data-l="10"><b>Guard first!</b> There is no real square root of a negative number. We use the <code>if</code> from Lesson 10 to check before calling the function.</li>
+  <li data-l="11"><b>The call:</b> <code>sqrt(n)</code> becomes 7, and <code>cout</code> prints it.</li>
+  <li data-l="12,13"><b>Otherwise</b> we print a friendly message instead of a strange &ldquo;nan&rdquo; (not a number) result.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-sqrt-loop" data-title="Square roots of 1 to 10 with a loop">
+  <span class="kicker">Loops and functions together</span>
+  <h2>A table of square roots: 1 to 10</h2>
+  <div class="code" data-title="sqrt_table.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    int i = 1;
+    while (i <= 10)
+    {
+        cout << i << "  " << sqrt(i) << endl;
+        i++;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <math.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 1;
+    clrscr();
+    while (i <= 10)
+    {
+        cout << i << "  " << sqrt(i) << endl;
+        i++;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1  1
+2  1.41421
+3  1.73205
+4  2
+5  2.23607
+6  2.44949
+7  2.64575
+8  2.82843
+9  3
+10  3.16228
+</script>
+<ol class="walk">
+  <li data-l="7,8,11"><b>The standard while pattern:</b> start at 1, test <code>i &lt;= 10</code>, update with <code>i++</code>.</li>
+  <li data-l="10"><b>The body calls <code>sqrt(i)</code></b> on a different value each round. An int is quietly converted to double (Lesson 8).</li>
+  <li data-l="10"><b>Perfect squares</b> (1, 4, 9) print as whole numbers. The others are endless decimals, and <code>cout</code> shows only the first <b>6 significant digits</b> by default: 1.41421, not 1.41421356&hellip;</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-while-idea">
+    <p class="q">int i = 5;
+while (i &lt; 3) { cout &lt;&lt; i; i++; }
+What is printed?</p>
+    <ul><li>5</li><li>345</li><li>Nothing</li><li>53</li></ul>
+    <div class="exp">A while loop tests <b>before</b> the first round. <code>5 &lt; 3</code> is false straight away, so the body never runs: <b>nothing</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-while-map">
+    <p class="q">int i = 1;
+while (i &lt;= 3) cout &lt;&lt; i;
+What happens?</p>
+    <ul><li>It prints 123</li><li>It prints 1 again and again, forever</li><li>It prints nothing</li><li>It does not compile</li></ul>
+    <div class="exp">Nothing in the body changes <code>i</code>, so <code>i &lt;= 3</code> stays true for ever: an <b>infinite loop</b>. The update line (<code>i++</code>) is missing.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-while-unknown">
+    <p class="q">In the &ldquo;total until 0&rdquo; program, the user types   4 6 0   What is printed at the end?</p>
+    <ul><li>Total = 0</li><li>Total = 10</li><li>Total = 4</li><li>It never stops</li></ul>
+    <div class="exp">4 and 6 are added: 10. The 0 stops the loop <b>before</b> it is added. Output: <b>Total = 10</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-math-intro">
+    <p class="q">Which header must you include to use <code>sqrt()</code> in modern C++?</p>
+    <ul><li>&lt;iostream&gt;</li><li>&lt;cmath&gt;</li><li>&lt;string&gt;</li><li>&lt;conio.h&gt;</li></ul>
+    <div class="exp">The maths functions live in <b>&lt;cmath&gt;</b> (<code>&lt;math.h&gt;</code> in Turbo C++).</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-math-demo">
+    <p class="q">cout &lt;&lt; sqrt(16.0) + pow(2.0, 3);
+What is printed?</p>
+    <ul><li>12</li><li>6</li><li>20</li><li>24</li></ul>
+    <div class="exp"><code>sqrt(16.0)</code> = 4 and <code>pow(2.0, 3)</code> = 8. Each call is replaced by its answer: 4 + 8 = <b>12</b>.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 14 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; The while loop</h3><ul><li><code>while (condition) { body }</code> tests <b>first</b>, so the body may run zero times.</li><li>Initialise <b>before</b> the loop; update <b>inside</b> the body.</li><li>Use <code>for</code> for a known count and <code>while</code> for &ldquo;until something happens&rdquo;, such as a <b>sentinel</b> value.</li></ul></div>
+    <div class="card good"><h3>&#9989; The math library</h3><ul><li><code>#include &lt;cmath&gt;</code> (<code>&lt;math.h&gt;</code> in Turbo C++).</li><li><code>sqrt</code>, <code>pow</code>, <code>fabs</code>, <code>ceil</code>, <code>floor</code>: a call is replaced by its answer.</li><li>Check <code>n &gt;= 0</code> before <code>sqrt(n)</code>. <code>cout</code> shows 6 significant digits by default.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

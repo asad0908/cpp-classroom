@@ -97,7 +97,13 @@
     function applyHot() {
       var walking = !!(walk && hot && (mode === 'modern' || (!both && mode !== 'cmp')));
       box.classList.toggle('walking', walking);
-      $$('pre .ln', body).forEach(function (l, i) { l.classList.toggle('hot', !!(walking && hot[i + 1])); });
+      var firstHot = null;
+      $$('pre .ln', body).forEach(function (l, i) { var on = !!(walking && hot[i + 1]); l.classList.toggle('hot', on); if (on && !firstHot) firstHot = l; });
+      var pre = $('pre', body);
+      if (firstHot && pre && pre.scrollHeight > pre.clientHeight + 2) {
+        var top = firstHot.offsetTop, bot = top + firstHot.offsetHeight;
+        if (top < pre.scrollTop || bot > pre.scrollTop + pre.clientHeight) pre.scrollTo({ top: Math.max(0, top - pre.clientHeight / 3), behavior: 'smooth' });
+      }
     }
     box._setHot = function (spec) { hot = spec ? parseRange(spec) : null; if (walk && spec && both && mode !== 'modern') { mode = 'modern'; render(); } else applyHot(); };
 
@@ -182,7 +188,7 @@
     for (var k = 0; k < 5; k++) {
       var h = inn.getBoundingClientRect().height;
       if (h <= avail + 1) break;
-      z = Math.max(0.5, z * (avail / h) * 0.985); inn.style.zoom = z;
+      z = Math.max(s.querySelector('.code') ? 0.85 : 0.5, z * (avail / h) * 0.985); inn.style.zoom = z;
     }
   }
   var fitT = null;

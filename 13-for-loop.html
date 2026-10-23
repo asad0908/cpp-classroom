@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 13 – The for Loop and Nested Loops</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="35" data-lesson="Lesson 13 · The for Loop &amp; Nested Loops">
+<div class="stage">
+
+<section class="slide cover" data-title="The for Loop & Nested Loops">
+  <div class="num">13</div>
+  <h1>The for Loop &amp; Nested Loops</h1>
+  <p>Computers are fast and never bored. A <b>loop</b> lets one short piece of code do a job a thousand times. We start with the loop made for <b>counting</b>.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>name the four parts of a loop and read a <code>for</code> header: <code>for (init; condition; update)</code></li>
+      <li>write the <b>sum of the first 10 numbers</b> and trace it round by round</li>
+      <li>put a loop inside a loop to print a <b>count matrix</b></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-loop-idea" data-title="Why loops? The four parts">
+  <span class="kicker">The big idea</span>
+  <h2>A <em>loop</em> repeats statements while a condition is true</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Your teacher says: &ldquo;Write <b>I will not talk in class</b> 100 times.&rdquo; You do not invent 100 different sentences. You follow one rule: <b>start at 1, write, count up, stop after 100</b>. A loop is that rule written for the computer.</p></div>
+  <div class="cols c4">
+    <div class="card accent step"><h3>1 &middot; Initialise</h3><p>Where does the counting <b>start</b>?</p><p><code>i = 1</code></p></div>
+    <div class="card accent step"><h3>2 &middot; Condition</h3><p>Keep going <b>while</b> this is true.</p><p><code>i &lt;= 10</code></p></div>
+    <div class="card accent step"><h3>3 &middot; Body</h3><p>The <b>work</b> to repeat.</p><p><code>sum = sum + i;</code></p></div>
+    <div class="card accent step"><h3>4 &middot; Update</h3><p>Move <b>towards the end</b>.</p><p><code>i++</code></p></div>
+  </div>
+  <div class="rule step">Forget the update and the loop never ends.</div>
+</section>
+
+<section class="slide fast" id="s-three-loops" data-title="Three loops in C++">
+  <span class="kicker">The family</span>
+  <h2>C++ has three loop statements</h2>
+  <div class="cols c3">
+    <div class="card accent"><span class="ico">&#128290;</span><h3><code>for</code></h3><p>Best when you <b>know how many times</b>: &ldquo;do it 10 times&rdquo;. All four parts sit in one line. <b>This lesson.</b></p></div>
+    <div class="card accent"><span class="ico">&#10067;</span><h3><code>while</code></h3><p>Best when you <b>do not know</b> how many times: &ldquo;keep going until the user types 0&rdquo;. <b>Lesson 14.</b></p></div>
+    <div class="card accent"><span class="ico">&#128260;</span><h3><code>do-while</code></h3><p>Like while, but the body runs <b>at least once</b> before the first test. <b>Lesson 15.</b></p></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-for-syntax" data-title="Anatomy of the for statement">
+  <span class="kicker">Syntax</span>
+  <h2>The <em>for</em> header holds three of the four parts</h2>
+  <div class="cols c2">
+    <div>
+      <div class="code step" data-title="syntax of for" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+for (initialisation; condition; update)
+{
+    body;
+}
+</script>
+      </div>
+      <div class="card accent step"><h3>The order of events</h3><p><b>1.</b> Initialisation runs <b>once</b>, at the start.</p><p><b>2.</b> Condition is tested. False? The loop is over.</p><p><b>3.</b> True? The body runs.</p><p><b>4.</b> Update runs, then back to step <b>2</b>.</p></div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 400 385" role="img" aria-label="Flowchart of a for loop: initialise once, test the condition, run the body, run the update, then test again">
+        <defs><marker id="ah-for" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="tm" x="150" y="4" width="100" height="26" rx="13"/><text class="w" x="200" y="17">Start</text>
+        <path class="fl" d="M200 30V48" marker-end="url(#ah-for)"/>
+        <rect class="bx" x="120" y="48" width="160" height="30" rx="8"/><text x="200" y="63">1 &middot; initialise (once)</text>
+        <path class="fl" d="M200 78V98" marker-end="url(#ah-for)"/>
+        <polygon class="dc" points="200,98 290,138 200,178 110,138"/><text x="200" y="138">2 &middot; condition?</text>
+        <path class="fl" d="M200 178V212" marker-end="url(#ah-for)"/><text class="fyes" x="222" y="196">true</text>
+        <rect class="bx" x="130" y="212" width="140" height="32" rx="8"/><text x="200" y="228">3 &middot; body</text>
+        <path class="fl" d="M200 244V270" marker-end="url(#ah-for)"/>
+        <rect class="bx" x="130" y="270" width="140" height="32" rx="8"/><text x="200" y="286">4 &middot; update</text>
+        <path class="fl" d="M130 286H40V138H110" marker-end="url(#ah-for)"/>
+        <path class="fl" d="M290 138H350V356H250" marker-end="url(#ah-for)"/><text class="fno" x="318" y="130">false</text>
+        <rect class="bx" x="150" y="342" width="100" height="28" rx="8"/><text x="200" y="356">after the loop</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-for-code" data-title="for in action: counting rounds">
+  <span class="kicker">See it work</span>
+  <h2>Five rounds, <em>counted</em></h2>
+  <div class="code" data-title="for_count.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i;
+    for (i = 1; i <= 5; i++)
+    {
+        cout << "Round " << i << endl;
+    }
+    cout << "Loop finished, i = " << i << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i;
+    clrscr();
+    for (i = 1; i <= 5; i++)
+    {
+        cout << "Round " << i << endl;
+    }
+    cout << "Loop finished, i = " << i << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Round 1
+Round 2
+Round 3
+Round 4
+Round 5
+Loop finished, i = 6
+</script>
+<ol class="walk">
+  <li data-l="6"><b>The counter</b> <code>i</code> is declared. It has no value yet.</li>
+  <li data-l="7"><b>The header controls everything.</b> <code>i = 1</code> runs once. Then <code>i &lt;= 5</code> is tested before <b>every</b> round, and <code>i++</code> runs after every round.</li>
+  <li data-l="8,9,10"><b>The body</b> is the repeated work: it prints the current round number.</li>
+  <li data-l="11"><b>After the loop,</b> <code>i</code> is <b>6</b>, not 5. The loop only stopped when the test <code>6 &lt;= 5</code> failed, so the counter had already moved past the end.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-for-trace" data-title="Tracing the for loop">
+  <span class="kicker">Trace it on paper</span>
+  <h2>What the computer does, round by round</h2>
+  <table>
+    <tr><th class="c">Round</th><th>Test at the top</th><th>Body prints</th><th>Update</th></tr>
+    <tr class="step"><td class="c">1</td><td><code>1 &lt;= 5</code> &rarr; true</td><td>Round 1</td><td><code>i</code> becomes 2</td></tr>
+    <tr class="step"><td class="c">2</td><td><code>2 &lt;= 5</code> &rarr; true</td><td>Round 2</td><td><code>i</code> becomes 3</td></tr>
+    <tr class="step"><td class="c">3</td><td><code>3 &lt;= 5</code> &rarr; true</td><td>Round 3</td><td><code>i</code> becomes 4</td></tr>
+    <tr class="step"><td class="c">4</td><td><code>4 &lt;= 5</code> &rarr; true</td><td>Round 4</td><td><code>i</code> becomes 5</td></tr>
+    <tr class="step"><td class="c">5</td><td><code>5 &lt;= 5</code> &rarr; true</td><td>Round 5</td><td><code>i</code> becomes 6</td></tr>
+    <tr class="step hl"><td class="c">&mdash;</td><td><code>6 &lt;= 5</code> &rarr; <b>false</b></td><td>(nothing)</td><td>loop ends, <code>i</code> stays 6</td></tr>
+  </table>
+  <div class="rule step">The test runs <b>one more time</b> than the body.</div>
+</section>
+
+<section class="slide slow" id="s-sum10" data-title="Practice: sum of the first 10 numbers">
+  <span class="kicker">Practice program</span>
+  <h2>Sum of the first 10 numbers: <em>1 + 2 + &hellip; + 10</em></h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A <b>piggy bank that starts empty</b>. On round 1 you drop in 1 rupee, on round 2 you drop in 2, and so on. The total in the bank is the <b>sum</b>. A variable that collects a running total is called an <b>accumulator</b>.</p></div>
+  <div class="code" data-title="sum10.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i, sum = 0;
+    for (i = 1; i <= 10; i++)
+    {
+        sum = sum + i;
+    }
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i, sum = 0;
+    clrscr();
+    for (i = 1; i <= 10; i++)
+    {
+        sum = sum + i;
+    }
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Sum of first 10 numbers = 55
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Empty the piggy bank first:</b> <code>sum = 0</code>. Without this the bank would start with garbage and the answer would be wrong.</li>
+  <li data-l="7"><b>i counts 1, 2, 3, &hellip; 10.</b></li>
+  <li data-l="9"><b>Drop i into the bank:</b> <code>sum = sum + i</code> means &ldquo;take the old sum, add i, store it back&rdquo;.</li>
+  <li data-l="11"><b>Print the total <u>after</u> the loop.</b> Printing inside the body would show every partial total. 1 + 2 + &hellip; + 10 = <b>55</b>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-sum-trace" data-title="Watching the accumulator grow">
+  <span class="kicker">Trace it on paper</span>
+  <h2>The value of <code>sum</code> after each round</h2>
+  <div class="pipe"><div class="node">0<small>start</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">1<small>i = 1</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">3<small>i = 2</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">6<small>i = 3</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">10<small>i = 4</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">15<small>i = 5</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">21<small>i = 6</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">28<small>i = 7</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">36<small>i = 8</small></div>
+    <span class="arr step">&rarr;</span><div class="node step">45<small>i = 9</small></div>
+    <span class="arr step">&rarr;</span><div class="node hot step">55<small>i = 10</small></div>
+  </div>
+  <div class="callout trick step"><span class="tag">A famous shortcut</span><p>The young mathematician Gauss noticed 1 + 10 = 11, 2 + 9 = 11, &hellip; five pairs, so the sum is <b>5 &times; 11 = 55</b>. In general the sum of the first n numbers is <code>n * (n + 1) / 2</code>. The loop does it the slow, general way, and works for any rule, not just consecutive numbers.</p></div>
+</section>
+
+<section class="slide slow" id="s-for-variants" data-title="Same loop, different headers">
+  <span class="kicker">Change the header, change the pattern</span>
+  <h2>Counting up, down and in jumps</h2>
+  <table>
+    <tr><th>Header</th><th>What it does</th><th>Values of i</th></tr>
+    <tr class="step"><td><code>for (i = 1; i &lt;= 5; i++)</code></td><td>count up by 1</td><td><b>1 2 3 4 5</b></td></tr>
+    <tr class="step"><td><code>for (i = 5; i &gt;= 1; i--)</code></td><td>count <b>down</b> (note <code>&gt;=</code> and <code>i--</code>)</td><td><b>5 4 3 2 1</b></td></tr>
+    <tr class="step"><td><code>for (i = 2; i &lt;= 10; i += 2)</code></td><td>jump by 2: even numbers</td><td><b>2 4 6 8 10</b></td></tr>
+    <tr class="step"><td><code>for (i = 10; i &gt; 0; i -= 3)</code></td><td>jump down by 3</td><td><b>10 7 4 1</b></td></tr>
+    <tr class="step"><td><code>for (i = 1; i &lt;= 100; i *= 2)</code></td><td>doubling</td><td><b>1 2 4 8 16 32 64</b></td></tr>
+    <tr class="step"><td><code>for (i = 0; i &lt; 5; i++)</code></td><td>zero-based counting (very common)</td><td><b>0 1 2 3 4</b></td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-for-scope" data-title="Declaring the counter inside the for">
+  <span class="kicker">Link to Lesson 8</span>
+  <h2>A counter declared <em>inside</em> the header is local to the loop</h2>
+  <div class="code" data-title="for_scope.cpp  (Modern C++)" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    for (int i = 1; i <= 3; i++)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 3
+</script>
+<ol class="walk">
+  <li data-l="6"><b><code>int i</code> is declared in the header.</b> It is created when the loop starts and is destroyed when the loop ends. This is <b>local scope</b> from Lesson 8, with the loop&rsquo;s braces as the block.</li>
+  <li data-l="11"><b>After the loop</b> writing <code>cout &lt;&lt; i;</code> would be an error: <code>i</code> does not exist any more.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">Turbo C++</span><p>Older compilers such as Turbo C++ treat the scope of such a counter differently. So in class we declare <code>int i;</code> <b>before</b> the loop, which behaves the same everywhere.</p></div>
+</section>
+
+<section class="slide slow" id="s-for-traps" data-title="Two for-loop traps">
+  <span class="kicker">Classic traps</span>
+  <h2>A stray <em>;</em> and the off-by-one</h2>
+  <div class="code" data-title="for_semi.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i;
+    for (i = 1; i <= 3; i++);
+        cout << "Hi" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i;
+    clrscr();
+    for (i = 1; i <= 3; i++);
+        cout << "Hi" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Hi
+</script>
+<ol class="walk">
+  <li data-l="7"><b>The <code>;</code> is the whole body.</b> The loop spins three times doing nothing, just like the stray semicolon after an <code>if</code> in Lesson 10.</li>
+  <li data-l="8"><b>This line is outside the loop</b>, so &ldquo;Hi&rdquo; prints <b>once</b>, not three times.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">Off-by-one</span><p>How many times does <code>for (i = 0; i &lt;= 5; i++)</code> run? <b>Six</b> (0, 1, 2, 3, 4, 5), not five. When counting from 0, use <code>&lt;</code>. When counting from 1, use <code>&lt;=</code>.</p></div>
+</section>
+
+<section class="slide slow" id="s-loop-lab" data-title="Loop lab">
+  <span class="kicker">Try it live</span>
+  <h2>Change the header and read the trace</h2>
+  <p class="mute">Ask the class to predict first. Try: start 10, test <code>&gt;</code>, limit 0, step &minus;3. Then try a test that is false from the start.</p>
+  <div class="play looplab"></div>
+</section>
+
+<section class="slide slow" id="s-nested-idea" data-title="Nested loops">
+  <span class="kicker">A loop inside a loop</span>
+  <h2><em>Nested loops</em>: the inner loop finishes completely for every round of the outer</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A <b>clock</b>. The hour hand moves one step, and during that time the minute hand goes round <b>all 60 minutes</b>. Then the hour hand moves again and the minute hand starts over. Hours are the <b>outer</b> loop; minutes are the <b>inner</b> loop.</p></div>
+  <div class="cols c2">
+    <div class="card accent step"><h3>Outer loop &rarr; rows</h3><p>Controls <b>how many lines</b> we print. It moves on only when the inner loop is completely done.</p></div>
+    <div class="card accent step"><h3>Inner loop &rarr; columns</h3><p>Controls <b>how many items</b> on one line. It <b>restarts from the beginning</b> every time the outer loop moves on.</p></div>
+  </div>
+  <div class="rule step">Total inner rounds = outer rounds &times; inner rounds.</div>
+</section>
+
+<section class="slide slow" id="s-matrix1" data-title="Nested loops: a 3 by 4 grid">
+  <span class="kicker">See it work</span>
+  <h2>3 rows, 4 columns: print the column number</h2>
+  <div class="code" data-title="matrix1.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i, j;
+    for (i = 1; i <= 3; i++)
+    {
+        for (j = 1; j <= 4; j++)
+        {
+            cout << j << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i, j;
+    clrscr();
+    for (i = 1; i <= 3; i++)
+    {
+        for (j = 1; j <= 4; j++)
+        {
+            cout << j << " ";
+        }
+        cout << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 3 4
+1 2 3 4
+1 2 3 4
+</script>
+<ol class="walk">
+  <li data-l="7"><b>The outer loop (i)</b> chooses the row: 1, 2, 3.</li>
+  <li data-l="9"><b>The inner loop (j)</b> walks across the row: 1, 2, 3, 4. Every time we start a new row, <code>j = 1</code> runs again, so j <b>restarts</b>.</li>
+  <li data-l="11"><b>Print one number</b> and a space, staying on the same line.</li>
+  <li data-l="13"><b>The inner loop has finished,</b> so end the line. Only now does the outer loop move to the next row.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-matrix-trace" data-title="Tracing the nested loop">
+  <span class="kicker">Trace it on paper</span>
+  <h2>The inner loop runs <em>4 times for each</em> of the 3 rows</h2>
+  <table>
+    <tr><th class="c">i (row)</th><th>j takes the values</th><th>Line printed</th></tr>
+    <tr class="step"><td class="c">1</td><td><code>1, 2, 3, 4</code> then j = 5 stops it</td><td><code>1 2 3 4</code></td></tr>
+    <tr class="step"><td class="c">2</td><td><code>1, 2, 3, 4</code> j starts again at 1</td><td><code>1 2 3 4</code></td></tr>
+    <tr class="step"><td class="c">3</td><td><code>1, 2, 3, 4</code> and again</td><td><code>1 2 3 4</code></td></tr>
+    <tr class="step hl"><td class="c">4</td><td>test <code>4 &lt;= 3</code> is false</td><td>the outer loop ends</td></tr>
+  </table>
+  <div class="rule step">3 rows &times; 4 columns = <b>12</b> times the <code>cout &lt;&lt; j</code> line ran.</div>
+</section>
+
+<section class="slide slow" id="s-count-matrix" data-title="The count matrix">
+  <span class="kicker">Practice program</span>
+  <h2>A <em>count matrix</em>: numbers 1 to 9 in a 3 &times; 3 grid</h2>
+  <div class="code" data-title="count_matrix.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i, j, count = 1;
+    for (i = 1; i <= 3; i++)
+    {
+        for (j = 1; j <= 3; j++)
+        {
+            cout << count << " ";
+            count++;
+        }
+        cout << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i, j, count = 1;
+    clrscr();
+    for (i = 1; i <= 3; i++)
+    {
+        for (j = 1; j <= 3; j++)
+        {
+            cout << count << " ";
+            count++;
+        }
+        cout << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 3
+4 5 6
+7 8 9
+</script>
+<ol class="walk">
+  <li data-l="6"><b>A separate counter</b> <code>count</code>, starting at 1. It is <b>not</b> reset when a row ends, so it keeps counting across the rows.</li>
+  <li data-l="7,9"><b>Same two loops</b> as before: 3 rows, 3 columns.</li>
+  <li data-l="11,12"><b>Print the counter, then add 1.</b> It runs 9 times in total, printing 1 to 9.</li>
+  <li data-l="14"><b>End each row</b> after its three numbers.</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">Without a counter</span><p>You can also work the number out from the loop variables: <code>cout &lt;&lt; (i - 1) * 3 + j &lt;&lt; " ";</code> gives the same grid. Try it for row 2, column 3: (2 &minus; 1) &times; 3 + 3 = 6.</p></div>
+</section>
+
+<section class="slide slow" id="s-matrix-lab" data-title="Matrix lab">
+  <span class="kicker">Try it live</span>
+  <h2>Build any grid</h2>
+  <p class="mute">Change rows, columns and the pattern. Watch the total number of inner rounds.</p>
+  <div class="play matrixlab"></div>
+</section>
+
+<section class="slide slow" id="s-triangle" data-title="A triangle pattern">
+  <span class="kicker">Bonus pattern</span>
+  <h2>When the inner limit depends on the outer loop</h2>
+  <div class="code" data-title="triangle.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i, j;
+    for (i = 1; i <= 4; i++)
+    {
+        for (j = 1; j <= i; j++)
+        {
+            cout << "* ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i, j;
+    clrscr();
+    for (i = 1; i <= 4; i++)
+    {
+        for (j = 1; j <= i; j++)
+        {
+            cout << "* ";
+        }
+        cout << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+*
+* *
+* * *
+* * * *
+</script>
+<ol class="walk">
+  <li data-l="9"><b>The inner test is <code>j &lt;= i</code>, not a fixed number.</b> In row 1 the inner loop runs once, in row 2 twice, in row 3 three times&hellip;</li>
+  <li data-l="11"><b>One star per round</b> of the inner loop, so row <i>i</i> has <i>i</i> stars.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-for-code">
+    <p class="q">int i;
+for (i = 1; i &lt;= 3; i++) cout &lt;&lt; i;
+cout &lt;&lt; i;
+What is printed?</p>
+    <ul><li>123</li><li>1234</li><li>12</li><li>4</li></ul>
+    <div class="exp">The loop prints 1, 2, 3. It stops when <code>i</code> becomes 4, and that 4 is printed by the last line: <b>1234</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-for-traps">
+    <p class="q">How many times does the body run?
+for (i = 0; i &lt;= 5; i++)</p>
+    <ul><li>4</li><li>5</li><li>6</li><li>7</li></ul>
+    <div class="exp">i takes the values 0, 1, 2, 3, 4, 5. That is <b>6</b> rounds. Counting from 0 with <code>&lt;=</code> gives one extra round.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-for-variants">
+    <p class="q">for (i = 10; i &gt; 0; i -= 3) cout &lt;&lt; i &lt;&lt; " ";
+What is printed?</p>
+    <ul><li>10 7 4</li><li>10 7 4 1</li><li>10 7 4 1 -2</li><li>7 4 1</li></ul>
+    <div class="exp">10, 7, 4, 1 are all above 0, so they print. Then i becomes &minus;2, and <code>-2 &gt; 0</code> is false: <b>10 7 4 1</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-sum10">
+    <p class="q">int sum;
+for (i = 1; i &lt;= 3; i++) sum = sum + i;
+What is wrong?</p>
+    <ul><li>Nothing, it prints 6</li><li>sum was never set to 0, so it starts as garbage</li><li>The loop runs 4 times</li><li>sum must be a float</li></ul>
+    <div class="exp">A local variable starts with a <b>garbage</b> value (Lesson 8). An accumulator must be set to 0 <b>before</b> the loop: <code>int sum = 0;</code>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-matrix-trace">
+    <p class="q">for (i = 1; i &lt;= 2; i++)
+    for (j = 1; j &lt;= 3; j++)
+        cout &lt;&lt; "*";
+How many stars are printed?</p>
+    <ul><li>5</li><li>6</li><li>8</li><li>3</li></ul>
+    <div class="exp">The inner loop prints 3 stars, and it runs once for each of the 2 outer rounds: 2 &times; 3 = <b>6</b>.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 13 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; The for loop</h3><ul><li>Four parts: initialise, condition, body, update. <code>for (init; cond; update)</code></li><li>Init runs once; the test runs <b>one more time</b> than the body.</li><li>Sum of 10: <code>sum = 0</code> first, then <code>sum = sum + i</code> inside, print after the loop.</li><li>Traps: stray <code>;</code> after the header, and off-by-one.</li></ul></div>
+    <div class="card good"><h3>&#9989; Nested loops</h3><ul><li>The inner loop <b>finishes completely</b> for each round of the outer loop, and restarts each time.</li><li>Outer = rows, inner = columns. Total = outer &times; inner.</li><li>Count matrix: a separate <code>count</code> that is not reset between rows.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

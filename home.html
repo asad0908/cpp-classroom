@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>C++ Classroom – Part 1</title>
+<title>C++ Classroom – Parts 1 and 2</title>
 <link rel="stylesheet" href="assets/deck.css">
 <style>
   body{overflow:auto;height:auto}
@@ -20,7 +20,7 @@
   .lesson .meta span{border-radius:99px;padding:.05em .7em;font-weight:700}
   .m-f{background:#dff7e8;color:#0d7a43}.m-s{background:#fff0d4;color:#a15c00}
   :root[data-theme="dark"] .m-f{background:#12301f;color:#6fe3a2}:root[data-theme="dark"] .m-s{background:#3a2f10;color:#ffc95e}
-  .ls1{--hue:222}.ls2{--hue:165}.ls3{--hue:28}.ls4{--hue:275}.ls5{--hue:12}.ls6{--hue:190}.ls7{--hue:345}.ls8{--hue:95}.ls9{--hue:320}
+  .ls1{--hue:222}.ls2{--hue:165}.ls3{--hue:28}.ls4{--hue:275}.ls5{--hue:12}.ls6{--hue:190}.ls7{--hue:345}.ls8{--hue:95}.ls9{--hue:320}.ls10{--hue:210}.ls11{--hue:145}.ls12{--hue:260}.ls13{--hue:35}.ls14{--hue:175}.ls15{--hue:0}
   @media (max-width:760px){
     .hero{padding:1.6rem 1rem 2rem}
     .hero h1{font-size:2.2rem}
@@ -37,14 +37,14 @@
 </head>
 <body class="home-page">
 
-<div class="dk-top"><span class="logo">C++ <span>Classroom</span></span><span class="ttl">Class 11 &middot; Introduction to C++ &middot; Part 1</span>
+<div class="dk-top"><span class="logo">C++ <span>Classroom</span></span><span class="ttl">Class 11 &middot; Introduction to C++ &middot; Parts 1 &amp; 2</span>
   <button id="zm">A&minus;</button><button id="zp">A+</button><button id="thm">&#9681;</button></div>
 
 <header class="hero"><div class="wrap">
-  <span class="pill">Class 11</span><span class="pill">Part 1</span><span class="pill">Beginner friendly</span>
+  <span class="pill">Class 11</span><span class="pill">Parts 1 &amp; 2</span><span class="pill">Beginner friendly</span>
   <h1>C++ Classroom</h1>
-  <p>From &ldquo;what is a variable?&rdquo; to bitwise operators. Nine short lessons, taught slide by slide, with every program shown in <b>Turbo C++</b> and <b>Modern C++</b>.</p>
-  <a class="go" href="01-first-program.html">&#9654;&nbsp; Start Lesson 1</a>
+  <p>From &ldquo;what is a variable?&rdquo; to loops. Fifteen short lessons, taught slide by slide, with every program shown in <b>Turbo C++</b> and <b>Modern C++</b>.</p>
+  <a class="go" href="01-first-program.html">&#9654;&nbsp; Start Lesson 1</a> &nbsp; <a class="go" href="10-if-else.html">&#9654;&nbsp; Part 2: Flow of control</a>
 </div></header>
 
 <div class="sect">
@@ -57,7 +57,7 @@
 </div>
 
 <div class="sect">
-  <h2>The lessons</h2>
+  <h2>Part 1 &middot; The basics</h2>
   <div class="lessons">
     <a class="lesson ls1" href="01-first-program.html"><div class="no">LESSON 1</div><h3>Your First Program</h3><p>What a program is, <code>main</code>, <code>cout</code> / <code>cin</code>, comments, and the Turbo vs Modern differences.</p><div class="meta"><span class="m-f">&#9889; 9 quick</span><span class="m-s">&#129504; 7 deep</span></div></a>
     <a class="lesson ls2" href="02-data-types.html"><div class="no">LESSON 2</div><h3>Data Types</h3><p>int, char, float, double, void, bool, long, short, long double &mdash; and the size of each. The 1-2-4-8 trick.</p><div class="meta"><span class="m-f">&#9889; 11 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
@@ -68,6 +68,19 @@
     <a class="lesson ls7" href="07-operator-precedence.html"><div class="no">LESSON 7</div><h3>The Operator Table</h3><p>Precedence &amp; associativity, the operator ladder, a memory sentence, and a live step-by-step expression solver.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
     <a class="lesson ls8" href="08-scope-casting.html"><div class="no">LESSON 8</div><h3>Scope &amp; Type Casting</h3><p>Local vs global, visibility, the <code>::</code> operator, implicit and explicit casts.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 11 deep</span></div></a>
     <a class="lesson ls9" href="09-practice.html"><div class="no">LESSON 9</div><h3>Exam Practice</h3><p>11 quick-fire questions, 7 find-the-output programs, an operator challenge, and the 12 classic exam traps.</p><div class="meta"><span class="m-f">&#9889; 15 quick</span><span class="m-s">&#129504; 9 deep</span></div></a>
+  </div>
+</div>
+
+<div class="sect">
+  <h2>Part 2 &middot; Flow of control</h2>
+  <p class="mute">Selection (if, switch) and iteration (for, while, do-while), with practice programs in every lesson. Compile-checked, and every program has a Turbo C++ twin.</p>
+  <div class="lessons">
+    <a class="lesson ls10" href="10-if-else.html"><div class="no">LESSON 10</div><h3>Making Decisions</h3><p>Flow of control, <code>if</code> and <code>if-else</code>, the three classic traps, maximum of two and minimum of three numbers.</p><div class="meta"><span class="m-f">&#9889; 7 quick</span><span class="m-s">&#129504; 11 deep</span></div></a>
+    <a class="lesson ls11" href="11-nested-ladder.html"><div class="no">LESSON 11</div><h3>Nested if &amp; the else-if Ladder</h3><p>An if inside an if, largest of three, the dangling else, grades with an else-if ladder, and a live ladder lab.</p><div class="meta"><span class="m-f">&#9889; 6 quick</span><span class="m-s">&#129504; 11 deep</span></div></a>
+    <a class="lesson ls12" href="12-switch-goto.html"><div class="no">LESSON 12</div><h3>switch-case &amp; goto</h3><p><code>switch</code>, <code>break</code>, <code>default</code>, fall-through, a calculator, and why <code>goto</code> is not used.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 10 deep</span></div></a>
+    <a class="lesson ls13" href="13-for-loop.html"><div class="no">LESSON 13</div><h3>The for Loop &amp; Nested Loops</h3><p>The four parts of a loop, sum of the first 10 numbers, a loop lab, and nested loops for a count matrix.</p><div class="meta"><span class="m-f">&#9889; 7 quick</span><span class="m-s">&#129504; 16 deep</span></div></a>
+    <a class="lesson ls14" href="14-while-math.html"><div class="no">LESSON 14</div><h3>The while Loop &amp; Math Library</h3><p><code>while</code>, the same sum of 10, looping until a stop value, and <code>sqrt()</code> with <code>&lt;cmath&gt;</code>.</p><div class="meta"><span class="m-f">&#9889; 7 quick</span><span class="m-s">&#129504; 7 deep</span></div></a>
+    <a class="lesson ls15" href="15-dowhile-jumps.html"><div class="no">LESSON 15</div><h3>do-while, break, continue &amp; Infinite Loops</h3><p><code>do-while</code>, <code>break</code>, <code>continue</code>, infinite loops, how to stop them, and <code>exit(0)</code>.</p><div class="meta"><span class="m-f">&#9889; 8 quick</span><span class="m-s">&#129504; 14 deep</span></div></a>
   </div>
 </div>
 

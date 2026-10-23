@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 15 – do-while, break, continue and Infinite Loops</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="0" data-lesson="Lesson 15 · do-while, break, continue &amp; Infinite Loops">
+<div class="stage">
+
+<section class="slide cover" data-title="do-while, break, continue & Infinite Loops">
+  <div class="num">15</div>
+  <h1>do-while, break, continue &amp; Infinite Loops</h1>
+  <p>The last loop, and the statements that let us <b>leave a loop early</b> or <b>skip a round</b>. Then the loop that never ends: how it happens, how to stop it, and how to end a whole program with <code>exit(0)</code>.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>write a <code>do-while</code> loop and say how it differs from <code>while</code></li>
+      <li>use <code>break</code> and <code>continue</code> and predict their output</li>
+      <li>spot an <b>infinite loop</b>, stop one, and end a program with <code>exit(0)</code></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-dowhile-idea" data-title="The do-while statement">
+  <span class="kicker">Loop &middot; test last</span>
+  <h2><em>do-while</em>: do it first, then ask whether to repeat</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>You <b>taste the soup first</b>, and only then decide whether it needs more salt. You must taste <b>at least once</b>, because you cannot judge before tasting.</p></div>
+      <div class="code step" data-title="syntax of do-while" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+do
+{
+    body;
+} while (condition);
+</script>
+      </div>
+      <div class="callout warn step"><span class="tag">Do not forget</span><p>The <b>semicolon</b> after <code>while (condition)</code> is <b>required</b>. It is the only loop that ends with one.</p></div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 400 255" role="img" aria-label="Flowchart of a do-while loop: run the body first, then test the condition and repeat while it is true">
+        <defs><marker id="ah-dw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="tm" x="150" y="4" width="100" height="26" rx="13"/><text class="w" x="200" y="17">Start</text>
+        <path class="fl" d="M200 30V48" marker-end="url(#ah-dw)"/>
+        <rect class="bx" x="130" y="48" width="140" height="34" rx="8"/><text x="200" y="65">body (runs first)</text>
+        <path class="fl" d="M200 82V104" marker-end="url(#ah-dw)"/>
+        <polygon class="dc" points="200,104 290,144 200,184 110,144"/><text x="200" y="144">condition?</text>
+        <path class="fl" d="M110 144H40V65H130" marker-end="url(#ah-dw)"/><text class="fyes" x="76" y="136">true</text>
+        <path class="fl" d="M200 184V214" marker-end="url(#ah-dw)"/><text class="fno" x="222" y="200">false</text>
+        <rect class="bx" x="150" y="214" width="100" height="28" rx="8"/><text x="200" y="228">after the loop</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-dowhile-code" data-title="do-while in action: sum of 10 numbers">
+  <span class="kicker">See it work</span>
+  <h2>Sum of the first 10 numbers, a third way</h2>
+  <div class="code" data-title="dowhile_sum.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 1, sum = 0;
+    do
+    {
+        sum = sum + i;
+        i++;
+    } while (i <= 10);
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 1, sum = 0;
+    clrscr();
+    do
+    {
+        sum = sum + i;
+        i++;
+    } while (i <= 10);
+    cout << "Sum of first 10 numbers = " << sum << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Sum of first 10 numbers = 55
+</script>
+<ol class="walk">
+  <li data-l="7,8"><b><code>do</code> opens the loop.</b> There is no test here, so the body is entered straight away.</li>
+  <li data-l="9,10"><b>The body runs once, then the test.</b> Add i to sum, then <code>i++</code>.</li>
+  <li data-l="11"><b>The test is at the bottom:</b> <code>i &lt;= 10</code>. True? Jump back up to <code>do</code>. False? Carry on below. Note the <code>;</code>.</li>
+  <li data-l="12"><b>Same answer, 55.</b> For a count like this all three loops agree. They differ when the condition is false at the very start.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-dowhile-once" data-title="do-while runs at least once">
+  <span class="kicker">The key difference</span>
+  <h2>The condition is false from the start: <em>while</em> runs 0 times, <em>do-while</em> runs 1</h2>
+  <div class="code" data-title="once.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 5;
+    cout << "while loop:" << endl;
+    while (i < 3)
+    {
+        cout << "  i = " << i << endl;
+        i++;
+    }
+    cout << "do-while loop:" << endl;
+    do
+    {
+        cout << "  i = " << i << endl;
+        i++;
+    } while (i < 3);
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 5;
+    clrscr();
+    cout << "while loop:" << endl;
+    while (i < 3)
+    {
+        cout << "  i = " << i << endl;
+        i++;
+    }
+    cout << "do-while loop:" << endl;
+    do
+    {
+        cout << "  i = " << i << endl;
+        i++;
+    } while (i < 3);
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+while loop:
+do-while loop:
+  i = 5
+</script>
+<ol class="walk">
+  <li data-l="8,9,10,11,12"><b>The while loop tests first.</b> <code>5 &lt; 3</code> is false, so its body is <b>never</b> entered. Nothing is printed under &ldquo;while loop:&rdquo;.</li>
+  <li data-l="14,15,16,17"><b>The do-while runs its body before any test.</b> It prints <code>i = 5</code> and makes i equal to 6.</li>
+  <li data-l="18"><b>Only now is the condition checked:</b> <code>6 &lt; 3</code> is false, so the loop ends. One round happened even though the condition was never true.</li>
+</ol>
+  </div>
+  <div class="rule step">while: <b>0 or more</b> times &nbsp;&middot;&nbsp; do-while: <b>1 or more</b> times</div>
+</section>
+
+<section class="slide slow" id="s-dowhile-valid" data-title="do-while for input checking">
+  <span class="kicker">Where do-while shines</span>
+  <h2>Keep asking until the answer is <em>valid</em></h2>
+  <div class="code" data-title="age.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int age;
+    do
+    {
+        cout << "Enter your age (1-100): ";
+        cin >> age;
+    } while (age < 1 || age > 100);
+    cout << "Thank you. Age = " << age << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int age;
+    clrscr();
+    do
+    {
+        cout << "Enter your age (1-100): ";
+        cin >> age;
+    } while (age < 1 || age > 100);
+    cout << "Thank you. Age = " << age << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter your age (1-100): 150
+Enter your age (1-100): -5
+Enter your age (1-100): 16
+Thank you. Age = 16
+</script>
+<ol class="walk">
+  <li data-l="7,8,9,10"><b>We <u>must</u> ask at least once</b>, because there is no age to check before the user types one. That is exactly what do-while guarantees.</li>
+  <li data-l="11"><b>The condition describes a bad answer:</b> under 1 <b>or</b> over 100. While the answer is bad, ask again.</li>
+  <li data-l="9,10,11"><b>In the sample run</b> 150 is rejected, &minus;5 is rejected, 16 is accepted and the loop ends.</li>
+  <li data-l="12"><b>Only a valid age reaches this line.</b></li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-three-compare" data-title="for, while, do-while compared">
+  <span class="kicker">Choosing a loop</span>
+  <h2>Three loops, one comparison</h2>
+  <table>
+    <tr><th></th><th><code>for</code></th><th><code>while</code></th><th><code>do-while</code></th></tr>
+    <tr><td>When is the test?</td><td><b>before</b> each round</td><td><b>before</b> each round</td><td><b>after</b> each round</td></tr>
+    <tr><td>Kind of loop</td><td>entry-controlled</td><td>entry-controlled</td><td><b>exit-controlled</b></td></tr>
+    <tr><td>Fewest rounds</td><td>0</td><td>0</td><td><b>1</b></td></tr>
+    <tr><td>Semicolon after the closing test?</td><td>no</td><td>no</td><td><b>yes</b></td></tr>
+    <tr><td>Best for</td><td>a known count</td><td>&ldquo;until something happens&rdquo;</td><td>menus and input checking: &ldquo;at least once&rdquo;</td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-break-idea" data-title="break: leave the loop">
+  <span class="kicker">Jump statement &middot; break</span>
+  <h2><em>break</em>: leave the loop right now</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A <b>fire alarm</b> rings in the middle of a lesson. Nobody finishes the lesson: everyone <b>walks out at once</b>. <code>break</code> does the same to a loop.</p></div>
+  <div class="code" data-title="break_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i;
+    for (i = 1; i <= 10; i++)
+    {
+        if (i == 4)
+            break;
+        cout << i << " ";
+    }
+    cout << endl << "Stopped at i = " << i << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i;
+    clrscr();
+    for (i = 1; i <= 10; i++)
+    {
+        if (i == 4)
+            break;
+        cout << i << " ";
+    }
+    cout << endl << "Stopped at i = " << i << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 3
+Stopped at i = 4
+</script>
+<ol class="walk">
+  <li data-l="7"><b>The loop is meant to run 10 rounds.</b></li>
+  <li data-l="9,10"><b>On round 4 the if is true and <code>break</code> runs.</b> The loop ends immediately: the update <code>i++</code> and the test are skipped.</li>
+  <li data-l="11"><b>Rounds 1, 2, 3</b> printed their number before round 4 broke out.</li>
+  <li data-l="13"><b>Control continues after the loop</b> with i still 4: the number it had when we left.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-continue-idea" data-title="continue: skip this round">
+  <span class="kicker">Jump statement &middot; continue</span>
+  <h2><em>continue</em>: skip the rest of this round, carry on with the next</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>Playing a playlist, you <b>skip one song</b> you dislike and the next one starts. You do not leave the playlist; you only skip <b>that</b> song.</p></div>
+  <div class="code" data-title="continue_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i;
+    for (i = 1; i <= 7; i++)
+    {
+        if (i % 3 == 0)
+            continue;
+        cout << i << " ";
+    }
+    cout << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i;
+    clrscr();
+    for (i = 1; i <= 7; i++)
+    {
+        if (i % 3 == 0)
+            continue;
+        cout << i << " ";
+    }
+    cout << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 4 5 7
+</script>
+<ol class="walk">
+  <li data-l="9"><b>Multiples of 3</b> (3 and 6) make this test true.</li>
+  <li data-l="10"><b><code>continue</code> abandons the rest of this round.</b> The <code>cout</code> below is skipped, and the loop moves straight on to the update (<code>i++</code>) and the next test.</li>
+  <li data-l="11"><b>All other numbers</b> reach this line and are printed: 1 2 4 5 7. The loop still ran all 7 rounds.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-continue-while" data-title="continue inside while: a danger">
+  <span class="kicker">Careful!</span>
+  <h2><em>continue</em> jumps to the test, so a <em>while</em> loop must update first</h2>
+  <div class="code" data-title="continue_while.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 0;
+    while (i < 7)
+    {
+        i++;
+        if (i % 3 == 0)
+            continue;
+        cout << i << " ";
+    }
+    cout << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 0;
+    clrscr();
+    while (i < 7)
+    {
+        i++;
+        if (i % 3 == 0)
+            continue;
+        cout << i << " ";
+    }
+    cout << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1 2 4 5 7
+</script>
+<ol class="walk">
+  <li data-l="9"><b>The update comes first</b> in this loop, <b>before</b> the <code>continue</code> can skip anything.</li>
+  <li data-l="10,11"><b>On 3 and 6, <code>continue</code> jumps back to the test.</b> i has already been increased, so the loop still moves forward.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">The trap</span><p>If <code>i++;</code> were written <b>after</b> the <code>if</code>, then for i = 3 the <code>continue</code> would skip it. i would stay 3, the test would stay true, and the loop would repeat round 3 <b>forever</b>. (In a <code>for</code> loop this cannot happen, because <code>continue</code> still runs the update part of the header.)</p></div>
+</section>
+
+<section class="slide fast" id="s-break-vs-continue" data-title="break vs continue">
+  <span class="kicker">Side by side</span>
+  <h2><code>break</code> vs <code>continue</code></h2>
+  <table>
+    <tr><th></th><th><code>break</code></th><th><code>continue</code></th></tr>
+    <tr><td>What it does</td><td>ends the <b>whole loop</b></td><td>ends <b>this round only</b></td></tr>
+    <tr><td>Control goes to</td><td>the first statement <b>after</b> the loop</td><td>the <b>update / test</b> of the same loop</td></tr>
+    <tr><td>Analogy</td><td>fire alarm: everyone leaves</td><td>skipping one song</td></tr>
+    <tr><td>Usually written</td><td colspan="2">inside an <code>if</code>, otherwise the loop would stop (or skip) every single time</td></tr>
+    <tr><td>In nested loops</td><td colspan="2">affects only the <b>innermost</b> loop it sits in</td></tr>
+    <tr><td>Also seen in</td><td>a <code>switch</code> (Lesson 12)</td><td>loops only</td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-infinite-idea" data-title="Infinite loops">
+  <span class="kicker">The loop that never ends</span>
+  <h2>An <em>infinite loop</em>: the condition never becomes false</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A <b>roundabout with no exit</b>. The car keeps going round and round until the petrol runs out. A program stuck in an infinite loop keeps burning the processor until somebody stops it.</p></div>
+  <div class="cols c2">
+    <div class="card good step"><h3>&#9989; On purpose</h3><p>Menus, games, servers and embedded devices <b>should</b> keep running until told to stop. They use <code>while (1)</code> or <code>for (;;)</code> with a planned exit.</p></div>
+    <div class="card bad step"><h3>&#10060; By mistake</h3><p>A bug stops the condition from ever turning false. The program seems to <b>hang</b>, or fills the screen with the same line.</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">Remember</span><p>Any non-zero value is true (Lesson 10), so <code>while (1)</code> is always true. Modern C++ also accepts <code>while (true)</code>, but Turbo C++ has no <code>true</code>, so we write <code>1</code>.</p></div>
+</section>
+
+<section class="slide slow" id="s-infinite-code" data-title="A planned infinite loop with break">
+  <span class="kicker">Infinite on purpose</span>
+  <h2><code>while (1)</code> with a planned way out</h2>
+  <div class="code" data-title="infinite_break.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n, total = 0;
+    cout << "Type numbers. Type 0 to stop." << endl;
+    while (1)
+    {
+        cout << "Enter number: ";
+        cin >> n;
+        if (n == 0)
+            break;
+        total = total + n;
+    }
+    cout << "Total = " << total << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n, total = 0;
+    clrscr();
+    cout << "Type numbers. Type 0 to stop." << endl;
+    while (1)
+    {
+        cout << "Enter number: ";
+        cin >> n;
+        if (n == 0)
+            break;
+        total = total + n;
+    }
+    cout << "Total = " << total << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Type numbers. Type 0 to stop.
+Enter number: 5
+Enter number: 8
+Enter number: 2
+Enter number: 0
+Total = 15
+</script>
+<ol class="walk">
+  <li data-l="8"><b>The condition is <code>1</code>:</b> always true, so by itself this loop would never end.</li>
+  <li data-l="10,11"><b>Ask for a number</b> on every round.</li>
+  <li data-l="12,13"><b>The planned exit:</b> when the user types 0, <code>break</code> leaves the loop.</li>
+  <li data-l="14"><b>Otherwise add it</b> and go round again.</li>
+  <li data-l="16"><b>After the break,</b> print the total. This does the same job as the <code>total.cpp</code> program from Lesson 14, written the other way round.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-infinite-causes" data-title="How infinite loops happen by accident">
+  <span class="kicker">Spot the bug</span>
+  <h2>Four ways to build an infinite loop by mistake</h2>
+  <div class="cols c2">
+    <div class="card bad step"><h3>1 &middot; The update is missing</h3><p><code>while (i &lt;= 5) { cout &lt;&lt; i; }</code></p><p>Nothing ever changes <code>i</code>.</p></div>
+    <div class="card bad step"><h3>2 &middot; The update goes the wrong way</h3><p><code>for (i = 1; i &lt;= 5; i--)</code></p><p>i gets smaller, so it is always &le; 5.</p></div>
+    <div class="card bad step"><h3>3 &middot; A stray semicolon</h3><p><code>while (i &lt;= 5);</code></p><p>The <code>;</code> is the whole body, so nothing inside the loop can ever change i.</p></div>
+    <div class="card bad step"><h3>4 &middot; <code>=</code> instead of <code>==</code></h3><p><code>while (i = 1)</code></p><p>This assigns 1, and 1 is always true.</p></div>
+  </div>
+  <div class="rule step">Before you run a loop, ask: <b>what makes the condition false?</b></div>
+</section>
+
+<section class="slide slow" id="s-infinite-lab" data-title="Watch an infinite loop happen">
+  <span class="kicker">Try it live</span>
+  <h2>The step goes the <em>wrong way</em></h2>
+  <p class="mute">This is <code>for (i = 1; i &lt;= 10; i += -1)</code>. Fix it by changing the step to 1. Then try a step of 0.</p>
+  <div class="play looplab" data-a="1" data-op="&lt;=" data-b="10" data-s="-1"></div>
+</section>
+
+<section class="slide slow" id="s-terminate" data-title="How to stop an infinite loop">
+  <span class="kicker">Getting out</span>
+  <h2>How to stop an infinite loop</h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3>&#9996; From outside: the program is already stuck</h3>
+      <ul>
+        <li>Press <kbd>Ctrl</kbd> + <kbd>C</kbd> in the terminal or console window.</li>
+        <li>In Turbo C++ (DOS) press <kbd>Ctrl</kbd> + <kbd>Break</kbd>.</li>
+        <li>In an IDE press the <b>Stop</b> button (&#9632;), or close the console window.</li>
+        <li>Last resort: end the program in Task Manager.</li>
+      </ul>
+      <p class="mute">Then fix the bug: stopping it does not repair it.</p></div>
+    <div class="card good step"><h3>&#128736; From inside: write a way out</h3>
+      <ul>
+        <li>Make sure something in the loop can turn the <b>condition false</b>.</li>
+        <li>Use <code>break</code> when a certain thing happens.</li>
+        <li>Use <code>return</code> to leave the function (in <code>main</code>, that ends the program).</li>
+        <li>Use <code>exit(0)</code> to end the whole program from anywhere. Next slide.</li>
+      </ul></div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-exit" data-title="exit(0)">
+  <span class="kicker">Ending the whole program</span>
+  <h2><em>exit(0)</em>: stop the program, right here, right now</h2>
+  <div class="cols c2">
+    <div class="card accent step"><h3>How to use it</h3><p>Add <code>#include &lt;cstdlib&gt;</code> (in Turbo C++: <code>&lt;stdlib.h&gt;</code>), then write <code>exit(0);</code></p><p>It ends the <b>entire program immediately</b>, even from deep inside a loop or another function. Nothing after it runs.</p></div>
+    <div class="card accent step"><h3>What the number means</h3><p>The value is the <b>exit status</b> handed back to the operating system.</p><p><code>exit(0)</code> = finished <b>normally</b>.<br><code>exit(1)</code> (or any non-zero) = something went <b>wrong</b>.</p></div>
+  </div>
+  <table class="step">
+    <tr><th>Statement</th><th>What it ends</th></tr>
+    <tr><td><code>continue</code></td><td>only the <b>current round</b> of a loop</td></tr>
+    <tr><td><code>break</code></td><td>the <b>innermost loop</b> (or switch)</td></tr>
+    <tr><td><code>return</code></td><td>the <b>current function</b>; in <code>main</code>, that is the whole program</td></tr>
+    <tr><td><code>exit(0)</code></td><td>the <b>whole program</b>, from anywhere</td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-menu" data-title="Menu program with exit(0)">
+  <span class="kicker">Putting it together</span>
+  <h2>A menu that runs <em>forever</em> until you choose Exit</h2>
+  <div class="code" data-title="menu.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main()
+{
+    int choice;
+    while (1)
+    {
+        cout << "1) Hello  2) Bye  0) Exit" << endl;
+        cout << "Choice: ";
+        cin >> choice;
+        if (choice == 1)
+            cout << "Hello!" << endl;
+        else if (choice == 2)
+            cout << "Bye!" << endl;
+        else if (choice == 0)
+        {
+            cout << "Goodbye" << endl;
+            exit(0);
+        }
+        else
+            cout << "Invalid choice" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <stdlib.h>
+#include <conio.h>
+
+void main()
+{
+    int choice;
+    clrscr();
+    while (1)
+    {
+        cout << "1) Hello  2) Bye  0) Exit" << endl;
+        cout << "Choice: ";
+        cin >> choice;
+        if (choice == 1)
+            cout << "Hello!" << endl;
+        else if (choice == 2)
+            cout << "Bye!" << endl;
+        else if (choice == 0)
+        {
+            cout << "Goodbye" << endl;
+            exit(0);
+        }
+        else
+            cout << "Invalid choice" << endl;
+    }
+}
+</script>
+<script type="text/plain" data-v="out">
+1) Hello  2) Bye  0) Exit
+Choice: 2
+Bye!
+1) Hello  2) Bye  0) Exit
+Choice: 1
+Hello!
+1) Hello  2) Bye  0) Exit
+Choice: 0
+Goodbye
+</script>
+<ol class="walk">
+  <li data-l="8"><b>An infinite loop on purpose:</b> the menu keeps coming back after every choice.</li>
+  <li data-l="10,11,12"><b>Show the menu and read a choice</b> on every round.</li>
+  <li data-l="13,14,15,16"><b>Choices 1 and 2</b> print a message, and the loop goes round again (this is an else-if ladder from Lesson 11).</li>
+  <li data-l="17,18,19,20,21"><b>Choice 0:</b> say goodbye, then <code>exit(0)</code> ends the whole program on the spot.</li>
+  <li data-l="22,23"><b>Anything else</b> gets an error message and another go.</li>
+  <li data-l="25"><b>This <code>return 0;</code> is never reached.</b> The only way out of the loop is <code>exit(0)</code>. The modern version keeps it because <code>main</code> normally ends with a return.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-dowhile-once">
+    <p class="q">int i = 5;
+do { cout &lt;&lt; i; i++; } while (i &lt; 3);
+What is printed?</p>
+    <ul><li>Nothing</li><li>5</li><li>345</li><li>53</li></ul>
+    <div class="exp">A do-while runs its body <b>once before testing</b>. It prints 5, then <code>6 &lt; 3</code> is false and the loop ends: <b>5</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-break-idea">
+    <p class="q">for (i = 1; i &lt;= 5; i++) {
+    if (i == 3) break;
+    cout &lt;&lt; i;
+}
+What is printed?</p>
+    <ul><li>12</li><li>1245</li><li>123</li><li>45</li></ul>
+    <div class="exp">On round 3, <code>break</code> ends the whole loop before the <code>cout</code>. Only rounds 1 and 2 print: <b>12</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-continue-idea">
+    <p class="q">for (i = 1; i &lt;= 5; i++) {
+    if (i == 3) continue;
+    cout &lt;&lt; i;
+}
+What is printed?</p>
+    <ul><li>12</li><li>1245</li><li>12345</li><li>45</li></ul>
+    <div class="exp"><code>continue</code> skips only round 3. The loop carries on with 4 and 5: <b>1245</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-infinite-causes">
+    <p class="q">Which of these is an INFINITE loop?</p>
+    <ul><li>for (i = 0; i &lt; 3; i++)</li><li>int i = 3; while (i &gt; 0) i--;</li><li>int i = 1; while (i &lt;= 5);</li><li>do { } while (0);</li></ul>
+    <div class="exp">In the third one the stray <code>;</code> is the whole body, so <code>i</code> stays 1 and <code>1 &lt;= 5</code> stays true for ever. The others all finish.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-exit">
+    <p class="q">What does <code>exit(0);</code> do?</p>
+    <ul><li>Leaves only the current loop</li><li>Ends the whole program immediately</li><li>Skips to the next round</li><li>Restarts the program</li></ul>
+    <div class="exp"><code>exit(0)</code> ends the <b>entire program</b> at once, from anywhere. The 0 means &ldquo;finished normally&rdquo;.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 15 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; do-while, break, continue</h3><ul><li><code>do { } while (cond);</code> tests <b>last</b>: it runs <b>at least once</b>. Note the <code>;</code>.</li><li><code>break</code> leaves the loop. <code>continue</code> skips to the next round.</li><li>In a <code>while</code>, update <b>before</b> a <code>continue</code>, or the loop may never end.</li></ul></div>
+    <div class="card good"><h3>&#9989; Infinite loops and exit</h3><ul><li><code>while (1)</code> / <code>for (;;)</code> loop for ever unless you add a way out.</li><li>Bugs: missing update, wrong direction, stray <code>;</code>, <code>=</code> for <code>==</code>.</li><li>Stop one with <kbd>Ctrl</kbd>+<kbd>C</kbd> (<kbd>Ctrl</kbd>+<kbd>Break</kbd> in Turbo C++). <code>exit(0)</code> ends the whole program.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

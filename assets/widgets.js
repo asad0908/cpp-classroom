@@ -1,4 +1,4 @@
-/* C++ Classroom — interactive widgets: token splitter, bit lab, expression evaluator */
+/* C++ Classroom — interactive widgets: token splitter, bit lab, expression evaluator, control-flow labs (ladder, loop tracer, switch, matrix) */
 (function () {
   'use strict';
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
@@ -195,10 +195,148 @@
 
   window.__cppSolve = function (e, v) { var t = strip(parse(lex(e))), vars = parseVars(v || ''), cur = t, k = 0, o = [show(t, true)]; if (hasVar(cur)) { cur = subst(cur, vars); o.push(show(cur, true)); } while (cur.t !== 'num' && k++ < 60) { cur = step(cool(cur)); o.push(show(cur, true).replace(/<\/?mark>/g, '') + '   [' + note + ']'); } return o; };
 
+  /* ================= control-flow labs (lessons 10-15) ================= */
+  function toInt(el, lo, hi, dflt) {
+    var x = parseInt(el.value, 10);
+    if (isNaN(x)) x = dflt;
+    return Math.max(lo, Math.min(hi, x));
+  }
+
+  /* else-if ladder: which test wins for these marks? */
+  var LADDER = [['marks >= 90', 90, 'A'], ['marks >= 75', 75, 'B'], ['marks >= 60', 60, 'C'], ['marks >= 35', 35, 'D']];
+  function ladderRun(marks) {
+    var rows = [], won = false, tests = 0;
+    LADDER.forEach(function (r, i) {
+      var label = (i ? 'else ' : '') + 'if (' + r[0] + ')  &rarr; Grade ' + r[2];
+      if (won) { rows.push({ cls: 'd', label: label, st: 'never tested' }); return; }
+      tests++;
+      if (marks >= r[1]) { won = true; rows.push({ cls: 't', label: label, st: 'TRUE &mdash; run this, skip the rest' }); }
+      else rows.push({ cls: 'f', label: label, st: 'false &mdash; go down a step' });
+    });
+    var elseLabel = 'else  &rarr; Grade F';
+    if (won) rows.push({ cls: 'd', label: elseLabel, st: 'never reached' });
+    else rows.push({ cls: 't', label: elseLabel, st: 'nothing above was true' });
+    return { rows: rows, tests: tests, grade: won ? LADDER.filter(function (r) { return marks >= r[1]; })[0][2] : 'F' };
+  }
+  function ladderLab(el) {
+    el.innerHTML = '<p><b>🪜 Ladder lab</b> &mdash; type marks (0&ndash;100). The tests run from the <u>top</u>; the <b>first true</b> one wins and the rest are never checked.</p>' +
+      '<p>marks = <input type="number" class="m" min="0" max="100" value="82"></p><div class="rows"></div><p class="lab-note"></p>';
+    var inp = $('.m', el), rows = $('.rows', el), note = $('.lab-note', el);
+    function go() {
+      var m = toInt(inp, 0, 100, 0), r = ladderRun(m);
+      rows.innerHTML = r.rows.map(function (x) { return '<div class="lab-row ' + x.cls + '"><span class="lb">' + x.label + '</span><span class="st">' + x.st + '</span></div>'; }).join('');
+      note.innerHTML = 'Grade = <b>' + r.grade + '</b> &nbsp;&middot;&nbsp; conditions tested: <b>' + r.tests + '</b>';
+    }
+    inp.oninput = go; go();
+  }
+
+  /* for-loop tracer */
+  var CMP = { '<': function (a, b) { return a < b; }, '<=': function (a, b) { return a <= b; }, '>': function (a, b) { return a > b; }, '>=': function (a, b) { return a >= b; }, '!=': function (a, b) { return a !== b; } };
+  var LOOP_CAP = 1000;
+  function loopRun(start, op, limit, step) {
+    var i = start, sum = 0, rows = [], n = 0;
+    while (CMP[op](i, limit) && n < LOOP_CAP) {
+      n++; sum += i;
+      rows.push({ n: n, i: i, sum: sum });
+      i += step;
+    }
+    return { rows: rows, rounds: n, sum: sum, last: i, infinite: n >= LOOP_CAP && CMP[op](i, limit) };
+  }
+  function loopLab(el) {
+    var d = el.dataset || {};
+    var a = d.a || 1, op = d.op || '<=', b = d.b || 10, s = d.s || 1;
+    var opts = ['<', '<=', '>', '>=', '!='].map(function (o) { return '<option' + (o === op ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('');
+    el.innerHTML = '<p><b>🔁 Loop lab</b> &mdash; change the three parts of the <code>for</code> header, then read the trace.</p>' +
+      '<div class="lab-ctl">int sum = 0; &nbsp; for ( i = <input type="number" class="a" value="' + a + '"> ; i <select class="op">' + opts + '</select> <input type="number" class="b" value="' + b + '"> ; i += <input type="number" class="s" value="' + s + '"> ) &nbsp; sum = sum + i;</div>' +
+      '<div class="tr-wrap"><table><tr><th class="c">Round</th><th class="c">i (at the test)</th><th class="c">Test is true?</th><th class="c">sum after the body</th></tr><tbody class="tb"></tbody></table></div><p class="lab-note"></p>';
+    var A = $('.a', el), OP = $('.op', el), B = $('.b', el), S = $('.s', el), tb = $('.tb', el), note = $('.lab-note', el);
+    function go() {
+      var av = toInt(A, -999, 999, 0), bv = toInt(B, -999, 999, 0), sv = toInt(S, -99, 99, 0), o = OP.value;
+      var r = loopRun(av, o, bv, sv), SHOW = 30, h = '';
+      r.rows.slice(0, SHOW).forEach(function (x) { h += '<tr><td class="c">' + x.n + '</td><td class="c">' + x.i + ' ' + esc(o) + ' ' + bv + '</td><td class="c">true</td><td class="c">' + x.sum + '</td></tr>'; });
+      if (r.rows.length > SHOW) h += '<tr><td class="c" colspan="4">&hellip; ' + (r.rows.length - SHOW) + ' more rounds &hellip;</td></tr>';
+      if (r.infinite) h += '<tr><td class="c" colspan="4"><b class="lab-warn">still true &hellip; and it never becomes false</b></td></tr>';
+      else h += '<tr><td class="c">&mdash;</td><td class="c">' + r.last + ' ' + esc(o) + ' ' + bv + '</td><td class="c"><b>false</b></td><td class="c">loop ends</td></tr>';
+      tb.innerHTML = h;
+      note.innerHTML = r.infinite
+        ? '<span class="lab-warn">⚠ INFINITE LOOP: the condition was still true after ' + LOOP_CAP + ' rounds. i never reaches a value that makes it false.</span>'
+        : 'The body ran <b>' + r.rounds + '</b> time' + (r.rounds === 1 ? '' : 's') + (r.rounds === 0 ? ' (the condition was false at the very first test)' : '') + ' &nbsp;&middot;&nbsp; final sum = <b>' + r.sum + '</b>';
+    }
+    [A, B, S].forEach(function (i) { i.oninput = go; }); OP.onchange = go; go();
+  }
+
+  /* switch: where does execution start, and where does it stop? */
+  var SW_CASES = [[1, 'One'], [2, 'Two'], [3, 'Three']];
+  function switchRun(n, withBreak) {
+    var start = SW_CASES.length, k;
+    for (k = 0; k < SW_CASES.length; k++) if (SW_CASES[k][0] === n) { start = k; break; }
+    var ran = [], out = [];
+    for (k = start; k <= SW_CASES.length; k++) {
+      ran.push(k);
+      out.push(k < SW_CASES.length ? SW_CASES[k][1] : 'Other');
+      if (withBreak && k < SW_CASES.length) break;
+    }
+    return { ran: ran, out: out };
+  }
+  function switchLab(el) {
+    el.innerHTML = '<p><b>🎛️ Switch lab</b> &mdash; pick a value for <code>n</code> and decide whether each case ends with <code>break</code>. The green lines are the ones that run.</p>' +
+      '<div class="lab-ctl">n = <select class="n"><option>1</option><option>2</option><option>3</option><option value="4">4 (no matching case)</option></select> &nbsp; <label><input type="checkbox" class="brk" checked> write <code>break;</code> after each case</label></div>' +
+      '<div class="rows"></div><p class="lab-note">Output:</p><div class="con"></div>';
+    var N = $('.n', el), BR = $('.brk', el), rows = $('.rows', el), con = $('.con', el);
+    function go() {
+      var n = parseInt(N.value, 10), wb = BR.checked, r = switchRun(n, wb), h = '';
+      h += '<div class="lab-row"><span class="lb">switch (n)  {</span></div>';
+      SW_CASES.forEach(function (c, k) {
+        h += '<div class="lab-row' + (r.ran.indexOf(k) >= 0 ? ' run' : '') + '"><span class="lb">case ' + c[0] + ': cout &lt;&lt; "' + c[1] + '\\n";' + (wb ? ' break;' : '') + '</span><span class="st">' + (r.ran.indexOf(k) >= 0 ? 'runs' : '') + '</span></div>';
+      });
+      h += '<div class="lab-row' + (r.ran.indexOf(3) >= 0 ? ' run' : '') + '"><span class="lb">default: cout &lt;&lt; "Other\\n";</span><span class="st">' + (r.ran.indexOf(3) >= 0 ? 'runs' : '') + '</span></div>';
+      h += '<div class="lab-row"><span class="lb">}</span></div>';
+      rows.innerHTML = h;
+      con.textContent = r.out.join('\n');
+    }
+    N.onchange = go; BR.onchange = go; go();
+  }
+
+  /* nested loops: print a grid */
+  function matrixRun(rows, cols, mode) {
+    var lines = [], count = 0, total = 0, i, j, w;
+    var maxv = mode === 'mul' ? rows * cols : mode === 'count' ? rows * cols : cols;
+    w = String(maxv).length + 1;
+    function pad(x) { var s = String(x); while (s.length < w) s = ' ' + s; return s; }
+    for (i = 1; i <= rows; i++) {
+      var line = '';
+      for (j = 1; j <= cols; j++) {
+        if (mode === 'tri' && j > i) break;
+        count++; total++;
+        line += pad(mode === 'j' || mode === 'tri' ? j : mode === 'count' ? count : i * j);
+      }
+      lines.push(line);
+    }
+    return { text: lines.join('\n'), inner: total };
+  }
+  function matrixLab(el) {
+    el.innerHTML = '<p><b>🧮 Matrix lab</b> &mdash; the <u>outer</u> loop makes the rows, the <u>inner</u> loop makes the columns. Change the size and the pattern.</p>' +
+      '<div class="lab-ctl">rows = <input type="number" class="r" min="1" max="9" value="3"> &nbsp; columns = <input type="number" class="c" min="1" max="9" value="4"> &nbsp; print <select class="p"><option value="j">j (the inner counter)</option><option value="count">a running count 1, 2, 3 &hellip;</option><option value="mul">i &times; j (multiplication table)</option><option value="tri">j, but only while j &le; i (triangle)</option></select></div>' +
+      '<div class="con"></div><p class="lab-note"></p>';
+    var R = $('.r', el), C = $('.c', el), P = $('.p', el), con = $('.con', el), note = $('.lab-note', el);
+    function go() {
+      var r = toInt(R, 1, 9, 1), c = toInt(C, 1, 9, 1), m = matrixRun(r, c, P.value);
+      con.textContent = m.text;
+      note.innerHTML = 'Outer loop: <b>' + r + '</b> rounds &nbsp;&middot;&nbsp; inner loop body ran <b>' + m.inner + '</b> times in total' + (P.value === 'tri' ? '' : ' (' + r + ' &times; ' + c + ')');
+    }
+    [R, C].forEach(function (i) { i.oninput = go; }); P.onchange = go; go();
+  }
+
+  window.__cppLabs = { ladderRun: ladderRun, loopRun: loopRun, switchRun: switchRun, matrixRun: matrixRun };
+
   function init() {
     $$('.tokdemo').forEach(tokDemo);
     $$('.bitplay').forEach(bitPlay);
     $$('.expreval').forEach(exprEval);
+    $$('.ladderlab').forEach(ladderLab);
+    $$('.looplab').forEach(loopLab);
+    $$('.switchlab').forEach(switchLab);
+    $$('.matrixlab').forEach(matrixLab);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

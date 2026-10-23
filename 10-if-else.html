@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 10 – Making Decisions: if and if-else</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="210" data-lesson="Lesson 10 · Making Decisions: if and if-else">
+<div class="stage">
+
+<section class="slide cover" data-title="Making Decisions">
+  <div class="num">10</div>
+  <h1>Making Decisions</h1>
+  <p>Until now every program ran from the first line to the last, in order. Today the program learns to <b>choose</b>: do this, or do that, depending on the data.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>explain <b>flow of control</b> and name its three kinds: sequence, selection, iteration</li>
+      <li>write <code>if</code> and <code>if-else</code> statements, and avoid the three classic traps</li>
+      <li>solve <b>maximum of two</b> and <b>minimum of three</b> numbers</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-flow" data-title="What is flow of control?">
+  <span class="kicker">The big idea</span>
+  <h2><em>Flow of control</em> = the order in which statements run</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A GPS says &ldquo;go straight, go straight, go straight&hellip;&rdquo;. But <b>if the road is closed</b>, it takes a turn. And at a roundabout it may send you <b>round again and again</b>. Programs do exactly the same.</p></div>
+  <div class="cols c3">
+    <div class="card accent step"><span class="ico">&#10145;&#65039;</span><h3>Sequence</h3><p>One statement after another, top to bottom. This is the <b>default</b>, and all we have used so far.</p></div>
+    <div class="card accent step"><span class="ico">&#128256;</span><h3>Selection</h3><p>Choose <b>which</b> statements run. Also called <b>branching</b> or decision making.</p></div>
+    <div class="card accent step"><span class="ico">&#128260;</span><h3>Iteration</h3><p>Run statements <b>again and again</b>. Also called <b>looping</b> or repetition.</p></div>
+  </div>
+  <div class="rule step">Control statements decide <b>which</b> code runs and <b>how many times</b>.</div>
+</section>
+
+<section class="slide fast" id="s-kinds" data-title="The control statements of C++">
+  <span class="kicker">The map for the next six lessons</span>
+  <h2>Every control statement in C++</h2>
+  <table>
+    <tr><th>Kind</th><th>Statements</th><th>The question it answers</th><th>Lessons</th></tr>
+    <tr><td><b>Selection</b> (branching)</td><td><code>if</code> &nbsp; <code>if-else</code> &nbsp; <code>else-if</code> ladder &nbsp; <code>switch</code></td><td>&ldquo;Which path should I take?&rdquo;</td><td class="c">10 &ndash; 12</td></tr>
+    <tr><td><b>Iteration</b> (looping)</td><td><code>for</code> &nbsp; <code>while</code> &nbsp; <code>do-while</code></td><td>&ldquo;How many times should I repeat?&rdquo;</td><td class="c">13 &ndash; 15</td></tr>
+    <tr><td><b>Jump</b></td><td><code>break</code> &nbsp; <code>continue</code> &nbsp; <code>goto</code> &nbsp; <code>return</code> &nbsp; <code>exit()</code></td><td>&ldquo;Leave or skip <b>right now</b>.&rdquo;</td><td class="c">12 &ndash; 15</td></tr>
+  </table>
+  <div class="callout trick"><span class="tag">Today</span><p>We start with the simplest decision makers: <code>if</code> and <code>if-else</code>.</p></div>
+</section>
+
+<section class="slide slow" id="s-if-idea" data-title="The if statement">
+  <span class="kicker">Selection &middot; one-way decision</span>
+  <h2>The <em>if</em> statement: do it only when the condition is true</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>&ldquo;<b>If</b> it is raining, take an umbrella.&rdquo; If it is not raining, you simply carry on.</p></div>
+      <div class="code step" data-title="syntax of if" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+if (condition)
+{
+    statements;
+}
+</script>
+      </div>
+      <div class="callout trick step"><span class="tag">What is a condition?</span><p>Usually a <b>relational</b> or <b>logical</b> expression from Lesson 5, which gives <b>1</b> (true) or <b>0</b> (false). C++ treats <b>any non-zero value as true</b> and only <b>0 as false</b>.</p></div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 360 290" role="img" aria-label="Flowchart of an if statement: if the condition is true the statements run, otherwise they are skipped">
+        <defs><marker id="ah-if" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="tm" x="130" y="4" width="100" height="28" rx="14"/><text class="w" x="180" y="18">Start</text>
+        <path class="fl" d="M180 32V52" marker-end="url(#ah-if)"/>
+        <polygon class="dc" points="180,52 275,92 180,132 85,92"/><text x="180" y="92">condition?</text>
+        <path class="fl" d="M180 132V172" marker-end="url(#ah-if)"/><text class="fyes" x="203" y="153">true</text>
+        <rect class="bx" x="105" y="172" width="150" height="34" rx="8"/><text x="180" y="189">statements</text>
+        <path class="fl" d="M180 206V240" marker-end="url(#ah-if)"/>
+        <path class="fl" d="M275 92H330V255H255" marker-end="url(#ah-if)"/><text class="fno" x="304" y="84">false</text>
+        <rect class="bx" x="105" y="240" width="150" height="30" rx="8"/><text x="180" y="255">next statement</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-if-code" data-title="if in action: pass or not">
+  <span class="kicker">See it work</span>
+  <h2>A program that reacts to the <em>marks</em></h2>
+  <div class="code" data-title="pass.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int marks;
+    cout << "Enter marks: ";
+    cin >> marks;
+    if (marks >= 35)
+    {
+        cout << "You passed!" << endl;
+    }
+    cout << "End of program" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int marks;
+    clrscr();
+    cout << "Enter marks: ";
+    cin >> marks;
+    if (marks >= 35)
+    {
+        cout << "You passed!" << endl;
+    }
+    cout << "End of program" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter marks: 72
+You passed!
+End of program
+</script>
+<ol class="walk">
+  <li data-l="8"><b>Read the marks.</b> The user types <code>72</code>, so <code>marks</code> holds 72.</li>
+  <li data-l="9"><b>The test.</b> <code>marks &gt;= 35</code> becomes <code>72 &gt;= 35</code>, which is <b>true</b> (1).</li>
+  <li data-l="10,11,12"><b>The body.</b> Because the condition is true, everything between the braces runs: <code>You passed!</code> is printed.</li>
+  <li data-l="13"><b>Outside the if.</b> This line is <b>not</b> controlled by the if, so it runs every time. Run it again with <code>20</code>: the condition is false, the braces are skipped, and only <code>End of program</code> appears.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ifelse-idea" data-title="The if-else statement">
+  <span class="kicker">Selection &middot; two-way decision</span>
+  <h2><em>if-else</em>: choose between two paths</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>&ldquo;<b>If</b> it is raining, take an umbrella, <b>else</b> wear sunglasses.&rdquo; You always do <b>exactly one</b> of the two.</p></div>
+      <div class="code step" data-title="syntax of if-else" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+if (condition)
+{
+    statements when true;
+}
+else
+{
+    statements when false;
+}
+</script>
+      </div>
+      <div class="rule step">Exactly one path runs: never both, never neither.</div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 400 285" role="img" aria-label="Flowchart of an if-else statement: the true part or the else part runs, then both paths join">
+        <defs><marker id="ah-ife" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <rect class="tm" x="150" y="4" width="100" height="28" rx="14"/><text class="w" x="200" y="18">Start</text>
+        <path class="fl" d="M200 32V50" marker-end="url(#ah-ife)"/>
+        <polygon class="dc" points="200,50 295,90 200,130 105,90"/><text x="200" y="90">condition?</text>
+        <path class="fl" d="M105 90H70V158" marker-end="url(#ah-ife)"/><text class="fyes" x="86" y="82">true</text>
+        <rect class="bx" x="10" y="158" width="120" height="34" rx="8"/><text x="70" y="175">if part</text>
+        <path class="fl" d="M295 90H330V158" marker-end="url(#ah-ife)"/><text class="fno" x="314" y="82">false</text>
+        <rect class="bx" x="270" y="158" width="120" height="34" rx="8"/><text x="330" y="175">else part</text>
+        <path class="fl" d="M70 192V226H200V244" marker-end="url(#ah-ife)"/>
+        <path class="fl" d="M330 192V226H200"/>
+        <rect class="bx" x="140" y="244" width="120" height="30" rx="8"/><text x="200" y="259">next statement</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ifelse-code" data-title="if-else in action: even or odd">
+  <span class="kicker">See it work</span>
+  <h2>Even or odd?</h2>
+  <div class="code" data-title="evenodd.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter a number: ";
+    cin >> n;
+    if (n % 2 == 0)
+        cout << n << " is even" << endl;
+    else
+        cout << n << " is odd" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n;
+    clrscr();
+    cout << "Enter a number: ";
+    cin >> n;
+    if (n % 2 == 0)
+        cout << n << " is even" << endl;
+    else
+        cout << n << " is odd" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter a number: 7
+7 is odd
+</script>
+<ol class="walk">
+  <li data-l="9"><b>The test uses <code>%</code>.</b> The remainder of <code>n / 2</code> is 0 for every even number. For 7 it is 1, so <code>7 % 2 == 0</code> is <b>false</b>.</li>
+  <li data-l="10"><b>The if part</b> is skipped.</li>
+  <li data-l="11,12"><b>The else part runs</b>: <code>7 is odd</code>.</li>
+  <li data-l="10,12"><b>No braces here.</b> When a branch has only <b>one statement</b>, the braces are optional. The next three slides show why we usually write them anyway.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-trap-braces" data-title="Trap 1: missing braces">
+  <span class="kicker">Classic trap 1 of 3</span>
+  <h2>Without braces, the <em>if</em> controls only <em>one</em> statement</h2>
+  <div class="code" data-title="braces_trap.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 3;
+    if (x > 5)
+        cout << "A" << endl;
+        cout << "B" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 3;
+    clrscr();
+    if (x > 5)
+        cout << "A" << endl;
+        cout << "B" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+B
+</script>
+<ol class="walk">
+  <li data-l="7"><b>3 &gt; 5 is false.</b></li>
+  <li data-l="8"><b>Only this line belongs to the if.</b> It is skipped.</li>
+  <li data-l="9"><b>This line looks like part of the if because of the indentation, but it is not.</b> The compiler ignores indentation. It runs every time, so <code>B</code> is printed.</li>
+</ol>
+  </div>
+  <div class="rule step">Always write the braces <code>{ }</code>, even for one statement.</div>
+</section>
+
+<section class="slide slow" id="s-trap-semi" data-title="Trap 2: semicolon after the condition">
+  <span class="kicker">Classic trap 2 of 3</span>
+  <h2>A stray <em>;</em> after the condition kills the if</h2>
+  <div class="code" data-title="semicolon_trap.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 3;
+    if (x > 5);
+    {
+        cout << "x is big" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 3;
+    clrscr();
+    if (x > 5);
+    {
+        cout << "x is big" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+x is big
+</script>
+<ol class="walk">
+  <li data-l="7"><b>The <code>;</code> is a complete (empty) statement.</b> C++ reads this as &ldquo;if x &gt; 5, do nothing&rdquo;. The if ends right here.</li>
+  <li data-l="8,9,10"><b>This is now an ordinary block</b>, not the body of the if. It runs <b>always</b>, even though 3 is not greater than 5.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">The program compiles and runs</span><p>No error message appears. The only clue is the wrong output, which is what makes this trap so sneaky.</p></div>
+</section>
+
+<section class="slide slow" id="s-trap-assign" data-title="Trap 3: = instead of ==">
+  <span class="kicker">Classic trap 3 of 3</span>
+  <h2><em>=</em> assigns, <em>==</em> compares</h2>
+  <div class="code" data-title="assign_trap.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x = 3;
+    if (x = 5)
+    {
+        cout << "x is five" << endl;
+    }
+    cout << "x = " << x << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int x = 3;
+    clrscr();
+    if (x = 5)
+    {
+        cout << "x is five" << endl;
+    }
+    cout << "x = " << x << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+x is five
+x = 5
+</script>
+<ol class="walk">
+  <li data-l="7"><b><code>x = 5</code> is an <u>assignment</u>, not a test.</b> It stores 5 in x, and the value of the whole expression is 5.</li>
+  <li data-l="7,8,9,10"><b>5 is non-zero, so it counts as true.</b> The body runs, even though x was 3 a moment ago.</li>
+  <li data-l="11"><b>x was changed.</b> It is now 5. The if silently damaged our data.</li>
+</ol>
+  </div>
+  <div class="rule step">To compare, use <code>==</code>. &nbsp;<code>if (x == 5)</code></div>
+</section>
+
+<section class="slide slow" id="s-max2" data-title="Practice 1: maximum of two numbers">
+  <span class="kicker">Practice program 1</span>
+  <h2>Find the <em>maximum</em> of two numbers</h2>
+  <div class="code" data-title="max2.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b, largest;
+    cout << "Enter two numbers: ";
+    cin >> a >> b;
+    if (a > b)
+        largest = a;
+    else
+        largest = b;
+    cout << "Largest = " << largest << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b, largest;
+    clrscr();
+    cout << "Enter two numbers: ";
+    cin >> a >> b;
+    if (a > b)
+        largest = a;
+    else
+        largest = b;
+    cout << "Largest = " << largest << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter two numbers: 15 28
+Largest = 28
+</script>
+<ol class="walk">
+  <li data-l="6"><b>Three lockers:</b> two for the input, and one to hold the answer.</li>
+  <li data-l="8"><b>Read both numbers.</b> a = 15, b = 28.</li>
+  <li data-l="9,10"><b>If a is bigger</b>, the answer is a.</li>
+  <li data-l="11,12"><b>Otherwise</b> the answer is b. Here 15 &gt; 28 is false, so <code>largest</code> becomes 28.</li>
+  <li data-l="13"><b>Print the stored answer.</b> If both numbers are equal, either branch gives the right answer.</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">Shortcut from Lesson 5</span><p>The whole if-else can be written in one line with the ternary operator: <code>largest = (a &gt; b) ? a : b;</code></p></div>
+</section>
+
+<section class="slide slow" id="s-min3" data-title="Practice 2: minimum of three numbers">
+  <span class="kicker">Practice program 2</span>
+  <h2>Find the <em>minimum</em> of three numbers</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>A race. The <b>first runner is the champion</b> for now. Each new runner challenges the champion: if the challenger is <b>faster</b> (smaller time), the challenger becomes champion.</p></div>
+  <div class="code" data-title="min3.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b, c, smallest;
+    cout << "Enter three numbers: ";
+    cin >> a >> b >> c;
+    smallest = a;
+    if (b < smallest)
+        smallest = b;
+    if (c < smallest)
+        smallest = c;
+    cout << "Smallest = " << smallest << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b, c, smallest;
+    clrscr();
+    cout << "Enter three numbers: ";
+    cin >> a >> b >> c;
+    smallest = a;
+    if (b < smallest)
+        smallest = b;
+    if (c < smallest)
+        smallest = c;
+    cout << "Smallest = " << smallest << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter three numbers: 40 12 25
+Smallest = 12
+</script>
+<ol class="walk">
+  <li data-l="9"><b>Crown the first number.</b> <code>smallest = a;</code> makes 40 the champion.</li>
+  <li data-l="10,11"><b>Challenger b.</b> Is 12 &lt; 40? Yes, so smallest becomes 12.</li>
+  <li data-l="12,13"><b>Challenger c.</b> Is 25 &lt; 12? No, so smallest stays 12. These are two separate <code>if</code>s, not an if-else, because each challenger must get a turn.</li>
+  <li data-l="14"><b>Print the champion:</b> 12.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-min3-trace" data-title="Tracing the minimum program">
+  <span class="kicker">Trace it on paper</span>
+  <h2>Follow <code>smallest</code> step by step &nbsp;(a = 40, b = 12, c = 25)</h2>
+  <table>
+    <tr><th>Step</th><th>Statement</th><th>Test</th><th>smallest after the step</th></tr>
+    <tr class="step"><td class="c">1</td><td><code>smallest = a;</code></td><td class="c">&mdash;</td><td class="c"><b>40</b></td></tr>
+    <tr class="step"><td class="c">2</td><td><code>if (b &lt; smallest)</code></td><td><code>12 &lt; 40</code> &rarr; true</td><td class="c"><b>12</b></td></tr>
+    <tr class="step"><td class="c">3</td><td><code>if (c &lt; smallest)</code></td><td><code>25 &lt; 12</code> &rarr; false</td><td class="c"><b>12</b></td></tr>
+  </table>
+  <div class="callout think step"><span class="tag">Think about it</span><p>How would you change the program to find the <b>largest</b> of three? <i>(Answer: flip each <code>&lt;</code> to <code>&gt;</code>, and rename the variable.)</i> We will solve the same problem a second way in the next lesson, with <b>nested</b> ifs.</p></div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-if-idea">
+    <p class="q">int x = 0;
+if (x) cout &lt;&lt; "A"; else cout &lt;&lt; "B";
+What is printed?</p>
+    <ul><li>A</li><li>B</li><li>AB</li><li>Error</li></ul>
+    <div class="exp">The condition is just <code>x</code>, which is 0. Zero means <b>false</b>, so the else part runs: <b>B</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-trap-assign">
+    <p class="q">int x = 3;
+if (x = 5) cout &lt;&lt; "yes"; else cout &lt;&lt; "no";
+What is printed?</p>
+    <ul><li>yes</li><li>no</li><li>Error</li><li>Nothing</li></ul>
+    <div class="exp"><code>x = 5</code> is an assignment. Its value is 5, which is non-zero, so it counts as true: <b>yes</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-trap-braces">
+    <p class="q">int n = 2;
+if (n &gt; 5)
+    cout &lt;&lt; "X";
+    cout &lt;&lt; "Y";
+What is printed?</p>
+    <ul><li>X</li><li>Y</li><li>XY</li><li>Nothing</li></ul>
+    <div class="exp">With no braces, the if controls only <code>cout &lt;&lt; "X"</code>. The Y line is outside the if and always runs: <b>Y</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-trap-semi">
+    <p class="q">if (5 &gt; 9);
+    cout &lt;&lt; "Hi";
+What is printed?</p>
+    <ul><li>Hi</li><li>Nothing</li><li>Error</li><li>5 &gt; 9</li></ul>
+    <div class="exp">The <code>;</code> after the condition is an empty body. The <code>cout</code> line is a separate statement that always runs: <b>Hi</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-ifelse-code">
+    <p class="q">Which condition correctly tests that n is EVEN?</p>
+    <ul><li>n / 2 == 0</li><li>n % 2 == 0</li><li>n % 2 = 0</li><li>n % 2 != 0</li></ul>
+    <div class="exp">An even number leaves remainder 0 when divided by 2: <code>n % 2 == 0</code>. (<code>=</code> would assign, and <code>!=</code> tests for <i>odd</i>.)</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 10 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; if and if-else</h3><ul><li>Three kinds of flow: <b>sequence</b>, <b>selection</b>, <b>iteration</b>.</li><li><code>if</code> runs its body only when the condition is true. <code>if-else</code> runs <b>exactly one</b> of two paths.</li><li>0 is false; <b>any non-zero value is true</b>.</li></ul></div>
+    <div class="card good"><h3>&#9989; Traps and practice</h3><ul><li>Always use braces. No <code>;</code> after the condition. Compare with <code>==</code>, not <code>=</code>.</li><li>Maximum of two: <code>if (a &gt; b)</code> &hellip; <code>else</code> &hellip;</li><li>Minimum of three: crown the first as champion, then let each challenger try.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

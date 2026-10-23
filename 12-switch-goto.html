@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 12 – switch-case and goto</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="260" data-lesson="Lesson 12 · switch-case &amp; goto">
+<div class="stage">
+
+<section class="slide cover" data-title="switch-case & goto">
+  <div class="num">12</div>
+  <h1>switch-case &amp; goto</h1>
+  <p>When one value decides among many fixed choices, a long ladder gets untidy. <code>switch</code> is built for exactly that. Then we meet <code>goto</code>, the jump that C++ has but good programmers avoid.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>write a <code>switch</code> with <code>case</code>, <code>break</code> and <code>default</code></li>
+      <li>explain <b>fall-through</b> and use it on purpose (a calculator and a vowel checker)</li>
+      <li>choose between <code>switch</code> and an else-if ladder, and say <b>why <code>goto</code> is not used</b></li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-switch-idea" data-title="The switch statement">
+  <span class="kicker">Selection &middot; many fixed choices</span>
+  <h2><em>switch</em>: jump straight to the matching case</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>In a lift you press <b>3</b> and it goes straight to floor 3. It does not stop at floors 1 and 2 to ask &ldquo;is this yours?&rdquo;</p></div>
+      <div class="code step" data-title="syntax of switch" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+switch (expression)
+{
+    case value1:
+        statements;
+        break;
+    case value2:
+        statements;
+        break;
+    default:
+        statements;
+}
+</script>
+      </div>
+    </div>
+    <div>
+      <div class="card accent step"><h3>1 &middot; Evaluate once</h3><p>The expression in <code>( )</code> is worked out a single time.</p></div>
+      <div class="card accent step"><h3>2 &middot; Jump to the match</h3><p>Control jumps to the <code>case</code> whose value is <b>equal</b>.</p></div>
+      <div class="card accent step"><h3>3 &middot; Run until <code>break</code></h3><p><code>break</code> leaves the switch. No match? <code>default</code> runs.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-switch-code" data-title="switch in action: traffic light">
+  <span class="kicker">See it work</span>
+  <h2>A traffic light with <em>switch</em></h2>
+  <div class="code" data-title="light.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    char light;
+    cout << "Enter signal letter: ";
+    cin >> light;
+    switch (light)
+    {
+        case 'R':
+            cout << "Stop" << endl;
+            break;
+        case 'Y':
+            cout << "Get ready" << endl;
+            break;
+        case 'G':
+            cout << "Go" << endl;
+            break;
+        default:
+            cout << "Not a traffic light colour" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    char light;
+    clrscr();
+    cout << "Enter signal letter: ";
+    cin >> light;
+    switch (light)
+    {
+        case 'R':
+            cout << "Stop" << endl;
+            break;
+        case 'Y':
+            cout << "Get ready" << endl;
+            break;
+        case 'G':
+            cout << "Go" << endl;
+            break;
+        default:
+            cout << "Not a traffic light colour" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter signal letter: G
+Go
+</script>
+<ol class="walk">
+  <li data-l="9"><b>The switch looks at <code>light</code></b>, which holds <code>'G'</code>.</li>
+  <li data-l="11,12,13"><b><code>'R'</code> does not match.</b> Control skips this whole case. It does not run these lines.</li>
+  <li data-l="17,18,19"><b><code>'G'</code> matches.</b> We jump here: &ldquo;Go&rdquo; is printed, and <code>break</code> leaves the switch.</li>
+  <li data-l="20,21"><b><code>default</code></b> is the &ldquo;none of the above&rdquo; case. It is skipped here. Type a lowercase <code>g</code> and it runs, because <code>'g'</code> and <code>'G'</code> are different characters.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide fast" id="s-switch-rules" data-title="Rules of switch">
+  <span class="kicker">Rules</span>
+  <h2>What <code>switch</code> accepts and what it refuses</h2>
+  <table>
+    <tr><th>Piece</th><th>Allowed</th><th>Not allowed</th></tr>
+    <tr><td>The expression in <code>switch ( )</code></td><td><code>int</code>, <code>char</code>, <code>enum</code> (whole-number types)</td><td><code>float</code>, <code>double</code>, text strings</td></tr>
+    <tr><td>Each <code>case</code> label</td><td>a <b>constant</b>: <code>case 5:</code> &nbsp; <code>case 'A':</code> &nbsp; <code>case 2+3:</code></td><td>a variable (<code>case x:</code>) or a condition / range (<code>case n &gt; 5:</code>)</td></tr>
+    <tr><td>Duplicate cases</td><td>every value once</td><td>two <code>case 3:</code> labels in one switch</td></tr>
+    <tr><td><code>default</code></td><td>optional; runs when nothing matches; usually written last</td><td>&mdash;</td></tr>
+    <tr><td><code>break</code></td><td>optional, but almost always needed</td><td>&mdash;</td></tr>
+  </table>
+  <div class="callout warn"><span class="tag">Equality only</span><p><code>switch</code> can only ask &ldquo;<b>is it equal to</b> this constant?&rdquo; For ranges such as <code>marks &gt;= 75</code>, use an <b>else-if ladder</b>.</p></div>
+</section>
+
+<section class="slide slow" id="s-fall" data-title="Fall-through: forgetting break">
+  <span class="kicker">The famous switch trap</span>
+  <h2>No <em>break</em>? Execution <em>falls through</em></h2>
+  <div class="code" data-title="fall.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n = 2;
+    switch (n)
+    {
+        case 1:
+            cout << "One" << endl;
+        case 2:
+            cout << "Two" << endl;
+        case 3:
+            cout << "Three" << endl;
+        default:
+            cout << "Done" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int n = 2;
+    clrscr();
+    switch (n)
+    {
+        case 1:
+            cout << "One" << endl;
+        case 2:
+            cout << "Two" << endl;
+        case 3:
+            cout << "Three" << endl;
+        default:
+            cout << "Done" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Two
+Three
+Done
+</script>
+<ol class="walk">
+  <li data-l="7"><b>n is 2</b>, so we jump to <code>case 2</code>.</li>
+  <li data-l="9,10"><b>case 1 is skipped.</b> We jumped over it.</li>
+  <li data-l="11,12"><b>We land on case 2</b> and print &ldquo;Two&rdquo;.</li>
+  <li data-l="13,14"><b>No <code>break</code>, so we keep going</b> into the next case without testing it: &ldquo;Three&rdquo;. A case label is only a <b>doorway</b>, not a wall.</li>
+  <li data-l="15,16"><b>And on into <code>default</code></b>: &ldquo;Done&rdquo;. The switch ends only at a <code>break</code> or at the closing brace.</li>
+</ol>
+  </div>
+  <div class="rule step">After matching, C++ runs <b>every line below</b> until a <code>break</code>.</div>
+</section>
+
+<section class="slide slow" id="s-switch-lab" data-title="Switch lab">
+  <span class="kicker">Try it live</span>
+  <h2>Watch where the switch <em>starts</em> and <em>stops</em></h2>
+  <p class="mute">Try n = 2 with and without <code>break</code>. Then try 4, which matches no case.</p>
+  <div class="play switchlab"></div>
+</section>
+
+<section class="slide slow" id="s-calc" data-title="Practice: simple calculator">
+  <span class="kicker">Practice program</span>
+  <h2>A simple <em>calculator</em></h2>
+  <div class="code" data-title="calc.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b;
+    char op;
+    cout << "Enter: number operator number: ";
+    cin >> a >> op >> b;
+    switch (op)
+    {
+        case '+':
+            cout << "Result = " << a + b << endl;
+            break;
+        case '-':
+            cout << "Result = " << a - b << endl;
+            break;
+        case '*':
+            cout << "Result = " << a * b << endl;
+            break;
+        case '/':
+            if (b != 0)
+                cout << "Result = " << a / b << endl;
+            else
+                cout << "Cannot divide by zero" << endl;
+            break;
+        default:
+            cout << "Unknown operator" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b;
+    char op;
+    clrscr();
+    cout << "Enter: number operator number: ";
+    cin >> a >> op >> b;
+    switch (op)
+    {
+        case '+':
+            cout << "Result = " << a + b << endl;
+            break;
+        case '-':
+            cout << "Result = " << a - b << endl;
+            break;
+        case '*':
+            cout << "Result = " << a * b << endl;
+            break;
+        case '/':
+            if (b != 0)
+                cout << "Result = " << a / b << endl;
+            else
+                cout << "Cannot divide by zero" << endl;
+            break;
+        default:
+            cout << "Unknown operator" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter: number operator number: 12 * 4
+Result = 48
+</script>
+<ol class="walk">
+  <li data-l="9"><b>One <code>cin</code> reads three things:</b> <code>12</code> into a, the character <code>*</code> into op, and <code>4</code> into b.</li>
+  <li data-l="10"><b>The switch examines the operator.</b></li>
+  <li data-l="12,13,14,15,16,17"><b>The <code>+</code> and <code>-</code> cases are skipped.</b></li>
+  <li data-l="18,19,20"><b>The <code>*</code> case matches:</b> 12 * 4 = 48, then <code>break</code>.</li>
+  <li data-l="21,22,23,24,25,26"><b>An if-else can live inside a case.</b> Division checks for a zero divisor first, so the program never crashes.</li>
+  <li data-l="27,28"><b>default</b> catches any other character, such as <code>%</code>.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-vowel" data-title="Fall-through on purpose: vowels">
+  <span class="kicker">Using fall-through on purpose</span>
+  <h2>Several cases, <em>one</em> block of code</h2>
+  <div class="code" data-title="vowel.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    char ch;
+    cout << "Enter a lowercase letter: ";
+    cin >> ch;
+    switch (ch)
+    {
+        case 'a':
+        case 'e':
+        case 'i':
+        case 'o':
+        case 'u':
+            cout << ch << " is a vowel" << endl;
+            break;
+        default:
+            cout << ch << " is a consonant" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    char ch;
+    clrscr();
+    cout << "Enter a lowercase letter: ";
+    cin >> ch;
+    switch (ch)
+    {
+        case 'a':
+        case 'e':
+        case 'i':
+        case 'o':
+        case 'u':
+            cout << ch << " is a vowel" << endl;
+            break;
+        default:
+            cout << ch << " is a consonant" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter a lowercase letter: u
+u is a vowel
+</script>
+<ol class="walk">
+  <li data-l="12,13,14,15,16"><b>Five labels, one body.</b> The first four have no statements and no <code>break</code>, so they fall through into the next label, until they reach the <code>cout</code>.</li>
+  <li data-l="17,18"><b>Any of a, e, i, o, u</b> lands here. For <code>'u'</code> we print &ldquo;u is a vowel&rdquo; and <code>break</code>.</li>
+  <li data-l="19,20"><b>Everything else</b> is a consonant (we assume the user typed a lowercase letter).</li>
+</ol>
+  </div>
+  <div class="callout trick step"><span class="tag">Compare</span><p>Without fall-through you would need <code>if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')</code>. Stacked labels read more clearly.</p></div>
+</section>
+
+<section class="slide fast" id="s-switch-vs" data-title="switch vs else-if ladder">
+  <span class="kicker">Which tool?</span>
+  <h2><code>switch</code> or <em>else-if ladder</em>?</h2>
+  <table>
+    <tr><th></th><th>switch</th><th>else-if ladder</th></tr>
+    <tr><td>Compares</td><td>one value against <b>fixed constants</b> (equality only)</td><td><b>any condition</b>: ranges, <code>&amp;&amp;</code>, <code>||</code>, decimals</td></tr>
+    <tr><td>Works on</td><td><code>int</code>, <code>char</code>, <code>enum</code></td><td>any type</td></tr>
+    <tr><td>Looks tidy for</td><td>menus, calculators, day or month names</td><td>marks to grade, age groups, price slabs</td></tr>
+    <tr><td>Execution</td><td>jumps straight to the matching case; needs <code>break</code></td><td>tests one by one, stops at the first true</td></tr>
+  </table>
+  <div class="rule">Equal to a fixed value &rarr; <b>switch</b>. &nbsp; A range or a complex test &rarr; <b>if</b>.</div>
+</section>
+
+<section class="slide slow" id="s-goto-idea" data-title="goto: the jump statement">
+  <span class="kicker">Jump statement</span>
+  <h2><em>goto</em>: jump to a label, no questions asked</h2>
+  <div class="cols c2">
+    <div class="code step" data-title="syntax of goto" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+    goto label;
+    ...
+label:
+    statement;
+</script>
+    </div>
+    <div>
+      <div class="card accent step"><h3>A label</h3><p>A name followed by a colon, such as <code>again:</code>. It just marks a spot in the function. It does nothing by itself.</p></div>
+      <div class="card accent step"><h3>The jump</h3><p><code>goto again;</code> sends control to that spot at once, <b>forward or backward</b>, inside the same function.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-goto-code" data-title="goto in action">
+  <span class="kicker">See it work</span>
+  <h2>Counting 1 to 3 with <em>goto</em></h2>
+  <div class="code" data-title="goto_demo.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i = 1;
+again:
+    cout << i << endl;
+    i++;
+    if (i <= 3)
+        goto again;
+    cout << "Finished" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i = 1;
+    clrscr();
+again:
+    cout << i << endl;
+    i++;
+    if (i <= 3)
+        goto again;
+    cout << "Finished" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1
+2
+3
+Finished
+</script>
+<ol class="walk">
+  <li data-l="7"><b>The label <code>again:</code></b> marks this spot.</li>
+  <li data-l="8,9"><b>Print i, then add 1.</b> First time: prints 1, i becomes 2.</li>
+  <li data-l="10,11"><b>If i is still 3 or less, jump back</b> to the label. This repeats the two lines above, so <code>goto</code> plus <code>if</code> behaves like a loop.</li>
+  <li data-l="12"><b>When i reaches 4</b> the if is false, there is no jump, and we fall through to &ldquo;Finished&rdquo;.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-goto-why" data-title="Why goto is not used">
+  <span class="kicker">The big warning</span>
+  <h2>Why good programmers <em>avoid</em> goto</h2>
+  <div class="cols c2">
+    <div class="card bad step"><span class="ico">&#127837;</span><h3>Spaghetti code</h3><p>Jumps go up, down and across. You cannot read the program from top to bottom any more; you must chase labels like a tangled plate of spaghetti.</p></div>
+    <div class="card bad step"><span class="ico">&#128027;</span><h3>Hard to debug</h3><p>At any line you cannot tell <b>how</b> control arrived there, because any <code>goto</code> in the function might have sent it.</p></div>
+    <div class="card bad step"><span class="ico">&#128295;</span><h3>Hard to change</h3><p>Adding one line can silently break a jump far away. Programs with many gotos are tiring to maintain.</p></div>
+    <div class="card good step"><span class="ico">&#127959;&#65039;</span><h3>We have better tools</h3><p>Anything <code>goto</code> does can be written with <b>sequence, selection and iteration</b> (if, switch, for, while). This is called <b>structured programming</b>.</p></div>
+  </div>
+  <div class="callout trick step"><span class="tag">History</span><p>In 1968 the computer scientist Edsger Dijkstra published a famous letter titled <b>&ldquo;Go To Statement Considered Harmful&rdquo;</b>. Structured programming grew from that idea, and goto has been rare in good code ever since.</p></div>
+</section>
+
+<section class="slide slow" id="s-goto-instead" data-title="The same job with a loop">
+  <span class="kicker">The better way</span>
+  <h2>The same job with a <em>for</em> loop</h2>
+  <div class="code" data-title="for_instead.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int i;
+    for (i = 1; i <= 3; i++)
+        cout << i << endl;
+    cout << "Finished" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int i;
+    clrscr();
+    for (i = 1; i <= 3; i++)
+        cout << i << endl;
+    cout << "Finished" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+1
+2
+3
+Finished
+</script>
+<ol class="walk">
+  <li data-l="7,8"><b>The whole loop in the header</b>: start at 1, keep going while <code>i &lt;= 3</code>, add 1 each round. No label, no jump, and the purpose is clear at a glance.</li>
+  <li data-l="9"><b>Same output as the goto version</b>, in fewer lines. Starting next lesson we study this loop properly.</li>
+</ol>
+  </div>
+  <div class="callout warn step"><span class="tag">In this course</span><p>You should know that <code>goto</code> exists, and you may meet it in old programs. <b>Do not write it yourself.</b> (A rare accepted use is escaping from several nested loops at once, and even then a function or a flag is usually cleaner.)</p></div>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-fall">
+    <p class="q">int n = 3;
+switch (n) {
+  case 1: cout &lt;&lt; "A";
+  case 3: cout &lt;&lt; "B";
+  case 4: cout &lt;&lt; "C"; break;
+  case 5: cout &lt;&lt; "D";
+}
+What is printed?</p>
+    <ul><li>B</li><li>BC</li><li>BCD</li><li>C</li></ul>
+    <div class="exp">Jump to <code>case 3</code>: prints B. No break, so it falls into <code>case 4</code>: prints C, then <code>break</code> stops it. <b>BC</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-switch-rules">
+    <p class="q">Which of these can NOT be used as the expression of a switch?</p>
+    <ul><li>int count</li><li>char ch</li><li>float price</li><li>'A' + 1</li></ul>
+    <div class="exp">A switch works on whole-number types (<code>int</code>, <code>char</code>, <code>enum</code>). A <code>float</code> is not allowed. <code>'A' + 1</code> is an int, so it is fine.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-fall">
+    <p class="q">char c = 'b';
+switch (c) {
+  case 'a': cout &lt;&lt; 1; break;
+  case 'b': cout &lt;&lt; 2;
+  default:  cout &lt;&lt; 3;
+}
+What is printed?</p>
+    <ul><li>2</li><li>23</li><li>123</li><li>3</li></ul>
+    <div class="exp">It matches <code>'b'</code> and prints 2. There is no break, so execution falls into <code>default</code> and prints 3: <b>23</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-goto-why">
+    <p class="q">Why is <code>goto</code> avoided by good programmers?</p>
+    <ul><li>It is slower than a loop</li><li>It makes the flow hard to follow (spaghetti code)</li><li>It is not part of C++</li><li>It can only jump forward</li></ul>
+    <div class="exp"><code>goto</code> exists and can jump both ways, but unrestricted jumps make programs hard to read, debug and change. Structured statements do the same job more clearly.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-switch-vs">
+    <p class="q">Which is the better tool for converting marks (0&ndash;100) into grades?</p>
+    <ul><li>switch</li><li>else-if ladder</li><li>goto</li><li>a nested switch</li></ul>
+    <div class="exp">Grades depend on <b>ranges</b> (75 or more, 60 or more&hellip;). A switch can only test equality with constants, so an else-if ladder is the right tool.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 12 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; switch</h3><ul><li>Evaluates once, jumps to the matching <code>case</code>, runs until <code>break</code>. No match &rarr; <code>default</code>.</li><li>Works on <code>int</code> / <code>char</code> / <code>enum</code>, with <b>constant</b> labels and equality only.</li><li><b>Fall-through</b>: no break means the next case runs too. Stack labels to share code.</li></ul></div>
+    <div class="card good"><h3>&#9989; goto, and what to use instead</h3><ul><li><code>goto label;</code> jumps to <code>label:</code> in the same function.</li><li>It leads to <b>spaghetti code</b>, so we use if / switch / loops instead.</li><li>Equal to a constant &rarr; <b>switch</b>. Range or complex test &rarr; <b>else-if ladder</b>.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>

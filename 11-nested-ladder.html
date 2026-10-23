@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson 11 – Nested if and the else-if Ladder</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body data-hue="145" data-lesson="Lesson 11 · Nested if &amp; the else-if Ladder">
+<div class="stage">
+
+<section class="slide cover" data-title="Nested if & the else-if Ladder">
+  <div class="num">11</div>
+  <h1>Nested if &amp; the else-if Ladder</h1>
+  <p>Real decisions are rarely just yes or no. Sometimes one decision leads to another, and sometimes there are many choices. Two tools handle both.</p>
+  <div class="goals"><b>By the end of this lesson you can</b>
+    <ul>
+      <li>put one <code>if</code> inside another (<b>nested selection</b>) and find the largest of three numbers</li>
+      <li>say which <code>if</code> an <code>else</code> belongs to (the <b>dangling else</b>)</li>
+      <li>write an <b>else-if ladder</b> and explain why the <b>order</b> of its tests matters</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide slow" id="s-nested-idea" data-title="Nested selection">
+  <span class="kicker">An if inside an if</span>
+  <h2><em>Nested</em> selection: a decision that leads to another decision</h2>
+  <div class="callout hook step"><span class="tag">Picture it</span><p>At a cinema door the guard asks <b>first</b>: &ldquo;Do you have a ticket?&rdquo; <b>Only if yes</b>, the next question is asked: &ldquo;Are you old enough for this film?&rdquo; The second question is reached only through the first.</p></div>
+  <div class="cols c2">
+    <div class="code step" data-title="shape of a nested if" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+if (outer condition)
+{
+    if (inner condition)
+    {
+        ...
+    }
+    else
+    {
+        ...
+    }
+}
+else
+{
+    ...
+}
+</script>
+    </div>
+    <div>
+      <div class="card accent step"><h3>How to read it</h3><p>The <b>inner</b> if is just a statement inside the outer if&rsquo;s braces. It is reached <b>only when the outer condition is true</b>.</p></div>
+      <div class="rule step">Any statement can sit inside an if, even another <code>if</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-nested-code" data-title="Nested if in action: cinema entry">
+  <span class="kicker">See it work</span>
+  <h2>Ticket first, then age</h2>
+  <div class="code" data-title="entry.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int age;
+    char hasTicket;
+    cout << "Age and ticket (y/n): ";
+    cin >> age >> hasTicket;
+    if (hasTicket == 'y')
+    {
+        if (age >= 18)
+            cout << "Welcome to the A-rated show" << endl;
+        else
+            cout << "Sorry, this show is for adults" << endl;
+    }
+    else
+    {
+        cout << "Please buy a ticket first" << endl;
+    }
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int age;
+    char hasTicket;
+    clrscr();
+    cout << "Age and ticket (y/n): ";
+    cin >> age >> hasTicket;
+    if (hasTicket == 'y')
+    {
+        if (age >= 18)
+            cout << "Welcome to the A-rated show" << endl;
+        else
+            cout << "Sorry, this show is for adults" << endl;
+    }
+    else
+    {
+        cout << "Please buy a ticket first" << endl;
+    }
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Age and ticket (y/n): 16 y
+Sorry, this show is for adults
+</script>
+<ol class="walk">
+  <li data-l="9"><b>Two values in one <code>cin</code>.</b> The user types <code>16 y</code>: age = 16, hasTicket = <code>'y'</code> (a char, so single quotes in the test).</li>
+  <li data-l="10"><b>Outer test:</b> <code>hasTicket == 'y'</code> is true, so we go inside the braces.</li>
+  <li data-l="12"><b>Inner test:</b> <code>16 &gt;= 18</code> is false.</li>
+  <li data-l="14,15"><b>The inner else runs:</b> &ldquo;Sorry, this show is for adults&rdquo;.</li>
+  <li data-l="17,18,19,20"><b>The outer else</b> is only for people without a ticket. It is skipped here, and the inner question was never even asked for them.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-max3" data-title="Practice: largest of three with nested if">
+  <span class="kicker">Practice program</span>
+  <h2>Largest of three numbers, using <em>nested</em> if</h2>
+  <div class="code" data-title="max3.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b, c, largest;
+    cout << "Enter three numbers: ";
+    cin >> a >> b >> c;
+    if (a > b)
+    {
+        if (a > c)
+            largest = a;
+        else
+            largest = c;
+    }
+    else
+    {
+        if (b > c)
+            largest = b;
+        else
+            largest = c;
+    }
+    cout << "Largest = " << largest << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a, b, c, largest;
+    clrscr();
+    cout << "Enter three numbers: ";
+    cin >> a >> b >> c;
+    if (a > b)
+    {
+        if (a > c)
+            largest = a;
+        else
+            largest = c;
+    }
+    else
+    {
+        if (b > c)
+            largest = b;
+        else
+            largest = c;
+    }
+    cout << "Largest = " << largest << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter three numbers: 12 25 40
+Largest = 40
+</script>
+<ol class="walk">
+  <li data-l="9"><b>First duel: a against b.</b> <code>12 &gt; 25</code> is false, so a has already lost. The winner must be b or c.</li>
+  <li data-l="16,17"><b>The outer else:</b> the winner of the first duel is b.</li>
+  <li data-l="18"><b>Second duel: b against c.</b> <code>25 &gt; 40</code> is false.</li>
+  <li data-l="20,21"><b>c wins:</b> <code>largest = c;</code> gives 40.</li>
+  <li data-l="23"><b>Print the answer.</b> Only <b>one</b> of the four assignments ever runs.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-max3-paths" data-title="The four paths of max3">
+  <span class="kicker">All possible paths</span>
+  <h2>Four paths, four answers</h2>
+  <table>
+    <tr><th>First test</th><th>Second test</th><th>Largest</th></tr>
+    <tr class="step"><td><code>a &gt; b</code> true</td><td><code>a &gt; c</code> true</td><td class="c"><b>a</b></td></tr>
+    <tr class="step"><td><code>a &gt; b</code> true</td><td><code>a &gt; c</code> false</td><td class="c"><b>c</b></td></tr>
+    <tr class="step"><td><code>a &gt; b</code> false</td><td><code>b &gt; c</code> true</td><td class="c"><b>b</b></td></tr>
+    <tr class="step"><td><code>a &gt; b</code> false</td><td><code>b &gt; c</code> false</td><td class="c"><b>c</b></td></tr>
+  </table>
+  <div class="callout trick step"><span class="tag">Compare with Lesson 10</span><p>Last lesson&rsquo;s <b>champion</b> method used two simple ifs. This <b>nested</b> method uses <b>exactly two tests</b> every time. Both are correct. You can also write it in one line with logical operators: <code>if (a &gt; b &amp;&amp; a &gt; c)</code> &hellip;</p></div>
+</section>
+
+<section class="slide slow" id="s-dangling" data-title="The dangling else">
+  <span class="kicker">Which if does this else belong to?</span>
+  <h2>The <em>dangling else</em>: indentation can lie</h2>
+  <div class="code" data-title="dangling.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a = 5, b = -2;
+    if (a > 0)
+        if (b > 0)
+            cout << "both positive" << endl;
+    else
+        cout << "a is not positive" << endl;
+    cout << "done" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int a = 5, b = -2;
+    clrscr();
+    if (a > 0)
+        if (b > 0)
+            cout << "both positive" << endl;
+    else
+        cout << "a is not positive" << endl;
+    cout << "done" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+a is not positive
+done
+</script>
+<ol class="walk">
+  <li data-l="7"><b>a = 5, so <code>a &gt; 0</code> is true.</b> We go on to the next statement, which is another if.</li>
+  <li data-l="8,9"><b>b = &minus;2, so <code>b &gt; 0</code> is false.</b> &ldquo;both positive&rdquo; is skipped.</li>
+  <li data-l="10,11"><b>The else is attached to the <u>nearest</u> if</b> (the one on line 8), no matter how it is indented. That if was false, so this else runs, and prints &ldquo;a is not positive&rdquo; although a is clearly positive!</li>
+</ol>
+  </div>
+  <div class="rule step">An <code>else</code> pairs with the <b>nearest unmatched</b> <code>if</code>. Use braces to say what you mean.</div>
+</section>
+
+<section class="slide slow" id="s-ladder-idea" data-title="The else-if ladder">
+  <span class="kicker">Many choices</span>
+  <h2>The <em>else-if ladder</em>: test one by one, take the first that fits</h2>
+  <div class="cols c2">
+    <div>
+      <div class="callout hook step"><span class="tag">Picture it</span><p>A teacher reads out the rules: &ldquo;90 or more: A. <b>Else</b> 75 or more: B. <b>Else</b> 60 or more: C&hellip;&rdquo; She <b>stops at the first rule that fits</b> and ignores the rest.</p></div>
+      <div class="code step" data-title="shape of the ladder" data-mode="modern" data-snippet>
+<script type="text/plain" data-v="modern">
+if (condition1)
+    statements1;
+else if (condition2)
+    statements2;
+else if (condition3)
+    statements3;
+else
+    default statements;
+</script>
+      </div>
+      <div class="rule step">Top to bottom. First true wins. The rest are skipped.</div>
+    </div>
+    <div class="step">
+      <svg class="fc" viewBox="0 0 400 335" role="img" aria-label="Flowchart of an else-if ladder: each false answer moves down to the next test, the first true answer runs its statements">
+        <defs><marker id="ah-lad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0,0L10,5L0,10z"/></marker></defs>
+        <polygon class="dc" points="140,8 215,40 140,72 65,40"/><text x="140" y="40">condition 1?</text>
+        <path class="fl" d="M215 40H262" marker-end="url(#ah-lad)"/><text class="fyes" x="238" y="31">true</text>
+        <rect class="bx" x="262" y="24" width="125" height="32" rx="8"/><text x="324" y="40">statements 1</text>
+        <path class="fl" d="M140 72V102" marker-end="url(#ah-lad)"/><text class="fno" x="162" y="88">false</text>
+        <polygon class="dc" points="140,102 215,134 140,166 65,134"/><text x="140" y="134">condition 2?</text>
+        <path class="fl" d="M215 134H262" marker-end="url(#ah-lad)"/><text class="fyes" x="238" y="125">true</text>
+        <rect class="bx" x="262" y="118" width="125" height="32" rx="8"/><text x="324" y="134">statements 2</text>
+        <path class="fl" d="M140 166V196" marker-end="url(#ah-lad)"/><text class="fno" x="162" y="182">false</text>
+        <polygon class="dc" points="140,196 215,228 140,260 65,228"/><text x="140" y="228">condition 3?</text>
+        <path class="fl" d="M215 228H262" marker-end="url(#ah-lad)"/><text class="fyes" x="238" y="219">true</text>
+        <rect class="bx" x="262" y="212" width="125" height="32" rx="8"/><text x="324" y="228">statements 3</text>
+        <path class="fl" d="M140 260V290" marker-end="url(#ah-lad)"/><text class="fno" x="162" y="276">false</text>
+        <rect class="bx" x="70" y="290" width="140" height="32" rx="8"/><text x="140" y="306">else statements</text>
+        <text class="fsm" x="324" y="282">after any one of these,</text><text class="fsm" x="324" y="298">the ladder is finished</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ladder-code" data-title="Else-if ladder in action: grades">
+  <span class="kicker">See it work</span>
+  <h2>Marks to <em>grade</em></h2>
+  <div class="code" data-title="grade.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int marks;
+    cout << "Enter marks: ";
+    cin >> marks;
+    if (marks >= 90)
+        cout << "Grade A" << endl;
+    else if (marks >= 75)
+        cout << "Grade B" << endl;
+    else if (marks >= 60)
+        cout << "Grade C" << endl;
+    else if (marks >= 35)
+        cout << "Grade D" << endl;
+    else
+        cout << "Grade F" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int marks;
+    clrscr();
+    cout << "Enter marks: ";
+    cin >> marks;
+    if (marks >= 90)
+        cout << "Grade A" << endl;
+    else if (marks >= 75)
+        cout << "Grade B" << endl;
+    else if (marks >= 60)
+        cout << "Grade C" << endl;
+    else if (marks >= 35)
+        cout << "Grade D" << endl;
+    else
+        cout << "Grade F" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Enter marks: 82
+Grade B
+</script>
+<ol class="walk">
+  <li data-l="9,10"><b>First rung:</b> <code>82 &gt;= 90</code> is false, so &ldquo;Grade A&rdquo; is skipped.</li>
+  <li data-l="11,12"><b>Second rung:</b> <code>82 &gt;= 75</code> is true. &ldquo;Grade B&rdquo; is printed.</li>
+  <li data-l="13,14,15,16,17,18"><b>The rest of the ladder is never even tested.</b> Once a rung is chosen, C++ jumps to the end.</li>
+  <li data-l="11"><b>Why not write <code>marks &lt; 90 &amp;&amp; marks &gt;= 75</code>?</b> There is no need: we only reach this test when the rung above was false, so marks is already below 90.</li>
+</ol>
+  </div>
+</section>
+
+<section class="slide slow" id="s-ladder-order" data-title="Order matters in a ladder">
+  <span class="kicker">Classic trap</span>
+  <h2>In a ladder, <em>the order of the tests matters</em></h2>
+  <div class="code" data-title="wrong_order.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int marks = 95;
+    if (marks >= 35)
+        cout << "Grade D" << endl;
+    else if (marks >= 60)
+        cout << "Grade C" << endl;
+    else if (marks >= 75)
+        cout << "Grade B" << endl;
+    else if (marks >= 90)
+        cout << "Grade A" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int marks = 95;
+    clrscr();
+    if (marks >= 35)
+        cout << "Grade D" << endl;
+    else if (marks >= 60)
+        cout << "Grade C" << endl;
+    else if (marks >= 75)
+        cout << "Grade B" << endl;
+    else if (marks >= 90)
+        cout << "Grade A" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+Grade D
+</script>
+<ol class="walk">
+  <li data-l="7"><b>95 &gt;= 35 is true</b>, and it is the very first rung.</li>
+  <li data-l="8"><b>Grade D is printed</b> for a student with 95 marks!</li>
+  <li data-l="9,10,11,12,13,14"><b>These rungs can never run.</b> Every mark that passes them has already passed 35 and been caught by the first rung.</li>
+</ol>
+  </div>
+  <div class="rule step">Put the <b>strictest</b> test first, the loosest last.</div>
+</section>
+
+<section class="slide slow" id="s-ladder-vs" data-title="Ladder vs separate ifs">
+  <span class="kicker">Another trap</span>
+  <h2>A ladder is <em>not</em> the same as a row of separate ifs</h2>
+  <div class="code" data-title="separate_ifs.cpp" data-mode="modern">
+<script type="text/plain" data-v="modern">
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int marks = 95;
+    if (marks >= 90)
+        cout << "A" << endl;
+    if (marks >= 75)
+        cout << "B" << endl;
+    if (marks >= 60)
+        cout << "C" << endl;
+    return 0;
+}
+</script>
+<script type="text/plain" data-v="turbo">
+#include <iostream.h>
+#include <conio.h>
+
+void main()
+{
+    int marks = 95;
+    clrscr();
+    if (marks >= 90)
+        cout << "A" << endl;
+    if (marks >= 75)
+        cout << "B" << endl;
+    if (marks >= 60)
+        cout << "C" << endl;
+    getch();
+}
+</script>
+<script type="text/plain" data-v="out">
+A
+B
+C
+</script>
+<ol class="walk">
+  <li data-l="7,8"><b>95 &gt;= 90:</b> true, A is printed.</li>
+  <li data-l="9,10"><b>A new, independent if.</b> 95 &gt;= 75 is also true, so B is printed too.</li>
+  <li data-l="11,12"><b>And again:</b> C. Every separate if is tested, whatever happened before.</li>
+</ol>
+  </div>
+  <table class="step">
+    <tr><th></th><th>else-if ladder</th><th>separate ifs</th></tr>
+    <tr><td>Tests performed</td><td>stops at the <b>first true</b></td><td><b>every</b> test is performed</td></tr>
+    <tr><td>Statements that run</td><td><b>at most one</b></td><td>zero, one or <b>many</b></td></tr>
+    <tr><td>Use when</td><td>choices <b>exclude</b> each other (a mark has only one grade)</td><td>choices are <b>independent</b></td></tr>
+  </table>
+</section>
+
+<section class="slide slow" id="s-ladder-lab" data-title="Ladder lab">
+  <span class="kicker">Try it live</span>
+  <h2>Watch the ladder run</h2>
+  <p class="mute">Type different marks, or ask the class for the boundary values: 90, 89, 75, 74, 35, 34.</p>
+  <div class="play ladderlab"></div>
+</section>
+
+<section class="slide slow" id="s-drill" data-title="Predict the output">
+  <span class="kicker">Your turn</span>
+  <h2>Predict each output</h2>
+  <p class="mute">Ask the class, then press &rarr;.</p>
+  <table>
+    <tr><th>Code</th><th>Why</th><th>Output</th></tr>
+    <tr class="step"><td><code>int x = 10; if (x &gt; 5) if (x &gt; 20) cout &lt;&lt; "A"; else cout &lt;&lt; "B";</code></td><td>the else belongs to the inner if (<code>x &gt; 20</code> is false)</td><td class="c"><b>B</b></td></tr>
+    <tr class="step"><td><code>int x = 7; if (x % 2 == 0) cout &lt;&lt; "E"; else if (x &gt; 5) cout &lt;&lt; "Big"; else cout &lt;&lt; "Small";</code></td><td>7 is odd, then 7 &gt; 5 is true</td><td class="c"><b>Big</b></td></tr>
+    <tr class="step"><td><code>if (0) cout &lt;&lt; "X"; else if (-1) cout &lt;&lt; "Y"; else cout &lt;&lt; "Z";</code></td><td>0 is false, but &minus;1 is non-zero, so true</td><td class="c"><b>Y</b></td></tr>
+    <tr class="step"><td><code>int x = 5; if (x &gt; 3 &amp;&amp; x &lt; 5) cout &lt;&lt; "in"; else cout &lt;&lt; "out";</code></td><td>x &lt; 5 is false, so <code>&amp;&amp;</code> is false</td><td class="c"><b>out</b></td></tr>
+  </table>
+</section>
+
+<section class="slide fast" data-title="Quick check 1">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 1 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-dangling">
+    <p class="q">int x = 10;
+if (x &gt; 5)
+    if (x &gt; 20) cout &lt;&lt; "A";
+    else cout &lt;&lt; "B";
+What is printed?</p>
+    <ul><li>A</li><li>B</li><li>AB</li><li>Nothing</li></ul>
+    <div class="exp">The else pairs with the <b>nearest</b> if, <code>x &gt; 20</code>. That is false, so the else runs: <b>B</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 2">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 2 of 5</h2>
+  <div class="mcq" data-a="0" data-ref="s-ladder-order">
+    <p class="q">int m = 80;
+if (m &gt;= 40) cout &lt;&lt; "P";
+else if (m &gt;= 75) cout &lt;&lt; "D";
+else cout &lt;&lt; "F";
+What is printed?</p>
+    <ul><li>P</li><li>D</li><li>F</li><li>PD</li></ul>
+    <div class="exp">80 &gt;= 40 is true on the very first rung, so <b>P</b> is printed and the rest is skipped. The <code>m &gt;= 75</code> test is never reached.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 3">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 3 of 5</h2>
+  <div class="mcq" data-a="1" data-ref="s-ladder-vs">
+    <p class="q">int n = 8;
+if (n &gt; 5) cout &lt;&lt; "X";
+if (n &gt; 3) cout &lt;&lt; "Y"; else cout &lt;&lt; "Z";
+What is printed?</p>
+    <ul><li>X</li><li>XY</li><li>XYZ</li><li>Y</li></ul>
+    <div class="exp">These are <b>two separate</b> statements. The first prints X. The second is a new if-else: <code>8 &gt; 3</code> is true, so Y. Together: <b>XY</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 4">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 4 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-nested-code">
+    <p class="q">int a = 4, b = 9;
+if (a &gt; b) { if (a &gt; 2) cout &lt;&lt; "P"; else cout &lt;&lt; "Q"; }
+else cout &lt;&lt; "R";
+What is printed?</p>
+    <ul><li>P</li><li>Q</li><li>R</li><li>PR</li></ul>
+    <div class="exp"><code>4 &gt; 9</code> is false, so the outer if is skipped completely (the inner if is never reached) and the outer else prints <b>R</b>.</div>
+  </div>
+</section>
+<section class="slide fast" data-title="Quick check 5">
+  <span class="kicker">Check yourself</span>
+  <h2>Quick check &mdash; 5 of 5</h2>
+  <div class="mcq" data-a="2" data-ref="s-ladder-lab">
+    <p class="q">In the grade ladder (90 / 75 / 60 / 35), marks = 62. How many conditions are tested before &ldquo;Grade C&rdquo; is printed?</p>
+    <ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>
+    <div class="exp"><code>62 &gt;= 90</code> false, <code>62 &gt;= 75</code> false, <code>62 &gt;= 60</code> true. That is <b>3</b> tests; the last rung is never tested.</div>
+  </div>
+</section>
+
+<section class="slide fast" data-title="Recap">
+  <span class="kicker">Lesson 11 recap</span>
+  <h2>What we learned</h2>
+  <div class="cols c2">
+    <div class="card good"><h3>&#9989; Nested selection</h3><ul><li>An <code>if</code> inside an <code>if</code>: the inner one is reached only through the outer one.</li><li>Largest of three: two duels, exactly two tests.</li><li>An <code>else</code> belongs to the <b>nearest</b> <code>if</code>. Use braces.</li></ul></div>
+    <div class="card good"><h3>&#9989; The else-if ladder</h3><ul><li>Tests run top to bottom; the <b>first true</b> one wins and the rest are skipped.</li><li><b>Order matters</b>: strictest test first.</li><li>Ladder = at most one branch runs. Separate ifs = every test runs.</li></ul></div>
+  </div>
+  <div class="revisit"></div>
+  <p class="score"></p>
+</section>
+
+</div>
+<script src="assets/deck.js"></script>
+<script src="assets/widgets.js"></script>
+</body>
+</html>
